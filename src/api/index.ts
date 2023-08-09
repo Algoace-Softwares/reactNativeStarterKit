@@ -12,16 +12,23 @@ export const storage = new MMKV();
 export const API = axios.create({
   baseURL: '',
 });
-
+/*
+ ** Before every api request following be taken
+ 1 - we are getting accessToken as well as refresh token from the api
+ 2 - then we are decoding accesToken by external library
+ 3 - then we are cheking the xpiry time for the token
+ 4 - if the token is expire then we calling api to get latest token from the server
+ 5 - if token is not expire we are simply injecting our accessToken into header
+ */
 // this mechnism every time when request gets
 API.interceptors.request.use(
   async function (config) {
     // getting access token
     const {tokens} = store.getState().auth;
-    let {accessToken, refreshToken} = tokens;
+    let {accessToken} = tokens;
 
     // decoded token data
-    let decodedToken = jwtDecode(accessToken) as unknown as {exp: number};
+    const decodedToken = jwtDecode(accessToken) as unknown as {exp: number};
 
     // extraction timme stamp
     const expiryTimestamp = new Date(decodedToken.exp * 1000);
@@ -31,14 +38,14 @@ API.interceptors.request.use(
       console.log('token expire');
       try {
         // if token expire get new token
-        let response = await axios.post(`${API_KEY}/user/token`, {
-          refreshToken: refreshToken,
+        const response = await axios.post(`${API_KEY}/user/token`, {
+          refreshToken: tokens.refreshToken,
         });
         console.log('RESPONSE[GET_NEW_TOKEN]', response);
 
         if (response?.status === 200) {
           // getting token from server data
-          let newToken = response?.data?.tokens;
+          const newToken = response?.data?.tokens;
           // saving new tokens locally
           storage.set(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
           //await AsyncStorage.setItem(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
@@ -51,7 +58,7 @@ API.interceptors.request.use(
         Toast.show('Token expire unable to get new Token try again later', Toast.LONG);
         console.log('ERROR[UNABLE_TO_GET_TOKEN]', error);
       }
-
+      // injecting our token into header
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 

@@ -1,11 +1,12 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {
-  ChangePasswordType,
-  UsersStateType,
-  updateUserDataType,
-} from './userSliceType';
+import {ChangePasswordType, UsersStateType, updateUserDataType} from './userSliceType';
 import {appUtils} from '../../../utils';
 import {API} from '../../../api';
+import {MMKV} from 'react-native-mmkv';
+import {ASYNC_USER_DATA_KEY} from '../../../constants';
+
+// local storage
+const storage = new MMKV();
 
 //inital states
 const initialState = {
@@ -24,7 +25,7 @@ export const updateUser = createAsyncThunk(
     console.log('INCOMIND_DATA[UPDATE_USER]', updatedUserData);
     try {
       // api call
-      let response = await API.patch('your/url/path', params);
+      const response = await API.patch('your/url/path', params);
       console.log('RESPONSE[UPDATE_USER]', response);
       return response.data;
     } catch (error: unknown) {
@@ -44,16 +45,10 @@ export const changePassword = createAsyncThunk(
   'user/change/password',
   async (params: ChangePasswordType, thunkAPI) => {
     const {oldPassword, newPassword, accessToken, userId} = params;
-    console.log(
-      'PARAMS[CHANGE_PASSWORD]',
-      oldPassword,
-      newPassword,
-      accessToken,
-      userId,
-    );
+    console.log('PARAMS[CHANGE_PASSWORD]', oldPassword, newPassword, accessToken, userId);
     try {
       // api call
-      let response = await API.patch('your/url/path', params);
+      const response = await API.patch('your/url/path', params);
       console.log('RESPONSE[CHANGE_PASSWORD]', response);
       return response.data;
     } catch (error: unknown) {
@@ -75,10 +70,13 @@ export const fetchUserData = createAsyncThunk(
     console.log('PARAMS[FETCH_USER_DATA]', params);
     try {
       // api call
-      let response = await API.patch(`your/url/path/${params.userId}`);
+      const response = await API.patch(`your/url/path/${params.userId}`);
       console.log('RESPONSE[CHANGE_PASSWORD]', response);
       if (response.data?.data) {
-        // save this data localing as user data
+        const userData = response.data?.data;
+        // save this data localing  and on state data
+        storage.set(userData, ASYNC_USER_DATA_KEY);
+        thunkAPI.dispatch(updateUserData(userData));
       }
       return response.data;
     } catch (error: unknown) {
@@ -93,13 +91,14 @@ export const fetchUserData = createAsyncThunk(
   },
 );
 
+// delete user
 export const deleteUser = createAsyncThunk(
   'user/id',
   async (params: {userId: string}, thunkAPI) => {
     console.log('PARAMS[DELETE_USER]', params);
     try {
       // api call
-      let response = await API.delete(`your/url/path/${params.userId}`);
+      const response = await API.delete(`your/url/path/${params.userId}`);
       console.log('RESPONSE[DELETE_USER]', response);
       if (response.status === 200) {
         // remove this data localing as user data
@@ -126,6 +125,10 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.message = '';
+    },
+    // updating user data
+    updateUserData: (state, action) => {
+      state.userData = action.payload;
     },
   },
   extraReducers: builder => {
@@ -168,5 +171,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const {reset} = userSlice.actions;
+export const {reset, updateUserData} = userSlice.actions;
 export default userSlice.reducer;

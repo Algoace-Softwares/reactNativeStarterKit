@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {KeyboardAvoidingView, Platform} from 'react-native';
@@ -7,6 +7,7 @@ import {authScreens, homeScreen} from '../data';
 import RNBootSplash from 'react-native-bootsplash';
 
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
+import {useAppSelector} from '../hooks/reduxHooks';
 
 declare global {
   namespace ReactNavigation {
@@ -69,7 +70,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
  **root navigator
  */
 const RootNavigator = (): JSX.Element => {
-  const [userData, setUserData] = useState(false);
+  const {userData} = useAppSelector(state => state.auth);
   /*
    ** check is user signed in or not
    */
@@ -85,7 +86,6 @@ const RootNavigator = (): JSX.Element => {
     4 step: we hide splash screen
      */
     RNBootSplash.hide();
-    setUserData(false);
   }, []);
 
   return (

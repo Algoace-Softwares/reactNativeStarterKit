@@ -4,15 +4,19 @@ import {
   changePasswordParamsType,
   forgotChangePasswordParamsType,
   loginParamType,
+  tokenType,
+  userType,
 } from './authSliceType';
 import {API} from '../../../api';
 import {appUtils} from '../../../utils';
 import {MMKV} from 'react-native-mmkv';
-import {ASYNC_USER_DATA_KEY} from '../../../constants';
+import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../../constants';
+import {fetchUserData} from '../user/userSlice';
 
 // local storage
 const storage = new MMKV();
 
+// initial state in app
 const initialState = {
   isError: false,
   isLoading: false,
@@ -26,32 +30,29 @@ const initialState = {
 } as UsersState;
 
 // login user
-export const login = createAsyncThunk(
-  'auth/login',
-  async (params: loginParamType, thunkAPI) => {
-    const {email, password} = params;
-    console.log('PARAMS[LOGIN]', email, password);
-    try {
-      // api call
-      let response = await API.post('your/url/path/', params);
-      console.log('RESPONSE[LOGIN]', response);
-      if (response.data?.data) {
-        // save this data localing as user data
-        storage.set(ASYNC_USER_DATA_KEY, JSON.stringify(response.data));
-      }
-
-      return response;
-    } catch (error: unknown) {
-      console.debug('ERROR[LOGIN]:', error);
-      appUtils.crashLogs({
-        error: error,
-        filename: 'authSlice',
-        functionName: 'login',
-      });
-      return thunkAPI.rejectWithValue(error);
+export const login = createAsyncThunk('auth/login', async (params: loginParamType, thunkAPI) => {
+  const {email, password} = params;
+  console.log('PARAMS[LOGIN]', email, password);
+  try {
+    // api call
+    const response = await API.post('your/url/path/', params);
+    console.log('RESPONSE[LOGIN]', response);
+    if (response.data?.data) {
+      // save this data localing as user data
+      storage.set(ASYNC_USER_DATA_KEY, JSON.stringify(response.data));
     }
-  },
-);
+
+    return response;
+  } catch (error: unknown) {
+    console.debug('ERROR[LOGIN]:', error);
+    appUtils.crashLogs({
+      error: error,
+      filename: 'authSlice',
+      functionName: 'login',
+    });
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 
 // confirm signup
 export const confirmSignup = createAsyncThunk(
@@ -61,7 +62,7 @@ export const confirmSignup = createAsyncThunk(
     console.log('PARAMS[CONFIRM_SIGNUP]', code, email, accessToken);
     try {
       // api call
-      let response = await API.post('your/url/path/', params);
+      const response = await API.post('your/url/path/', params);
       console.log('RESPONSE[CONFIRM_SIGNUP]', response);
       return '';
     } catch (error: unknown) {
@@ -85,7 +86,7 @@ export const forgotPassword = createAsyncThunk(
 
     try {
       // api call
-      let response = await API.post('your/url/path/', params);
+      const response = await API.post('your/url/path/', params);
       console.log('RESPONSE[CONFIRM_SIGNUP]', response);
       return '';
     } catch (error: unknown) {
@@ -105,15 +106,10 @@ export const confirmForgotPassword = createAsyncThunk(
   '/user/forgot/change/password',
   async (params: forgotChangePasswordParamsType, thunkAPI) => {
     const {code, newPassword, accessToken} = params;
-    console.log(
-      'params[CONFIRM_FORGOT_PASSWORD]',
-      code,
-      newPassword,
-      accessToken,
-    );
+    console.log('params[CONFIRM_FORGOT_PASSWORD]', code, newPassword, accessToken);
     try {
       // api call
-      let response = await API.post('your/url/path/', params);
+      const response = await API.post('your/url/path/', params);
       console.log('RESPONSE[CONFIRM_SIGNUP]', response);
       return '';
     } catch (error: unknown) {
@@ -122,6 +118,38 @@ export const confirmForgotPassword = createAsyncThunk(
         error: error,
         filename: 'authSlice',
         functionName: 'confirmForgotPassword',
+      });
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+// fchecking if user is logged in or not
+export const fetchDataFromLocalStorage = createAsyncThunk(
+  'user/fetch/local',
+  async (params, thunkAPI) => {
+    try {
+      // getting user data as well as token
+      const jsonUser = storage.getString(ASYNC_USER_DATA_KEY);
+      const jsonToken = storage.getString(ASYNC_TOKEN_KEY);
+      if (jsonUser && jsonToken) {
+        // parsing async data
+        const userData: userType = JSON.parse(jsonUser) as userType;
+        const userToken: tokenType = JSON.parse(jsonToken) as tokenType;
+        // saving local user data adn token data into state data
+        thunkAPI.dispatch(updateUserToken(userToken));
+        thunkAPI.dispatch(updateUserData(userData));
+        // getting user latest data from server
+        // api call
+        await thunkAPI.dispatch(fetchUserData({userId: userData?.PK}));
+      }
+      return;
+    } catch (error: unknown) {
+      console.debug('ERROR[FETCH_USER_DATA]:', error);
+      appUtils.crashLogs({
+        error: error,
+        filename: 'userSlice',
+        functionName: 'fetchUserData',
       });
       return thunkAPI.rejectWithValue(error);
     }
@@ -149,8 +177,13 @@ export const authSlice = createSlice({
         refreshToken: '',
       };
     },
+    // updating user data
     updateUserData: (state, action) => {
       state.userData = action.payload;
+    },
+    // updating user token
+    updateUserToken: (state, action) => {
+      state.tokens = action.payload;
     },
   },
   extraReducers: builder => {
@@ -209,5 +242,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const {reset, updateUserData, logout} = authSlice.actions;
+export const {reset, updateUserData, logout, updateUserToken} = authSlice.actions;
 export default authSlice.reducer;

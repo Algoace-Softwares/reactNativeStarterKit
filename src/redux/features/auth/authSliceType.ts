@@ -1,4 +1,4 @@
-interface Tokens {
+export interface tokenType {
   accessToken: string;
   refreshToken: string;
 }
@@ -15,7 +15,7 @@ export interface UsersState {
   isLoading: Boolean;
   isSuccess: Boolean;
   message: String | any;
-  tokens: Tokens;
+  tokens: tokenType;
 }
 
 export interface changePasswordParamsType {
@@ -27,4 +27,18 @@ export interface forgotChangePasswordParamsType {
   code: number;
   newPassword: string;
   accessToken: string;
+}
+
+export interface userType {
+  readonly PK: string;
+  readonly SK: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth?: string;
+  companyName: string;
+  position: string;
+  email: string;
+  verificationStatus: 'NOT-VERIFIED' | 'VERIFIED' | 'PENDING';
+  isAdmin?: boolean;
+  createdAt: string;
 }
