@@ -1,0 +1,63 @@
+import axios from 'axios';
+import {API_KEY, ASYNC_TOKEN_KEY} from '../constants';
+import jwtDecode from 'jwt-decode';
+import {store} from '../redux/store';
+import Toast from 'react-native-simple-toast';
+import {MMKV} from 'react-native-mmkv';
+
+// local storage
+export const storage = new MMKV();
+
+// seTting up base url
+export const API = axios.create({
+  baseURL: '',
+});
+
+// this mechnism every time when request gets
+API.interceptors.request.use(
+  async function (config) {
+    // getting access token
+    const {tokens} = store.getState().auth;
+    let {accessToken, refreshToken} = tokens;
+
+    // decoded token data
+    let decodedToken = jwtDecode(accessToken) as unknown as {exp: number};
+
+    // extraction timme stamp
+    const expiryTimestamp = new Date(decodedToken.exp * 1000);
+
+    // chgecking if token expire
+    if (expiryTimestamp < new Date()) {
+      console.log('token expire');
+      try {
+        // if token expire get new token
+        let response = await axios.post(`${API_KEY}/user/token`, {
+          refreshToken: refreshToken,
+        });
+        console.log('RESPONSE[GET_NEW_TOKEN]', response);
+
+        if (response?.status === 200) {
+          // getting token from server data
+          let newToken = response?.data?.tokens;
+          // saving new tokens locally
+          storage.set(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
+          //await AsyncStorage.setItem(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
+
+          accessToken = newToken?.accessToken;
+        }
+
+        // console.debug('Data returned', data);
+      } catch (error) {
+        Toast.show('Token expire unable to get new Token try again later', Toast.LONG);
+        console.log('ERROR[UNABLE_TO_GET_TOKEN]', error);
+      }
+
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  },
+);

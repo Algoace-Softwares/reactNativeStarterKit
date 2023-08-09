@@ -1,0 +1,115 @@
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {KeyboardAvoidingView, Platform} from 'react-native';
+import {GlobalStyles} from '../assets';
+import {authScreens, homeScreen} from '../data';
+import RNBootSplash from 'react-native-bootsplash';
+
+import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends AuthStackParamList {}
+    interface RootParamList extends HomeStackParamList {}
+  }
+}
+
+// export type onBoardingProps = NativeStackNavigationProp<RootStackParamList>;
+// export type onBoardingScreenProps = NativeStackScreenProps<
+//   RootStackParamList,
+//   'onBoardingScreen'
+// >;
+
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
+
+/*
+ ** Auth stack for rest of the screen
+ */
+const AuthStackScreens = () => {
+  return (
+    <AuthStack.Navigator>
+      {authScreens.map(item => {
+        return (
+          <AuthStack.Screen
+            key={item.id}
+            name={item.screenName as keyof AuthStackParamList}
+            component={item.component}
+            options={{headerShown: false}}
+          />
+        );
+      })}
+    </AuthStack.Navigator>
+  );
+};
+
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+/*
+ **Home stack for rest of the screen
+ */
+const HomeStackScreens = () => {
+  return (
+    <HomeStack.Navigator>
+      {homeScreen.map(item => {
+        return (
+          <HomeStack.Screen
+            key={item.id}
+            name={item.screenName as keyof HomeStackParamList}
+            component={item.component}
+            options={{headerShown: false}}
+          />
+        );
+      })}
+    </HomeStack.Navigator>
+  );
+};
+
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+/*
+ **root navigator
+ */
+const RootNavigator = (): JSX.Element => {
+  const [userData, setUserData] = useState(false);
+  /*
+   ** check is user signed in or not
+   */
+  useEffect(() => {
+    /* *
+    your logic for checking if user logged in or not  you need to get the token from asnyc
+    then your check if userData is their user is logged then but before showing to homeStack
+    your need to check the is token is expired or not if expired then your need to fetch another token
+    by using refresh token
+    1 step: check if you got accessToken in async or not if no this mean user is not signed in
+    2 step: if you find accessToken and userData this mean user is logged in but we still need to update our data
+    3 step: we make a api call to get latest userData from server and save it on async as well as on state varaible
+    4 step: we hide splash screen
+     */
+    RNBootSplash.hide();
+    setUserData(false);
+  }, []);
+
+  return (
+    <RootStack.Navigator>
+      <RootStack.Screen
+        name={userData ? 'HomeStackScreens' : 'AuthStackScreens'}
+        component={userData ? HomeStackScreens : AuthStackScreens}
+        options={{headerShown: false}}
+      />
+    </RootStack.Navigator>
+  );
+};
+
+/*
+ ** Main navigator
+ */
+export default function AppNavigator(): JSX.Element {
+  return (
+    <NavigationContainer>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 35}
+        style={GlobalStyles.mainContainer}>
+        <RootNavigator />
+      </KeyboardAvoidingView>
+    </NavigationContainer>
+  );
+}
