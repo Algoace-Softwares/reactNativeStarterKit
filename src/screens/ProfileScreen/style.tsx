@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-  lableStyle: {
-    color: 'green',
-    fontSize: 20,
+  mainView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -22,7 +22,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   message: '',
-  userData: {},
+  userData: null,
   tokens: {
     accessToken: '',
     refreshToken: '',
@@ -132,6 +132,7 @@ export const fetchDataFromLocalStorage = createAsyncThunk(
       // getting user data as well as token
       const jsonUser = storage.getString(ASYNC_USER_DATA_KEY);
       const jsonToken = storage.getString(ASYNC_TOKEN_KEY);
+      console.log('jsonUser and jsonToken', jsonUser, jsonToken);
       if (jsonUser && jsonToken) {
         // parsing async data
         const userData: userType = JSON.parse(jsonUser) as userType;
@@ -171,7 +172,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.message = '';
-      state.userData = {};
+      state.userData = null;
       state.tokens = {
         accessToken: '',
         refreshToken: '',

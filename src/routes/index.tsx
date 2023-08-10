@@ -7,7 +7,8 @@ import {authScreens, homeScreen} from '../data';
 import RNBootSplash from 'react-native-bootsplash';
 
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
-import {useAppSelector} from '../hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
+import {fetchDataFromLocalStorage} from '../redux/features/auth/authSlice';
 
 declare global {
   namespace ReactNavigation {
@@ -22,11 +23,10 @@ declare global {
 //   'onBoardingScreen'
 // >;
 
-const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-
 /*
- ** Auth stack for rest of the screen
+ ** Auth stack and navigator for rest of the screen
  */
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreens = () => {
   return (
     <AuthStack.Navigator>
@@ -44,10 +44,10 @@ const AuthStackScreens = () => {
   );
 };
 
-const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 /*
- **Home stack for rest of the screen
+ **Home stack and navigator for rest of the screen
  */
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const HomeStackScreens = () => {
   return (
     <HomeStack.Navigator>
@@ -64,16 +64,18 @@ const HomeStackScreens = () => {
     </HomeStack.Navigator>
   );
 };
-
-const RootStack = createNativeStackNavigator<RootStackParamList>();
 /*
- **root navigator
+ **Root stack and navigator
  */
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {
+  //hooks
   const {userData} = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   /*
    ** check is user signed in or not
    */
+  // life cycles methods
   useEffect(() => {
     /* *
     your logic for checking if user logged in or not  you need to get the token from asnyc
@@ -85,8 +87,16 @@ const RootNavigator = (): JSX.Element => {
     3 step: we make a api call to get latest userData from server and save it on async as well as on state varaible
     4 step: we hide splash screen
      */
-    RNBootSplash.hide();
-  }, []);
+    dispatch(fetchDataFromLocalStorage())
+      .then(data => {
+        console.debug('data is :', data);
+        RNBootSplash.hide();
+      })
+      .catch(e => {
+        RNBootSplash.hide();
+        console.log('error is:', e);
+      });
+  }, [dispatch]);
 
   return (
     <RootStack.Navigator>

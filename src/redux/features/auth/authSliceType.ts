@@ -10,7 +10,7 @@ export interface loginParamType {
 }
 
 export interface UsersState {
-  userData: Object;
+  userData: object | null;
   isError: Boolean;
   isLoading: Boolean;
   isSuccess: Boolean;
