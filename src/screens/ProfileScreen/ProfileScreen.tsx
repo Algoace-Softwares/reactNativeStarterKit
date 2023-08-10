@@ -1,6 +1,5 @@
 import {Text, View} from 'react-native';
 import React from 'react';
-import {GlobalStyles} from '../../assets';
 import styles from './style';
 
 const ProfileScreen = () => {
