@@ -76,4 +76,4 @@ This is simple and easy to use starter kit following are the feature used in thi
 
 ### Note?
 
-PR are most welcome. Feel free to raise PR. make your seperate branch and proper description if it would bug then it shoulw be like bug/"your description."
+PR are most welcome. Feel free to raise PR. make your seperate branch with proper description. if it would be a bug then it should be like bug/"your description."
