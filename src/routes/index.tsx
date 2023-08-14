@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {KeyboardAvoidingView, Platform} from 'react-native';
@@ -69,9 +69,10 @@ const HomeStackScreens = () => {
  */
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {
+  const [userData] = useState(null);
   //hooks
-  const {userData} = useAppSelector(state => state.auth);
-  const dispatch = useAppDispatch();
+  // const {userData} = useAppSelector(state => state.auth);
+  // const dispatch = useAppDispatch();
   /*
    ** check is user signed in or not
    */
@@ -87,16 +88,16 @@ const RootNavigator = (): JSX.Element => {
     3 step: we make a api call to get latest userData from server and save it on async as well as on state varaible
     4 step: we hide splash screen
      */
-    dispatch(fetchDataFromLocalStorage())
-      .then(data => {
-        console.debug('data is :', data);
-        RNBootSplash.hide();
-      })
-      .catch(e => {
-        RNBootSplash.hide();
-        console.log('error is:', e);
-      });
-  }, [dispatch]);
+    // dispatch(fetchDataFromLocalStorage())
+    //   .then(data => {
+    //     console.debug('data is :', data);
+    //     RNBootSplash.hide();
+    //   })
+    //   .catch(e => {
+    //     RNBootSplash.hide();
+    //     console.log('error is:', e);
+    //   });
+  }, []);
 
   return (
     <RootStack.Navigator>
