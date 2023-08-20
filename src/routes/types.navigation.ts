@@ -41,3 +41,14 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<HomeStackParamList>,
   BottomTabNavigationProp<BottomTabNavigatorParamList>
 >;
+
+export interface tabBarIconType {
+  color: string;
+  size: number;
+  item: {
+    name: string;
+    component: () => React.JSX.Element;
+    tabBarIcon: any;
+    tabBarLabel: string;
+  };
+}

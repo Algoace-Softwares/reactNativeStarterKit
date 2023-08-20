@@ -5,8 +5,7 @@ import {COLORS, GlobalStyles} from '../../assets';
 export default function PhoneNumber({code}: {code: number}) {
   return (
     <View>
-      <Text
-        style={{color: COLORS.grey5, ...GlobalStyles.l3}}>{`+${code}`}</Text>
+      <Text style={{color: COLORS.grey5, ...GlobalStyles.l3}}>{`+${code}`}</Text>
     </View>
   );
 }

@@ -5,7 +5,7 @@ import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS, ICONS} from '../../assets';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import styles from './styles';
-import {RootStackParamList} from '../../routes/types.navigation';
+import {AuthStackParamList} from '../../routes/types.navigation';
 
 export default function SocialAuthScreen(): JSX.Element {
   /*
@@ -13,9 +13,9 @@ export default function SocialAuthScreen(): JSX.Element {
    */
   const navigation = useNavigation();
 
-  let route = useRoute<RouteProp<RootStackParamList, 'SocialAuthScreen'>>();
+  const route = useRoute<RouteProp<AuthStackParamList, 'SocialAuthScreen'>>();
   //route params
-  let {authFlow} = route.params;
+  const {authFlow} = route.params;
   /*
    * Functions
    */

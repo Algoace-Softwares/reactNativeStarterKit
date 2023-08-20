@@ -30,7 +30,7 @@ export default function InputDatePicker({
   // redering date for display / formatting date for to display
   const renderDateToDisplay = (): JSX.Element => {
     if (value) {
-      let tempDate = new Date(value);
+      const tempDate = new Date(value);
       return (
         <Text style={styles.selectDateLabelStyle}>{tempDate.toLocaleDateString('en-US')}</Text>
       );

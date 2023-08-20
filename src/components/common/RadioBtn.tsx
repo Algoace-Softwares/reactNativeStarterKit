@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GlobalStyles, COLORS} from '../../assets';
 
 interface radioBtnStyle {
@@ -20,7 +14,7 @@ interface radioBtnStyle {
   mainStyle?: ViewStyle;
 }
 function RadioBtn({
-  onPress = () => {},
+  onPress,
   title = '',
   checked = false,
   titleStyle = {},
@@ -33,12 +27,7 @@ function RadioBtn({
   return (
     <TouchableOpacity style={[styles().container, mainStyle]} onPress={onPress}>
       <View style={[styles().outside, outerStyle]}>
-        <View
-          style={[
-            styles(checked, unSelectedColor, selectedColor).inside,
-            innerStyle,
-          ]}
-        />
+        <View style={[styles(checked, unSelectedColor, selectedColor).inside, innerStyle]} />
       </View>
       <Text style={[styles().mainLabelStyle, titleStyle]}>{title}</Text>
     </TouchableOpacity>
@@ -47,11 +36,7 @@ function RadioBtn({
 
 export default RadioBtn;
 
-const styles = (
-  checked?: boolean,
-  unSelectedColor?: string,
-  selectedColor?: string,
-) =>
+const styles = (checked?: boolean, unSelectedColor?: string, selectedColor?: string) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',

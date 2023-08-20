@@ -11,7 +11,5 @@ export default function FocusAwareStatusBar({
 }): JSX.Element | null {
   const isFocused = useIsFocused();
 
-  return isFocused ? (
-    <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} />
-  ) : null;
+  return isFocused ? <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} /> : null;
 }

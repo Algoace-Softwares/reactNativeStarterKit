@@ -15,9 +15,9 @@ interface alertChoiceModalType {
 
 export default function AlertChoiceModal({
   visible = false,
-  setVisible = () => {},
+  setVisible,
   clickAnywhere = false,
-  okBtnPressed = () => {},
+  okBtnPressed,
   label = '',
   loading = false,
 }: alertChoiceModalType): JSX.Element {

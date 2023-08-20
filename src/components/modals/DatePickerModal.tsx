@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Text, View, Modal, TouchableOpacity, Platform} from 'react-native';
 import React, {useState} from 'react';
 import {GlobalStyles, HEIGHT, COLORS} from '../../assets';
 import {LABELS} from '../../labels';
@@ -21,7 +14,7 @@ interface datePickerModalType {
 
 export default function DatePickerModal({
   visible = false,
-  setVisible = () => {},
+  setVisible,
   clickAnywhere = false,
   onSelectedDate,
   value = new Date(),

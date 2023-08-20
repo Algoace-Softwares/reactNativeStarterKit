@@ -19,7 +19,7 @@ export default function CommentBox({
   textInputStyle = {},
   textLabelStyle = {},
   viewStyle = {},
-  onChangeText = () => {},
+  onChangeText,
   placeHolder = '',
   value,
 }: commentBoxType): JSX.Element {

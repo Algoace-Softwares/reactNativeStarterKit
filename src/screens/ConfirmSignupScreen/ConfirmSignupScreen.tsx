@@ -53,7 +53,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
 
   useEffect(() => {
     //if rensend code is false then only count start
-    let interval: NodeJS.Timer;
+    let interval: NodeJS.Timeout;
     if (resendCode === false) {
       interval = setInterval(() => {
         if (countDown < 1) {
