@@ -9,15 +9,15 @@ import {AuthStackParamList} from '../../routes/types.navigation';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   //Hooks
-  let route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
+  const route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
   // navogation routes params
-  let {email, password} = route.params;
+  const {email, password} = route.params;
 
   // States
-  let [confirmationCode, setConfirmationCode] = useState<string>('');
-  let [countDown, setCountDown] = useState<number>(59);
-  let [resendCode, setResendCode] = useState<boolean>(true);
-  let [loading] = useState<boolean>(true);
+  const [confirmationCode, setConfirmationCode] = useState<string>('');
+  const [countDown, setCountDown] = useState<number>(59);
+  const [resendCode, setResendCode] = useState<boolean>(true);
+  const [loading] = useState<boolean>(true);
 
   // Functions
   const checkTextFieldValidation = () => {
@@ -53,7 +53,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
 
   useEffect(() => {
     //if rensend code is false then only count start
-    let interval: NodeJS.Timer;
+    let interval: NodeJS.Timeout;
     if (resendCode === false) {
       interval = setInterval(() => {
         if (countDown < 1) {
@@ -67,7 +67,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
     }
 
     return () => clearInterval(interval);
-  }, [countDown]);
+  }, [resendCode, countDown]);
 
   // Rendering
   return (
