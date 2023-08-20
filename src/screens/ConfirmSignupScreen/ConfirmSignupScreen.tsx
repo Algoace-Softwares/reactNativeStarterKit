@@ -9,15 +9,15 @@ import {AuthStackParamList} from '../../routes/types.navigation';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   //Hooks
-  const route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
+  let route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
   // navogation routes params
-  const {email, password} = route.params;
+  let {email, password} = route.params;
 
   // States
-  const [confirmationCode, setConfirmationCode] = useState<string>('');
-  const [countDown, setCountDown] = useState<number>(59);
-  const [resendCode, setResendCode] = useState<boolean>(true);
-  const [loading] = useState<boolean>(true);
+  let [confirmationCode, setConfirmationCode] = useState<string>('');
+  let [countDown, setCountDown] = useState<number>(59);
+  let [resendCode, setResendCode] = useState<boolean>(true);
+  let [loading] = useState<boolean>(true);
 
   // Functions
   const checkTextFieldValidation = () => {
@@ -67,7 +67,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
     }
 
     return () => clearInterval(interval);
-  }, [resendCode, countDown]);
+  }, [countDown]);
 
   // Rendering
   return (
