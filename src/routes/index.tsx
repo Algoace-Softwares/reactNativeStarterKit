@@ -7,8 +7,8 @@ import {authScreens, homeScreen} from '../data';
 import RNBootSplash from 'react-native-bootsplash';
 
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
-import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
-import {fetchDataFromLocalStorage} from '../redux/features/auth/authSlice';
+// import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
+// import {fetchDataFromLocalStorage} from '../redux/features/auth/authSlice';
 
 declare global {
   namespace ReactNavigation {
@@ -78,6 +78,7 @@ const RootNavigator = (): JSX.Element => {
    */
   // life cycles methods
   useEffect(() => {
+    RNBootSplash.hide();
     /* *
     your logic for checking if user logged in or not  you need to get the token from asnyc
     then your check if userData is their user is logged then but before showing to homeStack

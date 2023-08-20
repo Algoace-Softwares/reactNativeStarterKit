@@ -8,7 +8,7 @@ const storage = new MMKV();
 
 export class CommonUtils {
   constructor() {
-    console.log('constructer is called Common utils');
+    // console.log('constructer is called Common utils');
   }
   // crash log
   crashLogs = ({filename, functionName, error}: crashLogType): void => {
@@ -91,7 +91,7 @@ export class CommonUtils {
 // you need to install rnfetch blob in order to make these funnction working
 export class reactNativeFileManupilation {
   constructor() {
-    console.log('reactNativeFileManuiplation constructor called');
+    // console.log('reactNativeFileManuiplation constructor called');
   }
   // //File download
   // downloadFile = async (url = '', titleName = '') => {

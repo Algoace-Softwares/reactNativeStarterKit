@@ -18,6 +18,7 @@ jest.mock('axios', () => {
     })),
   };
 });
+
 // mocking bootsplash
 jest.mock('react-native-bootsplash', () => {
   return {
@@ -26,4 +27,4 @@ jest.mock('react-native-bootsplash', () => {
   };
 });
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');

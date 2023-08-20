@@ -29,22 +29,24 @@ export default function CarosalViewComponent({
   //Refs
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  // type checking for image path if it is url or local saved image
+  const renderImage = (item: dataItem) => {
+    if (typeof item?.path === 'number') {
+      return <Image source={item?.path} style={GlobalStyles.mainImageStyle} resizeMode={'cover'} />;
+    } else if (typeof item?.path === 'string') {
+      return (
+        <Image
+          source={{uri: item?.path}}
+          style={GlobalStyles.mainImageStyle}
+          resizeMode={'cover'}
+        />
+      );
+    }
+  };
+
   // redering top image slider
   const renderPictureSlider = ({item}: {item: dataItem}): JSX.Element => {
-    console.log('item is:', item);
-    return (
-      <View style={styles.carosalItemStyle}>
-        {typeof item?.path === 'number' ? (
-          <Image source={item?.path} style={GlobalStyles.mainImageStyle} resizeMode={'cover'} />
-        ) : (
-          <Image
-            source={{uri: item?.path}}
-            style={GlobalStyles.mainImageStyle}
-            resizeMode={'cover'}
-          />
-        )}
-      </View>
-    );
+    return <View style={styles.carosalItemStyle}>{renderImage(item)}</View>;
   };
 
   // controlling footer dots

@@ -7,7 +7,7 @@ export class AppValidation {
 
   private readonly nameRegex = /^[A-Za-z ]+$/;
   constructor() {
-    console.log('App validation constructor is called');
+    // console.log('App validation constructor is called');
   }
   get getEmailReg() {
     return this.emailRegex;

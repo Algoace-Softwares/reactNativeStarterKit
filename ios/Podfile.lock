@@ -378,9 +378,9 @@ PODS:
   - React-jsinspector (0.72.3)
   - React-logger (0.72.3):
     - glog
-  - react-native-date-picker (4.2.13):
+  - react-native-date-picker (4.2.14):
     - React-Core
-  - react-native-image-picker (5.6.0):
+  - react-native-image-picker (5.6.1):
     - React-Core
   - react-native-mmkv (2.10.1):
     - MMKV (>= 1.2.13)
@@ -739,8 +739,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 59d1eb03af7d30b7d66589c410f13151271e8006
   React-jsinspector: b511447170f561157547bc0bef3f169663860be7
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
-  react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
-  react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
+  react-native-date-picker: 8847cb359cf259ddae5ed165217e15573a654519
+  react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
   react-native-mmkv: dea675cf9697ad35940f1687e98e133e1358ef9f
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
   react-native-simple-toast: 0c7d14bcad288b5b83ae4b0eea65651b4ca829b0
@@ -771,4 +771,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: adb46be7fca22ba3ab58a67259bfa7ebce0c1a31
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.11.3
