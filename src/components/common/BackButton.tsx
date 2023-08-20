@@ -19,9 +19,7 @@ export default function BackButton({
   };
   // Rendering
   return (
-    <TouchableOpacity
-      style={[styles.mainViewStyle, viewStyle]}
-      onPress={backPressed}>
+    <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={backPressed}>
       <ICONS.BackIcon color={fillColor} />
     </TouchableOpacity>
   );

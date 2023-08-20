@@ -24,7 +24,7 @@ export default function OTPFieldInput({
   mainOtpStyle = {},
   textLabelStyle = {},
   mianViewStyle = {},
-  onChangeText = () => {},
+  onChangeText,
   cellStyle = {},
 }: oTPFieldInputType): JSX.Element {
   //states
@@ -38,9 +38,7 @@ export default function OTPFieldInput({
   //rendering
   return (
     <View style={[styles.viewStyle, mianViewStyle]}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>
-        {textLable}
-      </Text>
+      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
       <CodeField
         ref={ref}
         {...props}
@@ -51,8 +49,8 @@ export default function OTPFieldInput({
         }}
         cellCount={CELL_COUNT}
         rootStyle={[styles.codeFieldRoot, mainOtpStyle]}
-        keyboardType="number-pad"
-        textContentType="oneTimeCode"
+        keyboardType={'number-pad'}
+        textContentType={'oneTimeCode'}
         renderCell={({index, symbol, isFocused}) => (
           <Text
             key={index}

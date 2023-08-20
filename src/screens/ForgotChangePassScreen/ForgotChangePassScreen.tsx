@@ -13,15 +13,15 @@ import {GlobalStyles, COLORS, ICONS} from '../../assets';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
-import {RootStackParamList} from '../../routes/types.navigation';
+import {AuthStackParamList} from '../../routes/types.navigation';
 import {appValidation} from '../../utils';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   //Hooks
-  const route = useRoute<RouteProp<RootStackParamList, 'ForgotChangePassScreen'>>();
+  const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useNavigation();
   // route params
-  let {email} = route.params;
+  const {email} = route.params;
   console.log('emailAddress', route.params);
   // states
   const [password, setPassword] = useState<string>('');
@@ -53,7 +53,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
     if (!checkTextFieldValidation()) {
       return;
     }
-    let params = {
+    const params = {
       emailAddress: email?.trim(),
       password,
       confirmationCode,
@@ -75,7 +75,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
   // Lifecycle
   useEffect(() => {
     //if rensend code is false then only count start
-    let interval: NodeJS.Timer;
+    let interval: NodeJS.Timeout;
     if (resendCode === false) {
       interval = setInterval(() => {
         if (countDown < 1) {

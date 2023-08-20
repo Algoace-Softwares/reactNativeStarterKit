@@ -32,13 +32,13 @@ export default function useImagePicker() {
           // checking for platform
           if (Platform.OS === 'android') {
             // requesting permission
-            let androidPermission = await PermissionsAndroid.request(
+            const androidPermission = await PermissionsAndroid.request(
               PermissionsAndroid.PERMISSIONS.CAMERA,
             );
             console.debug('android permission', androidPermission);
             if (androidPermission === 'granted') {
               // launcging camera
-              let camResponse = await launchCamera(options);
+              const camResponse = await launchCamera(options);
               console.debug('camResponse is:', camResponse);
               if (camResponse.assets && camResponse.assets[0].fileSize) {
                 if (camResponse.assets[0].fileSize > 50000000) {
@@ -55,7 +55,7 @@ export default function useImagePicker() {
             }
           } else {
             // launching camera
-            let camResponse = await launchCamera(options);
+            const camResponse = await launchCamera(options);
             console.debug('camResponse is:', camResponse);
             if (camResponse.assets && camResponse.assets[0].fileSize) {
               // checking vide size
@@ -77,7 +77,7 @@ export default function useImagePicker() {
         text: 'Video Gallery',
         onPress: async () => {
           // lanunching image gallery
-          let ImageLibResponse = await launchImageLibrary(options);
+          const ImageLibResponse = await launchImageLibrary(options);
           console.log('ImageLibResponse is:', ImageLibResponse);
           if (ImageLibResponse.assets && ImageLibResponse.assets[0].fileSize) {
             // checking size condition
@@ -106,7 +106,7 @@ export default function useImagePicker() {
    ** for uploading image
    */
   const onPressImageUpload = ({callBck}: onPressUploadType): void => {
-    let options: ImageLibraryOptions = {
+    const options: ImageLibraryOptions = {
       mediaType: 'photo',
       includeExtra: true,
       maxHeight: 1024,
@@ -121,14 +121,14 @@ export default function useImagePicker() {
           // checking for platform
           if (Platform.OS === 'android') {
             // requesting permission
-            let androidPermission = await PermissionsAndroid.request(
+            const androidPermission = await PermissionsAndroid.request(
               PermissionsAndroid.PERMISSIONS.CAMERA,
             );
             console.debug('android permission', androidPermission);
 
             // permission is granted
             if (androidPermission === 'granted') {
-              let camResponse = await launchCamera(options);
+              const camResponse = await launchCamera(options);
               console.debug('camResponse is:', camResponse);
               if (camResponse.assets) {
                 callBck(camResponse);
@@ -139,7 +139,7 @@ export default function useImagePicker() {
             }
           } else {
             //launching camera
-            let camResponse = await launchCamera(options);
+            const camResponse = await launchCamera(options);
             console.debug('camResponse is:', camResponse);
             if (camResponse.assets) {
               callBck(camResponse);
@@ -155,7 +155,7 @@ export default function useImagePicker() {
         text: 'Gallery',
         onPress: async () => {
           // launch image librrary
-          let ImageLibResponse = await launchImageLibrary(options);
+          const ImageLibResponse = await launchImageLibrary(options);
           console.log('ImageLibResponse is:', ImageLibResponse);
           if (ImageLibResponse.assets) {
             callBck(ImageLibResponse);

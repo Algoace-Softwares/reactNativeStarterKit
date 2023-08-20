@@ -16,7 +16,7 @@ interface inputTextLabelType {
   textLabelStyle?: ViewStyle;
   editable?: boolean;
   viewStyle?: ViewStyle;
-  onChangeText?: (text: string) => void;
+  onChangeText: (text: string) => void;
   rightIconPress?: () => void;
   leftIconPress?: () => void;
   secureEntry?: boolean;
@@ -35,9 +35,9 @@ export default function InputTextLabel({
   textLabelStyle = {},
   editable = true,
   viewStyle = {},
-  onChangeText = () => {},
-  rightIconPress = () => {},
-  leftIconPress = () => {},
+  onChangeText,
+  rightIconPress,
+  leftIconPress,
   secureEntry = false,
   children,
   leftIcon = false,
@@ -55,11 +55,7 @@ export default function InputTextLabel({
 
       <View style={[styles.inputStyle2, textInputStyle]}>
         {leftIcon ? (
-          <TouchableOpacity
-            style={styles.leftButtonStyle}
-            onPress={() => {
-              leftIconPress();
-            }}>
+          <TouchableOpacity style={styles.leftButtonStyle} onPress={leftIconPress}>
             {Array.isArray(children) ? children[0] : children}
           </TouchableOpacity>
         ) : null}
@@ -78,11 +74,7 @@ export default function InputTextLabel({
           autoCorrect={false}
         />
         {rightIcon ? (
-          <TouchableOpacity
-            style={styles.rightButtonStyle}
-            onPress={() => {
-              rightIconPress();
-            }}>
+          <TouchableOpacity style={styles.rightButtonStyle} onPress={rightIconPress}>
             {Array.isArray(children) ? children[1] : children}
           </TouchableOpacity>
         ) : null}

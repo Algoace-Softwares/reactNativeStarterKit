@@ -12,7 +12,7 @@ import {WIDTH, COLORS, GlobalStyles} from '../../assets';
 
 interface appBtnType {
   title: string;
-  onPress?: (title: string) => void;
+  onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
   loadingColor?: string;
@@ -24,7 +24,7 @@ interface appBtnType {
 
 export default function AppButton({
   title = '',
-  onPress = () => {},
+  onPress,
   disabled = false,
   loading = false,
   loadingColor = COLORS.white,
@@ -37,7 +37,7 @@ export default function AppButton({
     <TouchableOpacity
       disabled={disabled}
       activeOpacity={activeOpacity}
-      onPress={() => onPress(title)}
+      onPress={onPress}
       style={[styles(disabled).btn, btnStyle]}>
       {children && <View style={styles().childrenViewStyle}>{children}</View>}
       {title ? (

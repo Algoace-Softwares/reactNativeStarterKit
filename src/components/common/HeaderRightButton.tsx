@@ -1,10 +1,4 @@
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../assets';
 
@@ -18,13 +12,11 @@ interface headerRightButtonType {
 export default function HeaderRightButton({
   children = <></>,
   viewStyle = {},
-  onPress = () => {},
+  onPress,
   loading = false,
 }: headerRightButtonType): JSX.Element {
   return (
-    <TouchableOpacity
-      style={[styles.mainViewStyle, viewStyle]}
-      onPress={onPress}>
+    <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={onPress}>
       {loading ? (
         <ActivityIndicator size={'small'} color={COLORS.black} />
       ) : (

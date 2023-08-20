@@ -2,11 +2,7 @@ import {StyleSheet, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../assets/';
 
-export default function SaperatorLine({
-  veiwStyle2 = {},
-}: {
-  veiwStyle2: ViewStyle;
-}): JSX.Element {
+export default function SaperatorLine({veiwStyle2 = {}}: {veiwStyle2: ViewStyle}): JSX.Element {
   return <View style={[styles.viewStyle, veiwStyle2]} />;
 }
 
