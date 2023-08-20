@@ -27,7 +27,7 @@ declare global {
  ** Auth stack and navigator for rest of the screen
  */
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-const AuthStackScreens = () => {
+const AuthStackScreens = (): JSX.Element => {
   return (
     <AuthStack.Navigator>
       {authScreens.map(item => {
@@ -48,7 +48,7 @@ const AuthStackScreens = () => {
  **Home stack and navigator for rest of the screen
  */
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
-const HomeStackScreens = () => {
+const HomeStackScreens = (): JSX.Element => {
   return (
     <HomeStack.Navigator>
       {homeScreen.map(item => {
