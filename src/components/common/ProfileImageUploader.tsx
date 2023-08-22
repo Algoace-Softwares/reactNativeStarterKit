@@ -3,17 +3,9 @@ import React from 'react';
 import {COLORS, ICONS, WIDTH, GlobalStyles} from '../../assets';
 import {imageObjectType} from '../../screens/SignupScreen/types';
 
-interface ProfileImageUploaderType {
-  loading: boolean;
-  onPressCamera: () => void;
-  imageAsset: null | imageObjectType;
-}
-
-export default function ProfileImageUploader({
-  loading,
-  onPressCamera,
-  imageAsset = null,
-}: ProfileImageUploaderType): JSX.Element {
+export default function ProfileImageUploader(props: ProfileImageUploaderType): JSX.Element {
+  // destructring props
+  const {loading, onPressCamera, imageAsset = null} = props;
   console.log('image asset is', imageAsset);
   return (
     <View style={styles.imageViewStyle}>
@@ -66,3 +58,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 });
+
+interface ProfileImageUploaderType {
+  loading: boolean;
+  onPressCamera: () => void;
+  imageAsset: null | imageObjectType;
+}

@@ -19,14 +19,9 @@ interface InputTextPhoneNumber {
   value?: string;
 }
 
-export default function InputTextPhoneNumber({
-  textLable = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  viewStyle = {},
-  onChangeText,
-  value = '+93',
-}: InputTextPhoneNumber): JSX.Element {
+export default function InputTextPhoneNumber(props: InputTextPhoneNumber): JSX.Element {
+  // destructring props
+  const {textLable, textInputStyle, textLabelStyle, viewStyle, onChangeText, value = '+93'} = props;
   /*
    **States
    */

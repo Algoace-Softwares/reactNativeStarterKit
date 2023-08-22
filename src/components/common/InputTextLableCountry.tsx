@@ -30,15 +30,17 @@ interface InputTextLabelCountryType {
   value?: string;
 }
 
-export default function InputTextLabelCountry({
-  textLable = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  viewStyle = {},
-  onCountrySelect,
-  placeHolder = '',
-  value = '',
-}: InputTextLabelCountryType): JSX.Element {
+export default function InputTextLabelCountry(props: InputTextLabelCountryType): JSX.Element {
+  // destructring props
+  const {
+    textLable = '',
+    textInputStyle = {},
+    textLabelStyle = {},
+    viewStyle = {},
+    onCountrySelect,
+    placeHolder = '',
+    value = '',
+  } = props;
   /*
    ** states
    */

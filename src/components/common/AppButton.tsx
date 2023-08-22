@@ -10,29 +10,20 @@ import {
 } from 'react-native';
 import {WIDTH, COLORS, GlobalStyles} from '../../assets';
 
-interface appBtnType {
-  title: string;
-  onPress?: () => void;
-  disabled?: boolean;
-  loading?: boolean;
-  loadingColor?: string;
-  btnStyle?: ViewStyle;
-  textStyle?: TextStyle;
-  activeOpacity?: number;
-  children?: JSX.Element | null;
-}
+export default function AppButton(props: appBtnType): JSX.Element {
+  // destructing props
+  const {
+    title = '',
+    onPress,
+    disabled = false,
+    loading = false,
+    loadingColor = COLORS.white,
+    btnStyle = {},
+    textStyle = {},
+    activeOpacity = 0.8,
+    children = null,
+  } = props;
 
-export default function AppButton({
-  title = '',
-  onPress,
-  disabled = false,
-  loading = false,
-  loadingColor = COLORS.white,
-  btnStyle = {},
-  textStyle = {},
-  activeOpacity = 0.8,
-  children = null,
-}: appBtnType): JSX.Element {
   return (
     <TouchableOpacity
       disabled={disabled}
@@ -76,3 +67,15 @@ const styles = (disabled?: boolean) =>
       marginRight: 20,
     },
   });
+
+interface appBtnType {
+  title: string;
+  onPress?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  loadingColor?: string;
+  btnStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  activeOpacity?: number;
+  children?: JSX.Element | null;
+}

@@ -2,7 +2,10 @@ import {StyleSheet, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../assets/';
 
-export default function SaperatorLine({veiwStyle2 = {}}: {veiwStyle2: ViewStyle}): JSX.Element {
+export default function SaperatorLine(props: SaperatorLineType): JSX.Element {
+  //destructring props
+  const {veiwStyle2 = {}} = props;
+
   return <View style={[styles.viewStyle, veiwStyle2]} />;
 }
 
@@ -14,3 +17,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 });
+
+interface SaperatorLineType {
+  veiwStyle2: ViewStyle;
+}

@@ -7,10 +7,11 @@ interface backBtnType {
   fillColor: string;
   viewStyle?: ViewStyle;
 }
-export default function BackButton({
-  fillColor = 'white',
-  viewStyle = {},
-}: backBtnType): JSX.Element {
+
+export default function BackButton(props: backBtnType): JSX.Element {
+  // destructring props
+  const {fillColor = 'white', viewStyle = {}} = props;
+
   //Navigtion
   const navigation = useNavigation();
   // Functions

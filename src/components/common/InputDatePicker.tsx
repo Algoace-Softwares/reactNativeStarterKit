@@ -14,16 +14,18 @@ interface InputDatePicker {
   value: Date;
 }
 
-export default function InputDatePicker({
-  textLable = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  viewStyle = {},
-  onPressDate,
-  calenderIcon = false,
-  placeHolder = 'Select date',
-  value = new Date(),
-}: InputDatePicker): JSX.Element {
+export default function InputDatePicker(props: InputDatePicker): JSX.Element {
+  // destructruing props
+  const {
+    textLable = '',
+    textInputStyle = {},
+    textLabelStyle = {},
+    viewStyle = {},
+    onPressDate,
+    calenderIcon = false,
+    placeHolder = 'Select date',
+    value = new Date(),
+  } = props;
   //states
   const [datePickerModal, setDatePickerModal] = useState(false);
 

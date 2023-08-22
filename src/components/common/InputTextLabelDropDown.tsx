@@ -31,20 +31,23 @@ interface InputTextLabelDropDownType {
   dropDown: boolean;
 }
 
-export default function InputTextLabelDropDown({
-  textLable = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  editable = true,
-  viewStyle = {},
-  onChangeText,
-  keyType = 'default',
-  placeHolder = '',
-  value = '',
-  dropDown = false,
-  dropDownData = [],
-  disableAutoCapitalize = false,
-}: InputTextLabelDropDownType): JSX.Element {
+export default function InputTextLabelDropDown(props: InputTextLabelDropDownType): JSX.Element {
+  // destructring props
+  const {
+    textLable = '',
+    textInputStyle = {},
+    textLabelStyle = {},
+    editable = true,
+    viewStyle = {},
+    onChangeText,
+    keyType = 'default',
+    placeHolder = '',
+    value = '',
+    dropDown = false,
+    dropDownData = [],
+    disableAutoCapitalize = false,
+  } = props;
+
   //states
   const [itemData, setItemData] = useState(dropDownData);
   const [isDropDown, setIsDropDown] = useState(false);

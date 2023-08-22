@@ -13,17 +13,19 @@ interface commentBoxType {
   value: string | undefined;
 }
 
-export default function CommentBox({
-  textLable = '',
-  textLable2 = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  viewStyle = {},
-  onChangeText,
-  placeHolder = '',
-  value,
-}: commentBoxType): JSX.Element {
-  //Rendering
+export default function CommentBox(props: commentBoxType): JSX.Element {
+  // destuctruing props
+  const {
+    textLable = '',
+    textLable2 = '',
+    textInputStyle = {},
+    textLabelStyle = {},
+    viewStyle = {},
+    onChangeText,
+    placeHolder = '',
+    value,
+  } = props;
+  // Rerendering
   return (
     <View style={viewStyle}>
       <Text style={[GlobalStyles.b2, textLabelStyle]}>
@@ -42,7 +44,7 @@ export default function CommentBox({
         }}
         placeholder={placeHolder}
         value={value}
-        onChangeText={text => onChangeText(text)}
+        onChangeText={onChangeText}
       />
     </View>
   );

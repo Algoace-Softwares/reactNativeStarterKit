@@ -10,12 +10,10 @@ interface authHeaderType {
   upperTextStyle?: ViewStyle;
 }
 
-export default function AuthHeader({
-  text1 = '',
-  text2 = '',
-  viewStyle = {},
-  upperTextStyle = {},
-}: authHeaderType): JSX.Element {
+export default function AuthHeader(props: authHeaderType): JSX.Element {
+  // destructing props
+  const {text1 = '', text2 = '', viewStyle = {}, upperTextStyle = {}} = props;
+
   return (
     <View style={[styles.mainView, viewStyle]}>
       <Text style={[styles.upperTextStyle, upperTextStyle]}>{text1}</Text>

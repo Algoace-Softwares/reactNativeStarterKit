@@ -19,14 +19,15 @@ interface oTPFieldInputType {
   cellStyle?: ViewStyle;
 }
 
-export default function OTPFieldInput({
-  textLable = '',
-  mainOtpStyle = {},
-  textLabelStyle = {},
-  mianViewStyle = {},
-  onChangeText,
-  cellStyle = {},
-}: oTPFieldInputType): JSX.Element {
+export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Element {
+  const {
+    textLable = '',
+    mainOtpStyle = {},
+    textLabelStyle = {},
+    mianViewStyle = {},
+    onChangeText,
+    cellStyle = {},
+  } = properties;
   //states
   const [value, setValue] = useState<string>('');
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({

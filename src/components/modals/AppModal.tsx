@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS, WIDTH} from '../../assets';
 
 interface appModalType {
@@ -10,7 +10,7 @@ interface appModalType {
 
 export default function AppModal({
   visible = false,
-  setVisible,
+  setVisible = () => {},
   clickAnywhere = false,
 }: appModalType): JSX.Element {
   return (
@@ -19,9 +19,7 @@ export default function AppModal({
         activeOpacity={1}
         style={styles.centeredView}
         onPress={() => clickAnywhere && setVisible(false)}>
-        <View style={styles.modalView}>
-          <Text>Your text</Text>
-        </View>
+        <View style={styles.modalView}>{/* Your content here */}</View>
       </TouchableOpacity>
     </Modal>
   );

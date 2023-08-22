@@ -3,7 +3,9 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 // App Imports
 import {COLORS} from '../../assets';
 
-export default function Loading({fullScreen = false}: {fullScreen: boolean}) {
+export default function Loading(props: loadingType) {
+  // destructring props
+  const {fullScreen = false} = props;
   return (
     <View style={[fullScreen && styles.mainStyle]}>
       <ActivityIndicator color={COLORS.primary} size={'large'} />
@@ -19,3 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+interface loadingType {
+  fullScreen: boolean;
+}

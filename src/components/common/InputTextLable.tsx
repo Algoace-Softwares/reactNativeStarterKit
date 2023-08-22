@@ -16,7 +16,7 @@ interface inputTextLabelType {
   textLabelStyle?: ViewStyle;
   editable?: boolean;
   viewStyle?: ViewStyle;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   rightIconPress?: () => void;
   leftIconPress?: () => void;
   secureEntry?: boolean;
@@ -29,24 +29,26 @@ interface inputTextLabelType {
   disableAutoCapitalize?: boolean;
 }
 
-export default function InputTextLabel({
-  textLable = '',
-  textInputStyle = {},
-  textLabelStyle = {},
-  editable = true,
-  viewStyle = {},
-  onChangeText,
-  rightIconPress,
-  leftIconPress,
-  secureEntry = false,
-  children,
-  leftIcon = false,
-  rightIcon = false,
-  keyType = 'default',
-  placeHolder = '',
-  value = '',
-  disableAutoCapitalize = false,
-}: inputTextLabelType): JSX.Element {
+export default function InputTextLabel(props: inputTextLabelType): JSX.Element {
+  // desrtcurting props
+  const {
+    textLable = '',
+    textInputStyle = {},
+    textLabelStyle = {},
+    editable = true,
+    viewStyle = {},
+    onChangeText,
+    rightIconPress,
+    leftIconPress,
+    secureEntry = false,
+    children,
+    leftIcon = false,
+    rightIcon = false,
+    keyType = 'default',
+    placeHolder = '',
+    value = '',
+    disableAutoCapitalize = false,
+  } = props;
   //states
 
   return (
@@ -67,9 +69,7 @@ export default function InputTextLabel({
           placeholderTextColor={'rgba(137, 137, 137, 1)'}
           placeholder={placeHolder}
           value={value}
-          onChangeText={text => {
-            onChangeText(text);
-          }}
+          onChangeText={onChangeText}
           autoCapitalize={disableAutoCapitalize ? 'none' : 'sentences'}
           autoCorrect={false}
         />

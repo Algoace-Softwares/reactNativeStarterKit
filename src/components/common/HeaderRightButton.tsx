@@ -2,19 +2,10 @@ import {ActivityIndicator, StyleSheet, TouchableOpacity, View, ViewStyle} from '
 import React from 'react';
 import {COLORS} from '../../assets';
 
-interface headerRightButtonType {
-  children: JSX.Element;
-  viewStyle?: ViewStyle;
-  onPress?: () => void;
-  loading?: boolean;
-}
+export default function HeaderRightButton(props: headerRightButtonType): JSX.Element {
+  //destructuring props
+  const {children = <></>, viewStyle, onPress, loading = false} = props;
 
-export default function HeaderRightButton({
-  children = <></>,
-  viewStyle = {},
-  onPress,
-  loading = false,
-}: headerRightButtonType): JSX.Element {
   return (
     <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={onPress}>
       {loading ? (
@@ -33,3 +24,10 @@ const styles = StyleSheet.create({
     top: 30,
   },
 });
+
+interface headerRightButtonType {
+  children: JSX.Element;
+  viewStyle?: ViewStyle;
+  onPress?: () => void;
+  loading?: boolean;
+}
