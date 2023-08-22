@@ -71,7 +71,7 @@ This is simple and easy to use starter kit following are the feature used in thi
 
 ## Things remaining
 
-- Built CI/CD for this project
+
 - Write test case for each individual component
 
 ### Note?
