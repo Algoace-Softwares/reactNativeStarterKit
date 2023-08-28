@@ -22,7 +22,7 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 export default function ContactScreen() {
   const route = useRoute<RouteProp<AuthStackParamList, 'ContactScreen'>>();
   //route params
-  const {firstName, lastName, emailAddress, password} = route.params;
+  const {lastName, emailAddress, password, firstName} = route.params;
 
   //States
 
