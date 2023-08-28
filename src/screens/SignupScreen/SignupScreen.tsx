@@ -11,12 +11,12 @@ import {
   ProfileImageUploader,
 } from '../../components';
 import {LABELS} from '../../labels';
-import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
 import {appValidation} from '../../utils';
 import useImagePicker from '../../hooks/useImagePicker';
 import {imageObjectType} from './types';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function SignupScreen() {
   /*
@@ -37,7 +37,7 @@ export default function SignupScreen() {
   /*
    * Hooks
    */
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
 
   // Functions
   const checkTextFieldValidation = (): boolean => {
@@ -69,8 +69,9 @@ export default function SignupScreen() {
 
     return true;
   };
-
-  // when continue button is pressed
+  /*
+   **   When continue button is pressed
+   */
   const ContinuePressed = (): void => {
     if (!checkTextFieldValidation()) {
       return;

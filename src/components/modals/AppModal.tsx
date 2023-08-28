@@ -10,7 +10,7 @@ interface appModalType {
 
 export default function AppModal({
   visible = false,
-  setVisible = () => {},
+  setVisible,
   clickAnywhere = false,
 }: appModalType): JSX.Element {
   return (
@@ -19,7 +19,7 @@ export default function AppModal({
         activeOpacity={1}
         style={styles.centeredView}
         onPress={() => clickAnywhere && setVisible(false)}>
-        <View style={styles.modalView}>{/* Your content here */}</View>
+        <View style={styles.modalView} />
       </TouchableOpacity>
     </Modal>
   );

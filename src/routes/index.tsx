@@ -10,12 +10,12 @@ import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './type
 // import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
 // import {fetchDataFromLocalStorage} from '../redux/features/auth/authSlice';
 
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends AuthStackParamList {}
-    interface RootParamList extends HomeStackParamList {}
-  }
-}
+// declare global {
+//   namespace ReactNavigation {
+//     interface RootParamList extends AuthStackParamList {}
+//     interface RootParamList extends HomeStackParamList {}
+//   }
+// }
 
 // export type onBoardingProps = NativeStackNavigationProp<RootStackParamList>;
 // export type onBoardingScreenProps = NativeStackScreenProps<
@@ -45,7 +45,7 @@ const AuthStackScreens = (): JSX.Element => {
 };
 
 /*
- **Home stack and navigator for rest of the screen
+ ** Home stack and navigator for rest of the screen
  */
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const HomeStackScreens = (): JSX.Element => {
@@ -65,7 +65,7 @@ const HomeStackScreens = (): JSX.Element => {
   );
 };
 /*
- **Root stack and navigator
+ ** Root stack and navigator
  */
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {

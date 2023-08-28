@@ -20,13 +20,18 @@ export default function ConfirmSignupScreen(): JSX.Element {
   const [loading] = useState<boolean>(true);
 
   // Functions
+  /*
+   ** Cheking filed validation
+   */
   const checkTextFieldValidation = () => {
     if (!confirmationCode) {
       return false;
     }
     return true;
   };
-  //when submit code is pressed
+  /*
+   ** when submit code is pressed
+   */
   const submitCodePressed = () => {
     if (!checkTextFieldValidation()) {
       Toast.show('validation failed', Toast.LONG);
@@ -39,8 +44,9 @@ export default function ConfirmSignupScreen(): JSX.Element {
     // api call
     console.log('params is', params);
   };
-
-  //when resend code is pressed
+  /*
+   ** When resend code is pressed
+   */
   const onPressResendCode = (): void => {
     const params = {
       email,
@@ -48,9 +54,9 @@ export default function ConfirmSignupScreen(): JSX.Element {
     setResendCode(false);
     console.log('params is', params);
   };
-
-  // Lifecycle
-
+  /*
+   **   Lifecycle methods
+   */
   useEffect(() => {
     //if rensend code is false then only count start
     let interval: NodeJS.Timeout;

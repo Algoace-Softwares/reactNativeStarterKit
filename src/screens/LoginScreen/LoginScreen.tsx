@@ -9,10 +9,10 @@ import {
 } from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS, ICONS} from '../../assets';
-import {useNavigation} from '@react-navigation/native';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {AppValidation} from '../../utils/Validations';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const appValidation = new AppValidation();
 
@@ -27,7 +27,7 @@ export default function LoginScreen(): JSX.Element {
   /*
    * hooks
    */
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   /*
    * Functions
    */

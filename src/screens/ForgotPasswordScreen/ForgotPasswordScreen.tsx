@@ -9,19 +9,21 @@ import {
 } from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
-import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   // States
   const [emailAddress, setEmailAddres] = useState<string>('');
   const [loading] = useState<boolean>(false);
   //Hooks
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
 
   // Functions
-  // checking function validatrion
+  /*
+   ** Checking function validatrion
+   */
   const checkTextFieldValidation = (): boolean => {
     if (!emailAddress) {
       Toast.show('email address required', Toast.LONG);
@@ -30,8 +32,9 @@ export default function ForgotPasswordScreen(): JSX.Element {
     }
     return true;
   };
-
-  // navigation to another screen
+  /*
+   ** Navigation to another screen
+   */
   const resetPassPressed = (): void => {
     if (!checkTextFieldValidation()) {
       return;

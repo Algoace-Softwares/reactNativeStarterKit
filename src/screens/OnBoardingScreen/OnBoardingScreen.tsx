@@ -2,16 +2,16 @@ import {Text, View, SafeAreaView} from 'react-native';
 import React from 'react';
 import {GlobalStyles, COLORS, ICONS} from '../../assets';
 import {LABELS} from '../../labels';
-import {useNavigation} from '@react-navigation/native';
 import {AppButton, CarosalViewComponent, FocusAwareStatusBar} from '../../components';
 import styles from './style';
 import {onBoardingData} from '../../data';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function OnBoardingScreen(): JSX.Element {
   /*
    * hooks
    */
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   /*
    * functions
    */

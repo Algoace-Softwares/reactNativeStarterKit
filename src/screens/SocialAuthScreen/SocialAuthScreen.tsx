@@ -3,15 +3,16 @@ import {Text, View, SafeAreaView} from 'react-native';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar} from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS, ICONS} from '../../assets';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import styles from './styles';
 import {AuthStackParamList} from '../../routes/types.navigation';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function SocialAuthScreen(): JSX.Element {
   /*
    * hooks
    */
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
 
   const route = useRoute<RouteProp<AuthStackParamList, 'SocialAuthScreen'>>();
   //route params

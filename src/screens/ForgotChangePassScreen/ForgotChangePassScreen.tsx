@@ -10,16 +10,17 @@ import {
 } from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS, ICONS} from '../../assets';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {appValidation} from '../../utils';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   //Hooks
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   // route params
   const {email} = route.params;
   console.log('emailAddress', route.params);

@@ -12,11 +12,12 @@ import {
 } from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {countryStates} from '../../data';
 import {AuthStackParamList} from '../../routes/types.navigation';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ContactScreen() {
   const route = useRoute<RouteProp<AuthStackParamList, 'ContactScreen'>>();
@@ -31,7 +32,7 @@ export default function ContactScreen() {
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
   // Hooks
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
 
   // Functions
   const checkTextFieldValidation = (): boolean => {
