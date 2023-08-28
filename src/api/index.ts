@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode';
 import {store} from '../redux/store';
 import Toast from 'react-native-simple-toast';
 import {MMKV} from 'react-native-mmkv';
+import {appUtils} from '../utils';
 
 // local storage
 export const storage = new MMKV();
@@ -20,7 +21,9 @@ export const API = axios.create({
  4 - if the token is expire then we calling api to get latest token from the server
  5 - if token is not expire we are simply injecting our accessToken into header
  */
-// this mechnism every time when request gets
+/*
+ **This mechnism every time when request gets
+ */
 API.interceptors.request.use(
   async function (config) {
     // getting access token
@@ -65,6 +68,16 @@ API.interceptors.request.use(
     return config;
   },
   function (error) {
+    return Promise.reject(error);
+  },
+);
+/*
+ ** When axios return something
+ */
+API.interceptors.response.use(
+  request => request,
+  error => {
+    appUtils.crashLogs(error);
     return Promise.reject(error);
   },
 );

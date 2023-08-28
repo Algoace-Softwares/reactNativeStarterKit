@@ -74,9 +74,9 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.3)
   - hermes-engine/Pre-built (0.72.3)
   - libevent (2.1.12)
-  - MMKV (1.3.0):
-    - MMKVCore (~> 1.3.0)
-  - MMKVCore (1.3.0)
+  - MMKV (1.3.1):
+    - MMKVCore (~> 1.3.1)
+  - MMKVCore (1.3.1)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -382,7 +382,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.6.1):
     - React-Core
-  - react-native-mmkv (2.10.1):
+  - react-native-mmkv (2.10.2):
     - MMKV (>= 1.2.13)
     - React-Core
   - react-native-safe-area-context (4.7.1):
@@ -505,7 +505,7 @@ PODS:
   - RNScreens (3.24.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (13.11.0):
+  - RNSVG (13.13.0):
     - React-Core
   - SocketRocket (0.6.1)
   - Toast (4.0.0)
@@ -721,8 +721,8 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MMKV: 9c6c3fa4ddd849f28c7b9a5c9d23aab84f14ee35
-  MMKVCore: 9bb7440b170181ac5b81f542ac258103542e693d
+  MMKV: 5a07930c70c70b86cd87761a42c8f3836fb681d7
+  MMKVCore: e50135dbd33235b6ab390635991bab437ab873c0
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: a2faf4bad4e438ca37b2040cb8f7799baa065c18
@@ -741,7 +741,7 @@ SPEC CHECKSUMS:
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
   react-native-date-picker: 8847cb359cf259ddae5ed165217e15573a654519
   react-native-image-picker: 5fcac5a5ffcb3737837f0617d43fd767249290de
-  react-native-mmkv: dea675cf9697ad35940f1687e98e133e1358ef9f
+  react-native-mmkv: 9ae7ca3977e8ef48dbf7f066974eb844c20b5fd7
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
   react-native-simple-toast: 0c7d14bcad288b5b83ae4b0eea65651b4ca829b0
   React-NativeModulesApple: c57f3efe0df288a6532b726ad2d0322a9bf38472
@@ -763,7 +763,7 @@ SPEC CHECKSUMS:
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
   RNBootSplash: 85f6b879c080e958afdb4c62ee04497b05fd7552
   RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
-  RNSVG: 03e4d258ca355d7836a0a5dd4d4dc63c1eb49cbb
+  RNSVG: ed492aaf3af9ca01bc945f7a149d76d62e73ec82
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: 8796b55dba14d7004f980b54bcc9833ee45b28ce
@@ -771,4 +771,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: adb46be7fca22ba3ab58a67259bfa7ebce0c1a31
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0

@@ -28,6 +28,7 @@ export default function LoginScreen(): JSX.Element {
    * hooks
    */
   const navigation = useAppNavigation();
+
   /*
    * Functions
    */

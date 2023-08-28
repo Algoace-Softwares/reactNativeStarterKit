@@ -1,5 +1,9 @@
-import {crashLogType} from './types';
+import {ErrorType, crashLogType} from './types';
 import {MMKV} from 'react-native-mmkv';
+/**
+ * If you're using Crashlytics: https://rnfirebase.io/crashlytics/usage
+ */
+// import crashlytics from '@react-native-firebase/crashlytics';
 
 // local storage
 const storage = new MMKV();
@@ -10,27 +14,30 @@ export class CommonUtils {
   constructor() {
     // console.log('constructer is called Common utils');
   }
-  // crash log
-  crashLogs = ({filename, functionName, error}: crashLogType): void => {
-    console.log(`${filename} => ${functionName} ===> ${error}`, error);
 
-    if (error instanceof Error) {
-      const message = `${filename} => ${functionName} ====> ${error.message}`;
-      console.log(message);
+  /**
+   * Manually report a handled error.
+   */
+  crashLogs = ({
+    filename,
+    functionName,
+    error,
+    errorType = ErrorType.FATAL,
+  }: crashLogType): void => {
+    if (__DEV__ || process.env.NODE_ENV === 'development') {
+      console.log(`${filename} => ${functionName} ===> ${error}`, error);
+      if (error instanceof Error) {
+        const message = `${filename} => ${functionName} ====> ${error.message}`;
+        console.log(message, errorType);
+      }
+    } else {
+      // crashlytics().recordError(error);
     }
   };
 
-  toTitleCase = <T extends string>(text: T, allWords: Boolean = false): T => {
-    if (allWords) {
-      return text
-        .split(' ')
-        .map(item => item[0].toUpperCase() + item.substring(1, item.length))
-        .join(' ') as T;
-    }
-    return (text[0].toUpperCase() + text.substring(1, text.length)) as T;
-  };
-
-  // get unique object make array into object key value pair key would be the id
+  /*
+   ** Get unique object make array into object key value pair key would be the id
+   */
   getUniqueObject = <T extends Record<string, unknown>>(
     data: T[] = [],
     keyName: keyof T = '',
@@ -43,7 +50,9 @@ export class CommonUtils {
     });
     return newData;
   };
-  // Shuffle arrays
+  /*
+   ** Shuffle arrays
+   */
   shuffleArray = <Type>(array: Type[]): Type[] => {
     let currentIndex = array.length,
       randomIndex;
@@ -56,13 +65,15 @@ export class CommonUtils {
     }
     return array;
   };
-
-  // Get unique array - remove duplicates
+  /*
+   **Get unique array - remove duplicates
+   */
   uniqueArray = <T>(array: T[]): T[] => {
     return array.filter((v, i, a) => a.indexOf(v) === i);
   };
-
-  // getting local storage data
+  /*
+   ** Getting local storage data
+   */
   async getUserDataLocalStorage(key: string): Promise<unknown> {
     try {
       let jsonData = storage.getString(key);
@@ -76,7 +87,9 @@ export class CommonUtils {
       console.log('response fetchDataFromLocalStorage:', error);
     }
   }
-  //avg calculation
+  /*
+   ** Avg calculation of rating
+   */
   calculateAvgRating = <T extends number>(
     newRating: T,
     totalReviewerUsers: T,

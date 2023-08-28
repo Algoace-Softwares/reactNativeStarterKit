@@ -74,6 +74,7 @@ export default function CarosalViewComponent(props: carosalViewComponentType): J
       </View>
     );
   };
+
   return (
     <View style={[styles.mainViewStyle, mainViewStyle]}>
       <FlatList

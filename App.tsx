@@ -45,6 +45,4 @@ export default function App() {
 
 // write documentation for
 
-// linking font assets
-// splash screen
-//
+// error boundary

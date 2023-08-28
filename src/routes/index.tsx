@@ -5,23 +5,11 @@ import {KeyboardAvoidingView, Platform} from 'react-native';
 import {GlobalStyles} from '../assets';
 import {authScreens, homeScreen} from '../data';
 import RNBootSplash from 'react-native-bootsplash';
-
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
-// import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
-// import {fetchDataFromLocalStorage} from '../redux/features/auth/authSlice';
+import {useBackButtonHandler} from './navigationUtilities';
+import BaseConfig from '../config';
 
-// declare global {
-//   namespace ReactNavigation {
-//     interface RootParamList extends AuthStackParamList {}
-//     interface RootParamList extends HomeStackParamList {}
-//   }
-// }
-
-// export type onBoardingProps = NativeStackNavigationProp<RootStackParamList>;
-// export type onBoardingScreenProps = NativeStackScreenProps<
-//   RootStackParamList,
-//   'onBoardingScreen'
-// >;
+const exitRoutes = BaseConfig.exitRoutes;
 
 /*
  ** Auth stack and navigator for rest of the screen
@@ -71,6 +59,9 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {
   const [userData] = useState(null);
   //hooks
+
+  // back handler for android
+  useBackButtonHandler(routeName => exitRoutes.includes(routeName));
   // const {userData} = useAppSelector(state => state.auth);
   // const dispatch = useAppDispatch();
   /*
