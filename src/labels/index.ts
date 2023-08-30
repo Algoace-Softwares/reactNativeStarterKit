@@ -46,4 +46,7 @@ export const LABELS = {
   confirmationCode: 'Confirmation code',
   confirmSignUp: 'Confirm Sign Up',
   verificationSentCode: 'Verification code has been sent to your email address',
+  oops: 'Oops!',
+  errorBoundaryLable: 'Something went wrong try again later',
+  tryAgain: 'Try again',
 };

@@ -1,6 +1,9 @@
 import {Text, TextInput} from 'react-native';
 import React, {useEffect} from 'react';
 import AppNavigator from './src/routes';
+// import {ErrorBoundary} from './src/screens';
+import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
+import Config from './src/config';
 
 /**
  * declearing interface to avoid typescript error for text
@@ -28,6 +31,10 @@ export default function App() {
   (TextInput as unknown as TextInputWithDefaultProps).defaultProps =
     (TextInput as unknown as TextInputWithDefaultProps).defaultProps || {};
   (TextInput as unknown as TextInputWithDefaultProps).defaultProps!.allowFontScaling = false;
+  /*
+   ** States
+   */
+  const [_, setRecoveredFromError] = React.useState(false);
 
   useEffect(() => {
     /**
@@ -40,7 +47,11 @@ export default function App() {
    * Your main componenet
    */
 
-  return <AppNavigator />;
+  return (
+    <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
+      <AppNavigator />
+    </ErrorBoundary>
+  );
 }
 
 // write documentation for

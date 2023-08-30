@@ -15,12 +15,13 @@ export default function SocialAuthScreen(): JSX.Element {
   const navigation = useAppNavigation();
 
   const route = useRoute<RouteProp<AuthStackParamList, 'SocialAuthScreen'>>();
-  //route params
+  /*
+   ** Route params
+   */
   const {authFlow} = route.params;
   /*
    * Functions
    */
-
   /*
    *  btn press to proceed
    */

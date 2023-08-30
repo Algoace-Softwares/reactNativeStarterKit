@@ -21,6 +21,7 @@ export {default as ProfileImageUploader} from './common/ProfileImageUploader';
 export {default as InputDatePicker} from './common/InputDatePicker';
 export {default as InputTextLableCountry} from './common/InputTextLableCountry';
 export {default as InputLablePhoneNumber} from './common/InputLablePhoneNumber';
+export {default as CustomError} from './common/CustomError';
 
 /*
  ** Modals componenets
