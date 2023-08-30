@@ -68,6 +68,7 @@ This is simple and easy to use starter kit following are the feature used in thi
 - TextInput validations
 - Custom eslint setup
 - Predefine Modals
+- Error Boundary
 
 ## Things remaining
 
