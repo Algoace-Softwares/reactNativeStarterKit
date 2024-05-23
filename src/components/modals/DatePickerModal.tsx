@@ -12,31 +12,28 @@ interface datePickerModalType {
   value: Date;
 }
 
-export default function DatePickerModal({
-  visible = false,
-  setVisible,
-  clickAnywhere = false,
-  onSelectedDate,
-  value = new Date(),
-}: datePickerModalType): JSX.Element {
-  //states
+export default function DatePickerModal(props: datePickerModalType): JSX.Element {
+  /*
+   ** Props
+   */
+  const {visible = false, setVisible, clickAnywhere = false, onSelectedDate, value = new Date()} = props;
+  /*
+   ** States
+   */
   const [androidDate, setAndroidDate] = useState<Date>(new Date());
-
-  //functions
-
-  //refactory date getting day, month and yaer from that date
+  /*
+   ** Functions
+   */
+  /*
+   ** refactory date getting day, month and yaer from that date
+   */
   const refactorDate = (selectedDate: Date) => {
     onSelectedDate(selectedDate);
     setVisible(false);
   };
 
-  //Rendering
   return (
-    <Modal
-      transparent={true}
-      animationType={'slide'}
-      visible={visible}
-      onRequestClose={() => setVisible(false)}>
+    <Modal transparent={true} animationType={'slide'} visible={visible} onRequestClose={() => setVisible(false)}>
       <TouchableOpacity
         activeOpacity={1}
         style={styles.centeredView}
@@ -55,7 +52,6 @@ export default function DatePickerModal({
           {Platform.OS === 'android' ? (
             <DatePicker
               open={visible}
-              androidVariant={'iosClone'}
               date={androidDate}
               mode={'date'}
               minimumDate={new Date()}
@@ -79,47 +75,48 @@ export default function DatePickerModal({
 }
 
 const styles = StyleSheet.create({
-  modalView: {
-    backgroundColor: COLORS.white,
-    width: '100%',
-    height: HEIGHT * 0.35,
-    borderTopLeftRadius: 17,
-    borderTopRightRadius: 17,
-    paddingHorizontal: 20,
-    borderWidth: 0.5,
-    borderColor: COLORS.grey4,
-  },
   centeredView: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
   },
-  title2Style: {
-    color: COLORS.grey6,
-    fontWeight: 'bold',
+  iPhoneStyle: {
+    alignSelf: 'center',
+    backgroundColor: COLORS.grey3,
+    borderRadius: 2.5,
+    height: 5,
+    position: 'absolute',
+    top: 10,
+    width: 85,
+  },
+  modalView: {
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.grey4,
+    borderTopLeftRadius: 17,
+    borderTopRightRadius: 17,
+    borderWidth: 0.5,
+    height: HEIGHT * 0.35,
+    paddingHorizontal: 20,
+    width: '100%',
+  },
 
-    ...GlobalStyles.l1,
-  },
   title1Style: {
     color: COLORS.green2,
     fontWeight: 'bold',
     ...GlobalStyles.h5,
   },
 
-  iPhoneStyle: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: 10,
-    backgroundColor: COLORS.grey3,
-    height: 5,
-    width: 85,
-    borderRadius: 2.5,
+  title2Style: {
+    color: COLORS.grey6,
+    fontWeight: 'bold',
+    ...GlobalStyles.l1,
   },
+
   titleViewStyle: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 40,
+    width: '100%',
   },
 });

@@ -39,11 +39,7 @@ export default function AlertChoiceModal({
           <Text style={styles.textLabelStyle}>{label}</Text>
           {/* Main buttons */}
           <View style={styles.btnContainer}>
-            <AppButton
-              title={LABELS.no}
-              onPress={onPressbtn1}
-              btnStyle={GlobalStyles.smallBtn1Style}
-            />
+            <AppButton title={LABELS.no} onPress={onPressbtn1} btnStyle={GlobalStyles.smallBtn1Style} />
             <AppButton
               title={LABELS.yes}
               onPress={() => okBtnPressed()}
@@ -60,29 +56,31 @@ export default function AlertChoiceModal({
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 17,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  modalView: {
-    backgroundColor: COLORS.white,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 6,
-    padding: 16,
-  },
-  textLabelStyle: {
-    color: COLORS.black,
-    ...GlobalStyles.l7,
-  },
   btnContainer: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 13,
+    width: '100%',
+  },
+  centeredView: {
+    alignItems: 'center',
+    backgroundColor: COLORS.black,
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 17,
+  },
+
+  modalView: {
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 6,
+    justifyContent: 'center',
+    padding: 16,
+    width: '100%',
+  },
+
+  textLabelStyle: {
+    color: COLORS.black,
+    ...GlobalStyles.l7,
   },
 });

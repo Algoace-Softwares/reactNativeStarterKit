@@ -1,11 +1,11 @@
 import axios from 'axios';
 import {API_KEY, ASYNC_TOKEN_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
-import {MMKV} from 'react-native-mmkv';
 import {appUtils} from '../utils';
+import {saveString} from '../utils/storage/storage';
+import {jwtDecode} from 'jwt-decode';
 
 // local storage
-export const storage = new MMKV();
 
 // seTting up base url
 export const API = axios.create({
@@ -48,8 +48,7 @@ API.interceptors.request.use(
           // getting token from server data
           const newToken = response?.data?.tokens;
           // saving new tokens locally
-          storage.set(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
-          //await AsyncStorage.setItem(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
+          saveString(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
 
           accessToken = newToken?.accessToken;
         }

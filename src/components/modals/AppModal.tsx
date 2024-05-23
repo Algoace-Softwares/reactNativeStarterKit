@@ -8,11 +8,7 @@ interface appModalType {
   clickAnywhere: boolean;
 }
 
-export default function AppModal({
-  visible = false,
-  setVisible,
-  clickAnywhere = false,
-}: appModalType): JSX.Element {
+export default function AppModal({visible = false, setVisible, clickAnywhere = false}: appModalType): JSX.Element {
   return (
     <Modal transparent={true} visible={visible} onRequestClose={() => setVisible(false)}>
       <TouchableOpacity
@@ -27,10 +23,10 @@ export default function AppModal({
 
 const styles = StyleSheet.create({
   centeredView: {
+    alignItems: 'center',
+    backgroundColor: COLORS.black,
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalView: {
     backgroundColor: COLORS.white,

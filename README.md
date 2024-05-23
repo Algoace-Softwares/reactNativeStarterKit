@@ -1,8 +1,6 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
-
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 
@@ -46,34 +44,46 @@ If everything is set up _correctly_, you should see your new app running in your
 
 This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
 ## Congratulations! :tada:
 
 You've successfully run and modified your React Native App. :partying_face:
 
-### Now what?
+## React Native starter kit
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+This is simple and easy to use starter kit following are the feature used in this moulde
 
-# Troubleshooting
+- Typescript
+- Authentication flow
+- Refresh token flow
+- Is user logged in or not flow
+- Built in screens
+- State managment setup
+- Common components
+- Some built in text input for phone number,country and cities.
+- Splash screen and built in fonts
+- Api request flow
+- Predefine hooks (ImagePicker)
+- Local storage support(mmkv)
+- Already define navigation flow
+- TextInput validations
+- Custom eslint setup
+- Predefine Modals
+- Error Boundary
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Things remaining
 
-# Learn More
+- Write test case for each individual component
 
-To learn more about React Native, take a look at the following resources:
+### Note for svg?
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+you need to make fill prop as empty string in order to user svg as resuasable like this:
+<svg width="16" height="16" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.25 0.5H1.75C1.41848 0.5 1.10054 " fill=""/>
+</svg>
+
+and when you are impoting this svg import it like this
+<SVG.Add fill={COLORS.green} width={50} height={50} />
+
+### Note?
+
+PR are most welcome. Feel free to raise PR. make your seperate branch with proper description. if it would be a bug then it should be like bug/"your description."

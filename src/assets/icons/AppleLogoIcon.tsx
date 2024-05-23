@@ -7,11 +7,7 @@ export interface IconType {
   height: string;
 }
 
-export default function AppleLogoIcon({
-  fillColor = 'white',
-  width = '512',
-  height = '512',
-}: IconType): JSX.Element {
+export default function AppleLogoIcon({fillColor = 'white', width = '512', height = '512'}: IconType): JSX.Element {
   return (
     <Svg width={width} height={height} viewBox={'0 0 512 512'}>
       <Path

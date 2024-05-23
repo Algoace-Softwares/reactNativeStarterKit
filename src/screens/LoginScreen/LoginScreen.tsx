@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity} from 'react-native';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
 import {LABELS} from '../../labels';
-import {GlobalStyles, COLORS} from '../../assets';
+import {GlobalStyles, COLORS, SVG} from '../../assets';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
@@ -62,6 +62,7 @@ export default function LoginScreen(): JSX.Element {
 
       {/* Main Body */}
       <BackButton fillColor={COLORS.white} />
+      <SVG.Add fill={COLORS.green} width={50} height={50} />
 
       {/* Header */}
       <AuthHeader text1={LABELS.welcomeBack} text2={LABELS.signInLabel} />
