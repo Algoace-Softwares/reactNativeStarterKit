@@ -28,8 +28,7 @@ function App(): React.JSX.Element {
   /**
    * - disabling font scalling as a text
    */
-  (Text as unknown as TextWithDefaultProps).defaultProps =
-    (Text as unknown as TextWithDefaultProps).defaultProps || {};
+  (Text as unknown as TextWithDefaultProps).defaultProps = (Text as unknown as TextWithDefaultProps).defaultProps || {};
   (Text as unknown as TextWithDefaultProps).defaultProps!.allowFontScaling = false;
   /**
    * - disabling font scalling as a TextInput
@@ -63,6 +62,7 @@ function App(): React.JSX.Element {
 export default App;
 
 // typescript
+// add umoozi type of width and heigh utils functions
 // zustand
 // react query
 // change to babel svg setting

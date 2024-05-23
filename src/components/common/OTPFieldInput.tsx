@@ -1,11 +1,6 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
-import {
-  CodeField,
-  Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell,
-} from 'react-native-confirmation-code-field';
+import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
 import {GlobalStyles, COLORS} from '../../assets';
 
 const CELL_COUNT = 6;
@@ -20,6 +15,9 @@ interface oTPFieldInputType {
 }
 
 export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Element {
+  /*
+   ** Props
+   */
   const {
     textLable = '',
     mainOtpStyle = {},
@@ -28,18 +26,21 @@ export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Elemen
     onChangeText,
     cellStyle = {},
   } = properties;
-  //states
+  /*
+   ** States
+   */
   const [value, setValue] = useState<string>('');
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
-  //refs
+  /*
+   ** Refs
+   */
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
-  //rendering
   return (
     <View style={[styles.viewStyle, mianViewStyle]}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <Text style={[styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
       <CodeField
         ref={ref}
         {...props}
@@ -66,28 +67,29 @@ export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Elemen
 }
 
 const styles = StyleSheet.create({
-  viewStyle: {
-    marginTop: 20,
-    paddingHorizontal: 20,
-  },
-  upperTextStyle: {
-    color: COLORS.primary,
+  cell: {
+    borderColor: COLORS.seconday,
+    borderRadius: 5,
+    borderWidth: 1,
+    color: COLORS.seconday,
+    fontSize: 24,
+    height: 40,
+    lineHeight: 38,
+    textAlign: 'center',
+    width: 40,
   },
   codeFieldRoot: {
     marginTop: 10,
   },
-  cell: {
-    width: 40,
-    height: 40,
-    lineHeight: 38,
-    fontSize: 24,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-    textAlign: 'center',
-    color: COLORS.primary,
-  },
   focusCell: {
-    borderColor: '#000',
+    borderColor: COLORS.black,
+  },
+  upperTextStyle: {
+    color: COLORS.seconday,
+    ...GlobalStyles.b1,
+  },
+  viewStyle: {
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
 });

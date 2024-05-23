@@ -1,3 +1,4 @@
+/* eslint-disable react-native/split-platform-components */
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import {
   CameraOptions,
@@ -32,9 +33,7 @@ export default function useImagePicker() {
           // checking for platform
           if (Platform.OS === 'android') {
             // requesting permission
-            const androidPermission = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.CAMERA,
-            );
+            const androidPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
             console.debug('android permission', androidPermission);
             if (androidPermission === 'granted') {
               // launcging camera
@@ -42,8 +41,7 @@ export default function useImagePicker() {
               console.debug('camResponse is:', camResponse);
               if (camResponse.assets && camResponse.assets[0].fileSize) {
                 if (camResponse.assets[0].fileSize > 50000000) {
-                  Toast.show('Testing Toats', Toast.LONG);
-                  return;
+                  return Toast.show('Testing Toats', Toast.LONG);
                 } else {
                   callBck(camResponse);
                 }
@@ -60,8 +58,7 @@ export default function useImagePicker() {
             if (camResponse.assets && camResponse.assets[0].fileSize) {
               // checking vide size
               if (camResponse.assets[0].fileSize > 50000000) {
-                Toast.show('Testing Toats', Toast.LONG);
-                return;
+                return Toast.show('Testing Toats', Toast.LONG);
               } else {
                 callBck(camResponse);
               }
@@ -82,8 +79,7 @@ export default function useImagePicker() {
           if (ImageLibResponse.assets && ImageLibResponse.assets[0].fileSize) {
             // checking size condition
             if (ImageLibResponse.assets[0].fileSize > 50000000) {
-              Toast.show('Testing Toats', Toast.LONG);
-              return;
+              return Toast.show('Testing Toats', Toast.LONG);
             } else {
               callBck(ImageLibResponse);
             }
@@ -121,9 +117,7 @@ export default function useImagePicker() {
           // checking for platform
           if (Platform.OS === 'android') {
             // requesting permission
-            const androidPermission = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.CAMERA,
-            );
+            const androidPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
             console.debug('android permission', androidPermission);
 
             // permission is granted
@@ -132,13 +126,12 @@ export default function useImagePicker() {
               console.debug('camResponse is:', camResponse);
               if (camResponse.assets) {
                 callBck(camResponse);
-              } else if (camResponse.errorCode) {
               }
             } else if (androidPermission === 'never_ask_again') {
               Toast.show('Testing Toats', Toast.LONG);
             }
           } else {
-            //launching camera
+            // launching camera
             const camResponse = await launchCamera(options);
             console.debug('camResponse is:', camResponse);
             if (camResponse.assets) {

@@ -2,10 +2,6 @@ import {StyleSheet} from 'react-native';
 import {COLORS, WIDTH, GlobalStyles} from '../../assets';
 
 const styles = StyleSheet.create({
-  mainView: {
-    marginVertical: 30,
-    marginLeft: 21,
-  },
   textInputStyle: {
     height: 45,
     width: '100%',

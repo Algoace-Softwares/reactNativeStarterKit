@@ -1,10 +1,9 @@
-import {Text, View, SafeAreaView} from 'react-native';
+import {Text, View, SafeAreaView, Image, ImageBackground} from 'react-native';
 import React from 'react';
-import {GlobalStyles, COLORS, ICONS} from '../../assets';
+import {GlobalStyles, COLORS, IMAGES} from '../../assets';
 import {LABELS} from '../../labels';
-import {AppButton, CarosalViewComponent, FocusAwareStatusBar} from '../../components';
+import {AppButton, FocusAwareStatusBar} from '../../components';
 import styles from './style';
-import {onBoardingData} from '../../data';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function OnBoardingScreen(): JSX.Element {
@@ -13,39 +12,29 @@ export default function OnBoardingScreen(): JSX.Element {
    */
   const navigation = useAppNavigation();
   /*
-   * functions
+   * Functions
    */
   const onPressLogin = (): void => {
-    navigation.navigate('SocialAuthScreen', {authFlow: 'signin'});
+    navigation.navigate('LoginScreen');
   };
   const onPressSignUp = (): void => {
-    navigation.navigate('SocialAuthScreen', {authFlow: 'signup'});
+    navigation.navigate('SignupScreen');
   };
 
-  //Rendering
   return (
-    <View style={GlobalStyles.mainContainer}>
+    <ImageBackground source={IMAGES.onBoarding} style={GlobalStyles.mainContainer} resizeMode={'cover'}>
       <SafeAreaView />
       <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
 
-      <CarosalViewComponent
-        data={onBoardingData}
-        selectedDotColor={COLORS.primary}
-        unSelectedColor={COLORS.seconday}
-      />
       {/* Logo */}
       <View style={styles.appLogoView}>
-        <ICONS.AppLogoIcon width={100} height={100} />
-        <Text style={styles.appLableStyle}>{LABELS.algoace}</Text>
+        <Image source={IMAGES.appLogo} style={styles.appLogoImageStyle} resizeMode={'contain'} />
+        <Text style={styles.appLableStyle}>{LABELS.appLabel}</Text>
       </View>
 
       {/* Buttons */}
       <View style={styles.btnContainer}>
-        <AppButton
-          title={LABELS.login}
-          onPress={onPressLogin}
-          btnStyle={GlobalStyles.smallBtn1Style}
-        />
+        <AppButton title={LABELS.login} onPress={onPressLogin} btnStyle={GlobalStyles.smallBtn1Style} />
         <AppButton
           title={LABELS.signUp}
           onPress={onPressSignUp}
@@ -53,6 +42,6 @@ export default function OnBoardingScreen(): JSX.Element {
           textStyle={GlobalStyles.btn2textStyle}
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 }

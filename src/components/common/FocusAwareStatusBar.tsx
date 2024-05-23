@@ -3,8 +3,13 @@ import React from 'react';
 import {useIsFocused} from '@react-navigation/native';
 
 export default function FocusAwareStatusBar(props: FocusAwareStatusBarType): JSX.Element | null {
-  //destructuring props
+  /*
+   ** Props
+   */
   const {barStyle = 'default', backgroundColor = ''} = props;
+  /*
+   ** Hooks
+   */
   const isFocused = useIsFocused();
 
   return isFocused ? <StatusBar barStyle={barStyle} backgroundColor={backgroundColor} /> : null;

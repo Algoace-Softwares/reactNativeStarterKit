@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {WIDTH, COLORS, GlobalStyles} from '../../assets';
 
 export default function AppButton(props: appBtnType): JSX.Element {
-  // destructing props
+  /*
+   ** Props
+   */
   const {
     title = '',
     onPress,
@@ -29,44 +23,42 @@ export default function AppButton(props: appBtnType): JSX.Element {
       disabled={disabled}
       activeOpacity={activeOpacity}
       onPress={onPress}
-      style={[styles(disabled).btn, btnStyle]}>
-      {children && <View style={styles().childrenViewStyle}>{children}</View>}
-      {title ? (
-        <Text style={[styles().title, textStyle]} numberOfLines={1}>
+      style={[styles.btn, btnStyle]}>
+      {children && <View style={styles.childrenViewStyle}>{children}</View>}
+      {title && (
+        <Text style={[styles.title, textStyle]} numberOfLines={1}>
           {title}
         </Text>
-      ) : null}
-
-      {loading && (
-        <ActivityIndicator color={loadingColor} style={styles().loading} size={'small'} />
       )}
+
+      {loading && <ActivityIndicator color={loadingColor} style={styles.loading} size={'small'} />}
     </TouchableOpacity>
   );
 }
 
-const styles = (disabled?: boolean) =>
-  StyleSheet.create({
-    btn: {
-      width: WIDTH - 40,
-      borderRadius: 8,
-      height: 45,
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      zIndex: 9,
-      backgroundColor: disabled ? COLORS.primaryLight : COLORS.primary,
-    },
+const styles = StyleSheet.create({
+  btn: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: COLORS.primary,
+    borderRadius: 8,
+    flexDirection: 'row',
+    height: 45,
+    justifyContent: 'center',
+    marginTop: 20,
+    width: WIDTH - 40,
+    zIndex: 9,
+  },
+  childrenViewStyle: {
+    marginRight: 20,
+  },
+  loading: {marginLeft: 10},
 
-    title: {
-      ...GlobalStyles.l1,
-      color: 'rgba(255, 255, 255, 1)',
-    },
-
-    loading: {marginLeft: 10},
-    childrenViewStyle: {
-      marginRight: 20,
-    },
-  });
+  title: {
+    ...GlobalStyles.l1,
+    color: COLORS.white,
+  },
+});
 
 interface appBtnType {
   title: string;

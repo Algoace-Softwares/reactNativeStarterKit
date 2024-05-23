@@ -1,6 +1,6 @@
-import {View, SafeAreaView, TouchableOpacity, ScrollView} from 'react-native';
+import {View, SafeAreaView, ScrollView} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS, ICONS} from '../../assets';
+import {GlobalStyles, COLORS} from '../../assets';
 import {
   AppButton,
   AuthHeader,
@@ -20,14 +20,13 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function SignupScreen() {
   /*
-   *State
+   ** State
    */
   const [emailAddress, setEmailAddress] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
-  const [passSecure, setPassSecure] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [imageAsset, setImageAsset] = useState<imageObjectType | null>(null);
   /*
@@ -45,22 +44,22 @@ export default function SignupScreen() {
       Toast.show('Input fields required', Toast.LONG);
       return false;
     }
-    //validate login
+    // validate login
     if (!appValidation.validateLogin(emailAddress)) {
       Toast.show('email validation failed', Toast.LONG);
       return false;
     }
-    //validate password
+    // validate password
     if (!appValidation.validatePassword(password)) {
       Toast.show('password validation failed', Toast.LONG);
       return false;
     }
-    //validate first name
+    // validate first name
     if (!appValidation.validateUserName(firstName)) {
       Toast.show('name validation failed', Toast.LONG);
       return false;
     }
-    //validate last name
+    // validate last name
     if (!appValidation.validateUserName(lastName)) {
       Toast.show('name validation failed', Toast.LONG);
 
@@ -107,71 +106,20 @@ export default function SignupScreen() {
       <SafeAreaView />
       <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
       {/* Main Body */}
-      <View style={styles.inner}>
+      <View style={styles.mainContainer2}>
         <BackButton fillColor={COLORS.white} />
         {/* Headers */}
-        <AuthHeader text1={LABELS.signUp} text2={LABELS.signUpLabel} viewStyle={styles.mainView} />
+        <AuthHeader text1={LABELS.signUp} text2={LABELS.signUpLabel} />
         {/* Profile Image uploader */}
-        <ProfileImageUploader
-          loading={loading}
-          onPressCamera={onPressMedia}
-          imageAsset={imageAsset}
-        />
+        <ProfileImageUploader loading={loading} onPressCamera={onPressMedia} imageAsset={imageAsset} />
         {/* Input fields */}
-        <InputTextLabel
-          textLable={LABELS.firstName}
-          textInputStyle={styles.textInputStyle}
-          viewStyle={styles.InputViewStyle}
-          onChangeText={setFirstName}
-          value={firstName}
-        />
-        <InputTextLabel
-          textLable={LABELS.lastName}
-          textInputStyle={styles.textInputStyle}
-          viewStyle={styles.InputViewStyle}
-          onChangeText={setLastName}
-          value={lastName}
-        />
+        <InputTextLabel textLable={LABELS.firstName} onChangeText={setFirstName} value={firstName} />
+        <InputTextLabel textLable={LABELS.lastName} onChangeText={setLastName} value={lastName} />
+        <InputDatePicker textLable={LABELS.dob} onPressDate={setDateOfBirth} value={dateOfBirth} />
+        <InputTextLabel textLable={LABELS.emailAddress} onChangeText={setEmailAddress} value={emailAddress} />
+        <InputTextLabel textLable={LABELS.password} onChangeText={setPassword} value={password} isPassword={true} />
 
-        <InputDatePicker
-          textLable={LABELS.dob}
-          textInputStyle={styles.textInputStyle}
-          viewStyle={styles.InputViewStyle}
-          onPressDate={setDateOfBirth}
-          value={dateOfBirth}
-        />
-        <InputTextLabel
-          textLable={LABELS.emailAddress}
-          textInputStyle={styles.textInputStyle}
-          viewStyle={styles.InputViewStyle}
-          onChangeText={setEmailAddress}
-          value={emailAddress}
-        />
-
-        <InputTextLabel
-          textLable={LABELS.password}
-          textInputStyle={styles.textInputStyle}
-          viewStyle={styles.InputViewStyle}
-          onChangeText={setPassword}
-          secureEntry={passSecure}
-          value={password}
-          rightIcon={true}>
-          {passSecure ? (
-            <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-              <ICONS.EyeOffIcon color={COLORS.grey4} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-              <ICONS.EyeOnIcon color={COLORS.grey4} />
-            </TouchableOpacity>
-          )}
-        </InputTextLabel>
-        <AppButton
-          title={LABELS.continue}
-          onPress={ContinuePressed}
-          btnStyle={styles.loginButtonStyle}
-          textStyle={styles.buttonTextStyle}
-        />
+        <AppButton title={LABELS.continue} onPress={ContinuePressed} btnStyle={styles.loginButtonStyle} />
 
         {/* Main Button */}
       </View>

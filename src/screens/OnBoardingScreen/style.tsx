@@ -1,31 +1,31 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
+import {COLORS, GlobalStyles, HEIGHT, WIDTH} from '../../assets';
 
 const styles = StyleSheet.create({
-  btnContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: 60,
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-  },
   appLableStyle: {
     ...GlobalStyles.h2,
-    color: COLORS.grey5,
-  },
-  appLogoView: {
-    alignSelf: 'center',
-    marginTop: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 100,
+    color: COLORS.white,
   },
   appLogoImageStyle: {
-    width: 81,
-    height: 83,
+    height: HEIGHT * 0.1,
+    width: WIDTH * 0.3,
+  },
+  appLogoView: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+    position: 'absolute',
+    top: 100,
+    width: '100%',
+  },
+  btnContainer: {
+    bottom: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    position: 'absolute',
+    width: '100%',
   },
 });
 

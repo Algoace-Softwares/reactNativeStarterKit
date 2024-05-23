@@ -39,14 +39,14 @@ export const LABELS = {
   dob: 'Date of birth',
   forgotPasswordBold: 'Forgot password',
   forgotChangePasswordLable: 'Forgot password, please reset password, and confirm code via email.',
-  forgotPasswordLable:
-    'We understand you forgot your password, can you please provide your sign up email',
+  forgotPasswordLable: 'We understand you forgot your password, can you please provide your sign up email',
   resetPassword: 'Reset Password',
-  re_enterPassword: 'Re-enter new password',
+  reEnterPassword: 'Re-enter new password',
   confirmationCode: 'Confirmation code',
   confirmSignUp: 'Confirm Sign Up',
   verificationSentCode: 'Verification code has been sent to your email address',
   oops: 'Oops!',
   errorBoundaryLable: 'Something went wrong try again later',
   tryAgain: 'Try again',
+  appLabel: 'Pupspotter',
 };

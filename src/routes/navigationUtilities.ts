@@ -1,10 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {BackHandler, Platform} from 'react-native';
-import {
-  NavigationState,
-  PartialState,
-  createNavigationContainerRef,
-} from '@react-navigation/native';
+import {NavigationState, PartialState, createNavigationContainerRef} from '@react-navigation/native';
 
 export const navigationRef = createNavigationContainerRef();
 

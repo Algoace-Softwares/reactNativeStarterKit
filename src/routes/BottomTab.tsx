@@ -46,6 +46,9 @@ const BottomTab = (): JSX.Element => {
 
 const styles = (bottomValue?: number) =>
   StyleSheet.create({
+    label: {
+      ...GlobalStyles.l2,
+    },
     tabBarStyle: {
       height: 55 + Number(bottomValue),
       shadowColor: '#000000',
@@ -55,9 +58,6 @@ const styles = (bottomValue?: number) =>
       },
       shadowOpacity: 0.5,
       shadowRadius: 3.84,
-    },
-    label: {
-      ...GlobalStyles.l2,
     },
   });
 

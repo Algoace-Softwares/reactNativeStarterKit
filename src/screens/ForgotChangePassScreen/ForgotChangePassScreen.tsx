@@ -1,15 +1,8 @@
-import {View, SafeAreaView, TouchableOpacity, Text} from 'react-native';
+import {View, SafeAreaView, Text} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {
-  AppButton,
-  AuthHeader,
-  BackButton,
-  FocusAwareStatusBar,
-  InputTextLabel,
-  OTPFieldInput,
-} from '../../components';
+import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel, OTPFieldInput} from '../../components';
 import {LABELS} from '../../labels';
-import {GlobalStyles, COLORS, ICONS} from '../../assets';
+import {GlobalStyles, COLORS} from '../../assets';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
@@ -18,18 +11,22 @@ import {appValidation} from '../../utils';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ForgotChangePassScreen(): JSX.Element {
-  //Hooks
+  /*
+   ** Hooks
+   */
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useAppNavigation();
-  // route params
+  /*
+   ** Routing params
+   */
   const {email} = route.params;
   console.log('emailAddress', route.params);
-  // states
+  /*
+   ** States
+   */
   const [password, setPassword] = useState<string>('');
   const [confirmationCode, setConfirmationCode] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [passSecure, setPassSecure] = useState<boolean>(true);
-  const [passSecure1, setPassSecure1] = useState<boolean>(true);
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
   const [loading] = useState<boolean>(false);
@@ -49,7 +46,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
     return true;
   };
 
-  //when reste btn is pressed
+  // when reste btn is pressed
   const resetPassPressed = (): void => {
     if (!checkTextFieldValidation()) {
       return;
@@ -64,7 +61,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
     navigation.goBack();
   };
 
-  //when resend code is pressed
+  // when resend code is pressed
   const onPressResendCode = (): void => {
     const params = {
       email,
@@ -72,10 +69,11 @@ export default function ForgotChangePassScreen(): JSX.Element {
     setResendCode(false);
     console.log('params', params);
   };
-
-  // Lifecycle
+  /*
+   ** Lifecycles
+   */
   useEffect(() => {
-    //if rensend code is false then only count start
+    // if rensend code is false then only count start
     let interval: NodeJS.Timeout;
     if (resendCode === false) {
       interval = setInterval(() => {
@@ -108,52 +106,20 @@ export default function ForgotChangePassScreen(): JSX.Element {
       />
 
       {/* Inputs fields */}
+      <InputTextLabel textLable={LABELS.password} onChangeText={setPassword} value={password} isPassword={true} />
+
       <InputTextLabel
-        textLable={LABELS.password}
-        textInputStyle={styles.textInputStyle}
-        viewStyle={styles.InputViewStyle}
-        onChangeText={setPassword}
-        value={password}
-        secureEntry={passSecure}
-        rightIcon={true}>
-        {passSecure ? (
-          <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-            <ICONS.EyeOffIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-            <ICONS.EyeOnIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        )}
-      </InputTextLabel>
-      <InputTextLabel
-        textLable={LABELS.re_enterPassword}
-        textInputStyle={styles.textInputStyle}
-        viewStyle={styles.InputViewStyle}
+        textLable={LABELS.reEnterPassword}
         onChangeText={setConfirmPassword}
         value={confirmPassword}
-        secureEntry={passSecure1}
-        rightIcon={true}>
-        {passSecure1 ? (
-          <TouchableOpacity onPress={() => setPassSecure1(!passSecure1)}>
-            <ICONS.EyeOffIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => setPassSecure1(!passSecure1)}>
-            <ICONS.EyeOnIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        )}
-      </InputTextLabel>
+        isPassword={true}
+      />
+
       <OTPFieldInput textLable={LABELS.confirmationCode} onChangeText={setConfirmationCode} />
 
       {/* Main button */}
-      <AppButton
-        title={LABELS.resetPassword}
-        onPress={resetPassPressed}
-        btnStyle={styles.loginButtonStyle}
-        textStyle={styles.buttonTextStyle}
-        loading={loading}
-      />
+      <AppButton title={LABELS.resetPassword} onPress={resetPassPressed} loading={loading} />
+
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
           <Text style={styles.renderTextStyle} onPress={onPressResendCode}>

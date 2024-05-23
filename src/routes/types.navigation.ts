@@ -31,7 +31,6 @@ export type AuthStackParamList = {
     password: string;
   };
   ConfirmSignupScreen: {email: string; password: string};
-  SocialAuthScreen: {authFlow: string};
 };
 export type HomeStackParamList = {
   BottomTab: NavigatorScreenParams<BottomTabNavigatorParamList>;

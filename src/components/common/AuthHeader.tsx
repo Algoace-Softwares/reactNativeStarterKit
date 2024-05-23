@@ -11,25 +11,27 @@ interface authHeaderType {
 }
 
 export default function AuthHeader(props: authHeaderType): JSX.Element {
-  // destructing props
+  /*
+   ** Props
+   */
   const {text1 = '', text2 = '', viewStyle = {}, upperTextStyle = {}} = props;
 
   return (
     <View style={[styles.mainView, viewStyle]}>
       <Text style={[styles.upperTextStyle, upperTextStyle]}>{text1}</Text>
-      <Text style={[styles.lowerTextStyle]}>{text2}</Text>
+      <Text style={styles.lowerTextStyle}>{text2}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  upperTextStyle: {
-    color: COLORS.primary,
-    ...GlobalStyles.h1,
-  },
-  lowerTextStyle: {marginTop: 10, color: COLORS.seconday, ...GlobalStyles.b1},
+  lowerTextStyle: {color: COLORS.seconday, ...GlobalStyles.b1, marginTop: 10},
   mainView: {
-    marginVertical: 30,
     marginLeft: 21,
+    marginVertical: 30,
+  },
+  upperTextStyle: {
+    color: COLORS.seconday,
+    ...GlobalStyles.h1,
   },
 });

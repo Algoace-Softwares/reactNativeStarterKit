@@ -1,26 +1,24 @@
 import {View, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
-import {
-  AppButton,
-  AuthHeader,
-  BackButton,
-  FocusAwareStatusBar,
-  InputTextLabel,
-} from '../../components';
+import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import Toast from 'react-native-simple-toast';
-import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ForgotPasswordScreen(): JSX.Element {
-  // States
+  /*
+   ** States
+   */
   const [emailAddress, setEmailAddres] = useState<string>('');
   const [loading] = useState<boolean>(false);
-  //Hooks
+  /*
+   ** Hooks
+   */
   const navigation = useAppNavigation();
-
-  // Functions
+  /*
+   ** Functions
+   */
   /*
    ** Checking function validatrion
    */
@@ -57,28 +55,12 @@ export default function ForgotPasswordScreen(): JSX.Element {
       <BackButton fillColor={COLORS.white} />
 
       {/* Header */}
-      <AuthHeader
-        text1={LABELS.forgotPasswordBold}
-        text2={LABELS.forgotPasswordLable}
-        viewStyle={styles.mainView}
-      />
+      <AuthHeader text1={LABELS.forgotPasswordBold} text2={LABELS.forgotPasswordLable} />
 
       {/* Input field */}
-      <InputTextLabel
-        textLable={LABELS.emailAddress}
-        textInputStyle={styles.textInputStyle}
-        viewStyle={styles.InputViewStyle}
-        onChangeText={setEmailAddres}
-        value={emailAddress}
-      />
+      <InputTextLabel textLable={LABELS.emailAddress} onChangeText={setEmailAddres} value={emailAddress} />
       {/* Main button */}
-      <AppButton
-        title={LABELS.resetPassword}
-        onPress={resetPassPressed}
-        btnStyle={styles.loginButtonStyle}
-        textStyle={styles.buttonTextStyle}
-        loading={loading}
-      />
+      <AppButton title={LABELS.resetPassword} onPress={resetPassPressed} loading={loading} />
     </View>
   );
 }

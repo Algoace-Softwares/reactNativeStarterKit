@@ -7,13 +7,11 @@ import {
   InputLablePhoneNumber,
   InputTextLabelDropDown,
   InputTextLableCountry,
-  PhoneNumber,
   FocusAwareStatusBar,
 } from '../../components';
 import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import {RouteProp, useRoute} from '@react-navigation/native';
-
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {countryStates} from '../../data';
@@ -21,40 +19,45 @@ import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 export default function ContactScreen() {
+  /*
+   ** Routing params
+   */
   const route = useRoute<RouteProp<AuthStackParamList, 'ContactScreen'>>();
-  //route params
   const {lastName, emailAddress, password, firstName} = route.params;
-
-  //States
-
+  /*
+   ** States
+   */
   const [loading] = useState<boolean>(false);
   const [state, setState] = useState<string>('');
   const [country, setCountry] = useState<string>('afghanistan');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-
-  // Hooks
+  /*
+   ** Hooks
+   */
   const navigation = useAppNavigation();
-
-  // Functions
+  /*
+   ** Functions
+   */
   const checkTextFieldValidation = (): boolean => {
     if (!phoneNumber || !state) {
       return false;
     }
     return true;
   };
-
-  // when signUp pressedfor
+  /*
+   ** when signUp pressedfor
+   */
   const SignUpPressed = (): any => {
     if (!checkTextFieldValidation()) {
       Toast.show('Input fields required', Toast.LONG);
       return;
     }
     const params = {
-      emailAddress: emailAddress,
-      password: password,
+      emailAddress,
+      password,
       firstName,
       lastName,
-      phoneNumber: PhoneNumber,
+      phoneNumber,
       state,
     };
     console.log('params is:', params);
@@ -65,7 +68,6 @@ export default function ContactScreen() {
     });
   };
 
-  // Rendering
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
@@ -73,7 +75,7 @@ export default function ContactScreen() {
       {/* Main Body */}
       <BackButton fillColor={COLORS.white} />
       {/* Header */}
-      <AuthHeader text1={LABELS.contact} text2={LABELS.contactLable} viewStyle={styles.mainView} />
+      <AuthHeader text1={LABELS.contact} text2={LABELS.contactLable} />
       {/* Input fields */}
       <InputLablePhoneNumber
         textLable={`Select ${LABELS.phoneNumber}`}
@@ -98,13 +100,7 @@ export default function ContactScreen() {
       />
 
       {/* Main button */}
-      <AppButton
-        loading={loading}
-        title={LABELS.signUp}
-        onPress={SignUpPressed}
-        btnStyle={styles.loginButtonStyle}
-        textStyle={styles.buttonTextStyle}
-      />
+      <AppButton loading={loading} title={LABELS.signUp} onPress={SignUpPressed} />
     </View>
   );
 }

@@ -55,7 +55,7 @@ const HomeStackScreens = (): JSX.Element => {
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {
   const [userData] = useState(null);
-  //hooks
+  // hooks
 
   // back handler for android
   useBackButtonHandler(routeName => exitRoutes.includes(routeName));

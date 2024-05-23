@@ -2,11 +2,7 @@ import React from 'react';
 import Svg, {Path} from 'react-native-svg';
 import {IconType} from './BackIcon';
 
-export default function EyeOnIcon({
-  width = '30',
-  height = '23',
-  fillColor = 'black',
-}: IconType): JSX.Element {
+export default function EyeOnIcon({width = '30', height = '23', fillColor = 'black'}: IconType): JSX.Element {
   return (
     <Svg width={width} height={height} viewBox={'0 0 22 15'}>
       <Path

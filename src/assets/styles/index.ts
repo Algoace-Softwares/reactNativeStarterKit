@@ -3,85 +3,40 @@ import COLORS from '../colors';
 import {FONTS} from '../fonts';
 
 export const {width: WIDTH, height: HEIGHT} = Dimensions.get('screen');
-
 /*
  ** List of style that are required throughout the app
  */
-
 export const GlobalStyles = StyleSheet.create({
   /*
    ** Global styles
    */
-
-  mainContainer: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  mainImageStyle: {
-    width: '100%',
-    height: '100%',
-  },
-
-  smallBtn1Style: {
-    width: WIDTH * 0.4,
-    height: 45,
-    backgroundColor: COLORS.primary,
-  },
-  smallBtn2Style: {
-    width: WIDTH * 0.4,
-    height: 45,
-    backgroundColor: COLORS.white,
-    borderWidth: 0.5,
-    borderColor: COLORS.primary,
-  },
   btn2textStyle: {
     color: COLORS.grey5,
   },
-  btn1textStyle: {
-    color: COLORS.white,
-  },
-  largeBtnStyle: {
-    width: WIDTH - 70,
-    backgroundColor: COLORS.primary,
-    borderRadius: 6,
-  },
-
-  largeBtn2Style: {
-    width: WIDTH - 70,
-    borderWidth: 0.5,
+  mainContainer: {
     backgroundColor: COLORS.white,
-    borderColor: COLORS.grey5,
+    flex: 1,
   },
-
-  largeBtnTextStyle: {
-    color: COLORS.white,
+  mainImageStyle: {
+    height: '100%',
+    width: '100%',
   },
-
-  largeBtnTextStyle2: {
-    color: COLORS.grey6,
+  smallBtn1Style: {
+    backgroundColor: COLORS.primary,
+    height: 45,
+    width: WIDTH * 0.4,
   },
-
-  row: {flexDirection: 'row', alignItems: 'center'},
-
-  middle: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  smallBtn2Style: {
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.primary,
+    borderWidth: 0.5,
+    height: 45,
+    width: WIDTH * 0.4,
   },
   /*
    ** Fonts styles
    */
-  h1Big: {
-    fontFamily: FONTS.poppinsRegular,
-    fontSize: 48,
-  },
+  // eslint-disable-next-line react-native/sort-styles
   h1: {
     fontFamily: FONTS.poppinsBold,
     fontSize: 30,
@@ -102,7 +57,7 @@ export const GlobalStyles = StyleSheet.create({
     fontFamily: FONTS.poppinsBold,
     fontSize: 18,
   },
-  //labelfont style
+  // labelfont style
   l1: {
     fontFamily: FONTS.poppinsMedium,
     fontSize: 14,
@@ -140,7 +95,7 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
   },
-  //body font style
+  // body font style
   b1: {
     fontFamily: FONTS.poppinsMedium,
     fontSize: 14,

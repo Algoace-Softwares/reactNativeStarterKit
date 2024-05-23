@@ -11,7 +11,6 @@ import {
   ProfileScreen,
   SettingScreen,
   SignupScreen,
-  SocialAuthScreen,
 } from '../screens';
 import ContactScreen from '../screens/ContactScreen/ContactScreen';
 
@@ -53,11 +52,6 @@ export const authScreens = [
     id: 7,
     screenName: 'ContactScreen',
     component: ContactScreen,
-  },
-  {
-    id: 8,
-    screenName: 'SocialAuthScreen',
-    component: SocialAuthScreen,
   },
 ];
 

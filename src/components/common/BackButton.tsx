@@ -9,12 +9,17 @@ interface backBtnType {
 }
 
 export default function BackButton(props: backBtnType): JSX.Element {
-  // destructring props
+  /*
+   ** Props
+   */
   const {fillColor = 'white', viewStyle = {}} = props;
-
-  //Navigtion
+  /*
+   ** Hooks
+   */
   const navigation = useNavigation();
-  // Functions
+  /*
+   ** Functions
+   */
   const backPressed = (): void => {
     navigation.goBack();
   };
@@ -28,14 +33,14 @@ export default function BackButton(props: backBtnType): JSX.Element {
 
 const styles = StyleSheet.create({
   mainViewStyle: {
-    justifyContent: 'center',
     alignItems: 'center',
-    height: 40,
-    width: 40,
-    borderRadius: 20,
     backgroundColor: COLORS.grey5,
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
     marginLeft: 21,
     marginTop: 21,
+    width: 40,
     zIndex: 9999,
   },
 });

@@ -1,36 +1,29 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity} from 'react-native';
-import {
-  AppButton,
-  AuthHeader,
-  BackButton,
-  FocusAwareStatusBar,
-  InputTextLabel,
-} from '../../components';
+import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
 import {LABELS} from '../../labels';
-import {GlobalStyles, COLORS, ICONS} from '../../assets';
+import {GlobalStyles, COLORS} from '../../assets';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
-import {AppValidation} from '../../utils/Validations';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-
-const appValidation = new AppValidation();
+import {appValidation} from '../../utils';
 
 export default function LoginScreen(): JSX.Element {
-  /* *
-  States
+  /*
+   ** States
    */
   const [emailAddress, setEmailAddress] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [passSecure, setPassSecure] = useState<boolean>(true);
   const [loading] = useState<boolean>(false);
   /*
-   * hooks
+   * Hooks
    */
   const navigation = useAppNavigation();
-
   /*
    * Functions
+   */
+  /*
+   ** Validating data before api call
    */
   const checkTextFieldValidation = () => {
     if (!emailAddress || !password) {
@@ -42,17 +35,13 @@ export default function LoginScreen(): JSX.Element {
       return false;
     }
     if (!appValidation.validatePassword(password)) {
-      Toast.show(
-        'Inavlid password it should on UpperCase, lowerCase, letter and one number',
-        Toast.LONG,
-      );
+      Toast.show('Inavlid password it should on UpperCase, lowerCase, letter and one number', Toast.LONG);
       return false;
     }
     return true;
   };
-
   /*
-   *  btn press to make user login
+   *  Btn press to make user Login
    */
   const appBtnPress = () => {
     if (!checkTextFieldValidation()) {
@@ -63,59 +52,28 @@ export default function LoginScreen(): JSX.Element {
       emailAddress: emailAddress?.trim()?.toLowerCase(),
       password: password.trim(),
     };
+
     console.log('params:', params);
   };
-  // Rendering
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
       <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
+
       {/* Main Body */}
       <BackButton fillColor={COLORS.white} />
-      {/* Header */}
-      <AuthHeader
-        text1={LABELS.welcomeBack}
-        text2={LABELS.signInLabel}
-        viewStyle={styles.mainView}
-      />
-      {/* Input fields */}
-      <InputTextLabel
-        textLable={LABELS.email}
-        textInputStyle={styles.textInputStyle}
-        viewStyle={styles.InputViewStyle}
-        onChangeText={setEmailAddress}
-        value={emailAddress}
-      />
-      <InputTextLabel
-        textLable={LABELS.password}
-        textInputStyle={styles.textInputStyle}
-        viewStyle={styles.InputViewStyle}
-        onChangeText={setPassword}
-        secureEntry={passSecure}
-        value={password}
-        rightIcon={true}>
-        {passSecure ? (
-          <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-            <ICONS.EyeOffIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => setPassSecure(!passSecure)}>
-            <ICONS.EyeOnIcon color={COLORS.grey4} />
-          </TouchableOpacity>
-        )}
-      </InputTextLabel>
-      {/* Button */}
-      <AppButton
-        title={LABELS.login}
-        onPress={appBtnPress}
-        btnStyle={styles.loginButtonStyle}
-        textStyle={styles.buttonTextStyle}
-        loading={loading}
-      />
 
-      <TouchableOpacity
-        style={styles.buttonStyle}
-        onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+      {/* Header */}
+      <AuthHeader text1={LABELS.welcomeBack} text2={LABELS.signInLabel} />
+
+      {/* Input fields */}
+      <InputTextLabel textLable={LABELS.email} onChangeText={setEmailAddress} value={emailAddress} />
+      <InputTextLabel textLable={LABELS.password} onChangeText={setPassword} value={password} isPassword={true} />
+
+      {/* Button */}
+      <AppButton title={LABELS.login} onPress={appBtnPress} textStyle={styles.buttonTextStyle} loading={loading} />
+
+      <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
         <Text style={styles.forgotPassStyle}>{LABELS.forgotPasswordsmall}</Text>
       </TouchableOpacity>
     </View>
