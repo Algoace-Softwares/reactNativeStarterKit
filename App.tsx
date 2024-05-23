@@ -5,30 +5,67 @@
  * @format
  */
 
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, Text, TextInput} from 'react-native';
+import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
+import AppNavigator from './src/routes';
+import Config from './src/config';
 
-function App(): React.JSX.Element {
-  return (
-    <View style={styles.mainContainer}>
-      <Text>Hello, world!</Text>
-    </View>
-  );
+/**
+ * declearing interface to avoid typescript error for text
+ */
+interface TextWithDefaultProps extends Text {
+  defaultProps?: {allowFontScaling?: boolean};
+}
+/**
+ * declearing interface to avoid typescript error for textInput
+ */
+interface TextInputWithDefaultProps extends Text {
+  defaultProps?: {allowFontScaling?: boolean};
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+function App(): React.JSX.Element {
+  /**
+   * - disabling font scalling as a text
+   */
+  (Text as unknown as TextWithDefaultProps).defaultProps =
+    (Text as unknown as TextWithDefaultProps).defaultProps || {};
+  (Text as unknown as TextWithDefaultProps).defaultProps!.allowFontScaling = false;
+  /**
+   * - disabling font scalling as a TextInput
+   */
+  (TextInput as unknown as TextInputWithDefaultProps).defaultProps =
+    (TextInput as unknown as TextInputWithDefaultProps).defaultProps || {};
+  (TextInput as unknown as TextInputWithDefaultProps).defaultProps!.allowFontScaling = false;
+  /*
+   ** States
+   */
+  const [_, setRecoveredFromError] = React.useState(false);
+
+  useEffect(() => {
+    /**
+     * - All your app third part module initialization like @notifee
+     *
+     */
+  }, []);
+
+  /**
+   * Your main componenet
+   */
+  return (
+    // <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
+    //   <AppNavigator />
+    // </ErrorBoundary>
+    <AppNavigator />
+  );
+}
 
 export default App;
 
 // typescript
 // zustand
 // react query
+// change to babel svg setting
 // zod
 // react native testing
 // internatilation

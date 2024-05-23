@@ -9,5 +9,5 @@ module.exports = {
   singleAttributePerLine: false,
   arrowParens: 'avoid',
   bracketSameLine: true,
-  printWidth: 100,
+  printWidth: 120,
 };
