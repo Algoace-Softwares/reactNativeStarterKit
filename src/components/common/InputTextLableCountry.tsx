@@ -1,14 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ViewStyle} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {GlobalStyles, COLORS, HEIGHT, ICONS} from '../../assets';
+import {GlobalStyles, COLORS, HEIGHT, SVG} from '../../assets';
 import {countriesData} from '../../data';
 /*
  ** types
@@ -76,11 +68,8 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
       if (prevItem) {
         return {...prevItem, countryName: e};
       }
-      return;
     });
-    setItemData(
-      countriesData.filter(item => item.countryName?.toLowerCase()?.includes(e?.toLowerCase())),
-    );
+    setItemData(countriesData.filter(item => item.countryName?.toLowerCase()?.includes(e?.toLowerCase())));
   };
 
   // rendering breederlist in drop down view
@@ -108,9 +97,7 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
           onPress={() => {
             setIsDropDown(true);
           }}>
-          {selectedCountry?.emoji && (
-            <Text style={styles.flagEmojiStyle}>{`${selectedCountry?.emoji}`}</Text>
-          )}
+          {selectedCountry?.emoji && <Text style={styles.flagEmojiStyle}>{`${selectedCountry?.emoji}`}</Text>}
         </TouchableOpacity>
 
         <TextInput
@@ -130,7 +117,7 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
           onPress={() => {
             setIsDropDown(!isDropDown);
           }}>
-          {isDropDown ? <ICONS.DropUpIcon /> : <ICONS.DropDownIcon />}
+          {isDropDown ? <SVG.DropUpIcon /> : <SVG.DropDownIcon />}
         </TouchableOpacity>
 
         {/* rendering drop down view */}

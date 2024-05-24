@@ -1,4 +1,4 @@
-import {ICONS, IMAGES} from '../assets';
+import {IMAGES, SVG} from '../assets';
 import {LABELS} from '../labels';
 import BottomTab from '../routes/BottomTab';
 import {
@@ -79,14 +79,14 @@ export const TabScreens = [
   {
     name: 'HomeScreen',
     component: HomeScreen,
-    tabBarIcon: ICONS.HomeBottomIcon,
+    tabBarIcon: SVG.HomeIcon,
     tabBarLabel: LABELS.home,
   },
 
   {
     name: 'Profilescreen',
     component: ProfileScreen,
-    tabBarIcon: ICONS.ProfileBottomIcon,
+    tabBarIcon: SVG.ProfileIcon,
     tabBarLabel: LABELS.profile,
   },
 ];

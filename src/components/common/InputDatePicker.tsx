@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS, ICONS, WIDTH} from '../../assets';
+import {GlobalStyles, COLORS, WIDTH, SVG} from '../../assets';
 import DatePickerModal from '../modals/DatePickerModal';
 
 interface InputDatePickerType {
@@ -33,7 +33,9 @@ export default function InputDatePicker(props: InputDatePickerType): JSX.Element
    */
   const [datePickerModal, setDatePickerModal] = useState(false);
 
-  // redering date for display / formatting date for to display
+  /*
+   ** redering date for display / formatting date for to display
+   */
   const renderDateToDisplay = (): JSX.Element => {
     if (value) {
       const tempDate = new Date(value);
@@ -47,7 +49,7 @@ export default function InputDatePicker(props: InputDatePickerType): JSX.Element
       <Text style={[styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
       <View style={[styles.inputStyle2, textInputStyle]}>
         {renderDateToDisplay()}
-        {calenderIcon && <ICONS.CalenderIcon />}
+        {calenderIcon && <SVG.CalenderIcon />}
       </View>
       <DatePickerModal
         visible={datePickerModal}

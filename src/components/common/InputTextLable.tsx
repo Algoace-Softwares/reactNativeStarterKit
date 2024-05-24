@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TextInput, TouchableOpacity, ViewStyle, KeyboardTypeOptions} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS, ICONS, WIDTH} from '../../assets';
+import {GlobalStyles, COLORS, WIDTH, SVG} from '../../assets';
 
 interface inputTextLabelType {
   textLable: string;
@@ -72,11 +72,7 @@ export default function InputTextLabel(props: inputTextLabelType): JSX.Element {
         />
         {isPassword && (
           <TouchableOpacity style={styles.rightButtonStyle} onPress={() => setPassSecure(!passSecure)}>
-            {passSecure ? (
-              <ICONS.EyeOffIcon fillColor={COLORS.seconday} />
-            ) : (
-              <ICONS.EyeOnIcon fillColor={COLORS.seconday} />
-            )}
+            {passSecure ? <SVG.EyeOffIcon fill={COLORS.grey5} /> : <SVG.EyeOnIcon fill={COLORS.grey5} />}
           </TouchableOpacity>
         )}
         {rightIcon && !isPassword ? (

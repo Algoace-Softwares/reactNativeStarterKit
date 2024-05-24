@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {LABELS} from '../../labels';
-import {GlobalStyles, COLORS, HEIGHT, ICONS} from '../../assets';
+import {GlobalStyles, COLORS, HEIGHT, SVG} from '../../assets';
 
 type dataItem = {
   id: number;
@@ -32,7 +32,9 @@ interface InputTextLabelDropDownType {
 }
 
 export default function InputTextLabelDropDown(props: InputTextLabelDropDownType): JSX.Element {
-  // destructring props
+  /*
+   ** Props
+   */
   const {
     textLable = '',
     textInputStyle = {},
@@ -47,18 +49,24 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
     dropDownData = [],
     disableAutoCapitalize = false,
   } = props;
-
-  //states
+  /*
+   ** State
+   */
   const [itemData, setItemData] = useState(dropDownData);
   const [isDropDown, setIsDropDown] = useState(false);
-
-  // everythi,e when user type fillter condition execute to filte data
+  /*
+   ** Functions
+   */
+  /*
+   ** Everything when user type fillter condition execute to filte data
+   */
   const onChangeTextDropDown = (e: string): void => {
     onChangeText(e);
     setItemData(dropDownData.filter(item => item.title?.toLowerCase()?.includes(e?.toLowerCase())));
   };
-
-  // rendering breederlist in drop down view
+  /*
+   ** Rendering breederlist in drop down view
+   */
   const renderBreederList = ({item}: {item: dataItem}): JSX.Element => {
     return (
       <TouchableOpacity
@@ -127,7 +135,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
           onPress={() => {
             setIsDropDown(!isDropDown);
           }}>
-          {isDropDown ? <ICONS.DropUpIcon /> : <ICONS.DropDownIcon />}
+          {isDropDown ? <SVG.DropUpIcon /> : <SVG.DropDownIcon />}
         </TouchableOpacity>
       </View>
       {/* rendering drop down view */}

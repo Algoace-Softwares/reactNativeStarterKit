@@ -1,7 +1,7 @@
 import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS, ICONS} from '../../assets';
+import {COLORS, SVG} from '../../assets';
 
 interface backBtnType {
   fillColor: string;
@@ -17,16 +17,10 @@ export default function BackButton(props: backBtnType): JSX.Element {
    ** Hooks
    */
   const navigation = useNavigation();
-  /*
-   ** Functions
-   */
-  const backPressed = (): void => {
-    navigation.goBack();
-  };
-  // Rendering
+
   return (
-    <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={backPressed}>
-      <ICONS.BackIcon color={fillColor} />
+    <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={() => navigation.goBack()}>
+      <SVG.BackIcon fill={fillColor} />
     </TouchableOpacity>
   );
 }
