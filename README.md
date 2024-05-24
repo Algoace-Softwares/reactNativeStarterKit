@@ -76,9 +76,12 @@ This is simple and easy to use starter kit following are the feature used in thi
 
 ### Note for svg?
 
+We have used metero version of svg
+https://github.com/kristerkari/react-native-svg-transformer
+
 you need to make fill prop as empty string in order to user svg as resuasable like this:
 <svg width="16" height="16" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
-<path d="M14.25 0.5H1.75C1.41848 0.5 1.10054 " fill=""/>
+
 </svg>
 
 and when you are impoting this svg import it like this
