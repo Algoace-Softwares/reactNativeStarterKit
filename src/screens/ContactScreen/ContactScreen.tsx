@@ -23,7 +23,7 @@ export default function ContactScreen() {
    ** Routing params
    */
   const route = useRoute<RouteProp<AuthStackParamList, 'ContactScreen'>>();
-  const {lastName, emailAddress, password, firstName} = route.params;
+  const {lastName, email, password, firstName} = route.params;
   /*
    ** States
    */
@@ -53,7 +53,7 @@ export default function ContactScreen() {
       return;
     }
     const params = {
-      emailAddress,
+      email,
       password,
       firstName,
       lastName,
@@ -63,7 +63,7 @@ export default function ContactScreen() {
     console.log('params is:', params);
     // navigating to another screen
     navigation.navigate('ConfirmSignupScreen', {
-      email: emailAddress,
+      email,
       password,
     });
   };

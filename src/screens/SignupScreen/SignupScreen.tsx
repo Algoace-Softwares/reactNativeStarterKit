@@ -13,10 +13,11 @@ import {
 import {LABELS} from '../../labels';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
-import {appValidation} from '../../utils';
 import useImagePicker from '../../hooks/useImagePicker';
 import {imageObjectType} from './types';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {ZodError} from 'zod';
+import {signupSchema} from '../../utils/SchemaValidation';
 
 export default function SignupScreen() {
   /*
@@ -37,51 +38,31 @@ export default function SignupScreen() {
    * Hooks
    */
   const navigation = useAppNavigation();
+  /*
+   ** Functions
+   */
 
-  // Functions
-  const checkTextFieldValidation = (): boolean => {
-    if (!emailAddress || !password || !firstName?.trim() || !lastName?.trim()) {
-      Toast.show('Input fields required', Toast.LONG);
-      return false;
-    }
-    // validate login
-    if (!appValidation.validateLogin(emailAddress)) {
-      Toast.show('email validation failed', Toast.LONG);
-      return false;
-    }
-    // validate password
-    if (!appValidation.validatePassword(password)) {
-      Toast.show('password validation failed', Toast.LONG);
-      return false;
-    }
-    // validate first name
-    if (!appValidation.validateUserName(firstName)) {
-      Toast.show('name validation failed', Toast.LONG);
-      return false;
-    }
-    // validate last name
-    if (!appValidation.validateUserName(lastName)) {
-      Toast.show('name validation failed', Toast.LONG);
-
-      return false;
-    }
-
-    return true;
-  };
   /*
    **   When continue button is pressed
    */
   const ContinuePressed = (): void => {
-    if (!checkTextFieldValidation()) {
-      return;
+    try {
+      const params = {
+        firstName: firstName?.trim(),
+        lastName: lastName?.trim(),
+        email: emailAddress?.trim()?.toLowerCase(),
+        password: password?.trim(),
+        dateOfBirth,
+      };
+      const data = signupSchema.parse(params);
+      console.log('🚀 ~ ContinuePressed ~ data:', data);
+      navigation.navigate('ContactScreen', params);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        Toast.show(error?.issues[0]?.message, Toast.LONG);
+      }
+      console.log('🚀 ~ ContinuePressed ~ error:', error);
     }
-
-    navigation.navigate('ContactScreen', {
-      firstName,
-      lastName,
-      emailAddress: emailAddress?.trim()?.toLowerCase(),
-      password: password?.trim(),
-    });
   };
   /*
    * open camear or gallery for image upload

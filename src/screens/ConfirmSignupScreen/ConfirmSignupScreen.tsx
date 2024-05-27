@@ -7,6 +7,8 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {styles} from './style';
+import {ZodError} from 'zod';
+import {confirmationCodeValidation} from '../../utils/SchemaValidation';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
@@ -23,33 +25,31 @@ export default function ConfirmSignupScreen(): JSX.Element {
   const [confirmationCode, setConfirmationCode] = useState<string>('');
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
-  const [loading] = useState<boolean>(true);
+  const [loading] = useState<boolean>(false);
   /*
    ** Functions
    */
-  /*
-   ** Cheking filed validation
-   */
-  const checkTextFieldValidation = () => {
-    if (!confirmationCode) {
-      return false;
-    }
-    return true;
-  };
+
   /*
    ** when submit code is pressed
    */
   const submitCodePressed = () => {
-    if (!checkTextFieldValidation()) {
-      Toast.show('validation failed', Toast.LONG);
+    try {
+      const params = {
+        email,
+        confirmationCode,
+        password,
+      };
+      // api call
+      console.log('params is', params);
+      const data = confirmationCodeValidation.parse({confirmationCode});
+      console.log('🚀 ~ submitCodePressed ~ data:', data);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        Toast.show(error?.issues[0]?.message, Toast.LONG);
+      }
+      console.log('🚀 ~ submitCodePressed ~ error:', error);
     }
-    const params = {
-      email,
-      confirmationCode,
-      password,
-    };
-    // api call
-    console.log('params is', params);
   };
   /*
    ** When resend code is pressed

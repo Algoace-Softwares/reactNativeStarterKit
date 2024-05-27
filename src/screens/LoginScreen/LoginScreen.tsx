@@ -6,7 +6,8 @@ import {GlobalStyles, COLORS} from '../../assets';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-import {appValidation} from '../../utils';
+import {ZodError} from 'zod';
+import {loginSchema} from '../../utils/SchemaValidation';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -22,38 +23,27 @@ export default function LoginScreen(): JSX.Element {
   /*
    * Functions
    */
-  /*
-   ** Validating data before api call
-   */
-  const checkTextFieldValidation = () => {
-    if (!emailAddress || !password) {
-      Toast.show('Input fields required', Toast.LONG);
-      return false;
-    }
-    if (!appValidation.validateLogin(emailAddress)) {
-      Toast.show('Please enter valid emailAddress', Toast.LONG);
-      return false;
-    }
-    if (!appValidation.validatePassword(password)) {
-      Toast.show('Inavlid password it should on UpperCase, lowerCase, letter and one number', Toast.LONG);
-      return false;
-    }
-    return true;
-  };
+
   /*
    *  Btn press to make user Login
    */
   const appBtnPress = () => {
-    if (!checkTextFieldValidation()) {
-      return;
+    try {
+      const params = {
+        email: emailAddress?.trim(),
+        password,
+      };
+
+      const data = loginSchema.parse(params);
+      console.log('🚀 ~ appBtnPress ~ data:', data);
+
+      console.log('params:', params);
+    } catch (error: unknown | ZodError) {
+      if (error instanceof ZodError) {
+        Toast.show(error?.issues[0]?.message, Toast.LONG);
+      }
+      console.log('🚀 ~ appBtnPress ~ error:', error);
     }
-
-    const params = {
-      emailAddress: emailAddress?.trim()?.toLowerCase(),
-      password: password.trim(),
-    };
-
-    console.log('params:', params);
   };
   return (
     <View style={GlobalStyles.mainContainer}>

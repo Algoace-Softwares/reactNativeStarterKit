@@ -7,8 +7,9 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
 import {AuthStackParamList} from '../../routes/types.navigation';
-import {appValidation} from '../../utils';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {changePasswordSchema} from '../../utils/SchemaValidation';
+import {ZodError} from 'zod';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   /*
@@ -30,35 +31,29 @@ export default function ForgotChangePassScreen(): JSX.Element {
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
   const [loading] = useState<boolean>(false);
-
-  // Functions
-  const checkTextFieldValidation = (): boolean => {
-    if (!email || !password || !confirmPassword || !confirmationCode) {
-      Toast.show('Input filed required', Toast.LONG);
-      return false;
-    } else if (password !== confirmPassword) {
-      Toast.show('Password does not match', Toast.LONG);
-      return false;
-    } else if (!appValidation.validatePassword(password)) {
-      Toast.show('Invalid password', Toast.LONG);
-      return false;
-    }
-    return true;
-  };
+  /*
+   ** Functions
+   */
 
   // when reste btn is pressed
   const resetPassPressed = (): void => {
-    if (!checkTextFieldValidation()) {
-      return;
+    try {
+      const params = {
+        confirmationCode,
+        emailAddress: email?.trim(),
+        password,
+        confirmPassword,
+      };
+      const data = changePasswordSchema.parse(params);
+      console.log('🚀 ~ resetPassPressed ~ data:', data);
+      navigation.goBack();
+      navigation.goBack();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        Toast.show(error?.issues[0]?.message, Toast.LONG);
+      }
+      console.log('🚀 ~ appBtnPress ~ error:', error);
     }
-    const params = {
-      emailAddress: email?.trim(),
-      password,
-      confirmationCode,
-    };
-    console.log('params', params);
-    navigation.goBack();
-    navigation.goBack();
   };
 
   // when resend code is pressed

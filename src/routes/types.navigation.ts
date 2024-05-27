@@ -27,7 +27,7 @@ export type AuthStackParamList = {
   ContactScreen: {
     firstName: string;
     lastName: string;
-    emailAddress: string;
+    email: string;
     password: string;
   };
   ConfirmSignupScreen: {email: string; password: string};

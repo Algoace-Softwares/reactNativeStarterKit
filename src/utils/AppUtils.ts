@@ -11,19 +11,10 @@ const storage = new MMKV();
 // import {Platform} from 'react-native';
 
 export class CommonUtils {
-  constructor() {
-    // console.log('constructer is called Common utils');
-  }
-
   /**
    * Manually report a handled error.
    */
-  crashLogs = ({
-    filename,
-    functionName,
-    error,
-    errorType = ErrorType.FATAL,
-  }: crashLogType): void => {
+  crashLogs = ({filename, functionName, error, errorType = ErrorType.FATAL}: crashLogType): void => {
     if (__DEV__ || process.env.NODE_ENV === 'development') {
       console.log(`${filename} => ${functionName} ===> ${error}`, error);
       if (error instanceof Error) {
@@ -38,10 +29,7 @@ export class CommonUtils {
   /*
    ** Get unique object make array into object key value pair key would be the id
    */
-  getUniqueObject = <T extends Record<string, unknown>>(
-    data: T[] = [],
-    keyName: keyof T = '',
-  ): Record<string, T> => {
+  getUniqueObject = <T extends Record<string, unknown>>(data: T[] = [], keyName: keyof T = ''): Record<string, T> => {
     const newData: Record<string, T> = {};
     data.forEach(item => {
       if (keyName in item) {
@@ -90,11 +78,7 @@ export class CommonUtils {
   /*
    ** Avg calculation of rating
    */
-  calculateAvgRating = <T extends number>(
-    newRating: T,
-    totalReviewerUsers: T,
-    oldRating: T,
-  ): string => {
+  calculateAvgRating = <T extends number>(newRating: T, totalReviewerUsers: T, oldRating: T): string => {
     let temp = oldRating * totalReviewerUsers + newRating;
     temp = temp / (totalReviewerUsers + 1);
     return temp.toPrecision(2);
@@ -102,69 +86,69 @@ export class CommonUtils {
 }
 
 // you need to install rnfetch blob in order to make these funnction working
-export class reactNativeFileManupilation {
-  constructor() {
-    // console.log('reactNativeFileManuiplation constructor called');
-  }
-  // //File download
-  // downloadFile = async (url = '', titleName = '') => {
-  //   console.log('url', url);
-  //   console.log('title', titleName);
-  //   // geneting random string
-  //   let randomString = (Math.random() + 1).toString(36).substring(7);
-  //   try {
-  //     // constant
-  //     // const filePath = `${getDirectoryPath(true)}/${randomString}/${titleName}`;
-  //     let filePath: string;
-  //     if (Platform.OS === 'android') {
-  //       filePath = `${getDirectoryPath(true)}/${randomString}/${titleName}`;
-  //     } else {
-  //       filePath = `${getDirectoryPath(true)}/${titleName}`;
-  //     }
-  //     console.log('filePath is ', filePath);
-  //     RNFetchBlob.config({
-  //       fileCache: true,
-  //       path: filePath,
-  //     })
-  //       .fetch('GET', url)
-  //       .progress({interval: 100000}, recieved => {
-  //         Toast.show('Downloading file...', Toast.LONG);
-  //         console.log('this is data is recieving', recieved);
-  //       })
-  //       .then(async res => {
-  //         console.log('RESPONSE [DOWNLOAD_FILE]', res);
-  //         Toast.show('File downloaded', Toast.LONG);
-  //         if (Platform.OS === 'ios') {
-  //           RNFetchBlob.fs.writeFile(filePath, res.data, 'base64');
-  //           RNFetchBlob.ios.previewDocument(filePath);
-  //         }
-  //       })
-  //       .catch(error => {
-  //         Toast.show('Unable to donwload file try again later', Toast.LONG);
-  //         crashLogs({
-  //           error: error,
-  //           filename: 'utils',
-  //           functionName: 'downloadFile',
-  //         });
-  //       });
-  //   } catch (error) {
-  //     console.log('ERROR[DOWNLOAD_FILE]');
-  //     crashLogs({
-  //       error: error,
-  //       filename: 'utils',
-  //       functionName: 'downloadFile',
-  //     });
-  //     // Toast.show("Unable to download file");
-  //   }
-  // };
-  // // Get Directory path
-  // protected getDirectoryPath = (iOSDownload = false) => {
-  //   let directory = RNFetchBlob.fs.dirs.DownloadDir;
-  //   if (Platform.OS === 'ios') {
-  //     directory = iOSDownload
-  //       ? RNFetchBlob.fs.dirs.DocumentDir
-  //       : 'file://' + RNFetchBlob.fs.dirs.DocumentDir;
-  //   }
-  //   return `${directory}`;
-  // };
-}
+// export class reactNativeFileManupilation {
+//   constructor() {
+//     // console.log('reactNativeFileManuiplation constructor called');
+//   }
+//   // //File download
+//   // downloadFile = async (url = '', titleName = '') => {
+//   //   console.log('url', url);
+//   //   console.log('title', titleName);
+//   //   // geneting random string
+//   //   let randomString = (Math.random() + 1).toString(36).substring(7);
+//   //   try {
+//   //     // constant
+//   //     // const filePath = `${getDirectoryPath(true)}/${randomString}/${titleName}`;
+//   //     let filePath: string;
+//   //     if (Platform.OS === 'android') {
+//   //       filePath = `${getDirectoryPath(true)}/${randomString}/${titleName}`;
+//   //     } else {
+//   //       filePath = `${getDirectoryPath(true)}/${titleName}`;
+//   //     }
+//   //     console.log('filePath is ', filePath);
+//   //     RNFetchBlob.config({
+//   //       fileCache: true,
+//   //       path: filePath,
+//   //     })
+//   //       .fetch('GET', url)
+//   //       .progress({interval: 100000}, recieved => {
+//   //         Toast.show('Downloading file...', Toast.LONG);
+//   //         console.log('this is data is recieving', recieved);
+//   //       })
+//   //       .then(async res => {
+//   //         console.log('RESPONSE [DOWNLOAD_FILE]', res);
+//   //         Toast.show('File downloaded', Toast.LONG);
+//   //         if (Platform.OS === 'ios') {
+//   //           RNFetchBlob.fs.writeFile(filePath, res.data, 'base64');
+//   //           RNFetchBlob.ios.previewDocument(filePath);
+//   //         }
+//   //       })
+//   //       .catch(error => {
+//   //         Toast.show('Unable to donwload file try again later', Toast.LONG);
+//   //         crashLogs({
+//   //           error: error,
+//   //           filename: 'utils',
+//   //           functionName: 'downloadFile',
+//   //         });
+//   //       });
+//   //   } catch (error) {
+//   //     console.log('ERROR[DOWNLOAD_FILE]');
+//   //     crashLogs({
+//   //       error: error,
+//   //       filename: 'utils',
+//   //       functionName: 'downloadFile',
+//   //     });
+//   //     // Toast.show("Unable to download file");
+//   //   }
+//   // };
+//   // // Get Directory path
+//   // protected getDirectoryPath = (iOSDownload = false) => {
+//   //   let directory = RNFetchBlob.fs.dirs.DownloadDir;
+//   //   if (Platform.OS === 'ios') {
+//   //     directory = iOSDownload
+//   //       ? RNFetchBlob.fs.dirs.DocumentDir
+//   //       : 'file://' + RNFetchBlob.fs.dirs.DocumentDir;
+//   //   }
+//   //   return `${directory}`;
+//   // };
+// }

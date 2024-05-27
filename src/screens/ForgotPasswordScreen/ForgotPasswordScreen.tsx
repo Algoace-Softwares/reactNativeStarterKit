@@ -5,6 +5,8 @@ import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {ZodError} from 'zod';
+import {emailSchema} from '../../utils/SchemaValidation';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   /*
@@ -19,31 +21,27 @@ export default function ForgotPasswordScreen(): JSX.Element {
   /*
    ** Functions
    */
-  /*
-   ** Checking function validatrion
-   */
-  const checkTextFieldValidation = (): boolean => {
-    if (!emailAddress) {
-      Toast.show('email address required', Toast.LONG);
 
-      return false;
-    }
-    return true;
-  };
   /*
    ** Navigation to another screen
    */
   const resetPassPressed = (): void => {
-    if (!checkTextFieldValidation()) {
-      return;
+    try {
+      const params = {
+        email: emailAddress,
+      };
+      console.log('resetPassword', params);
+      const data = emailSchema.parse(params);
+      console.log('🚀 ~ resetPassPressed ~ data:', data);
+      navigation.navigate('ForgotChangePassScreen', {
+        email: 'shaheer3.sa@algoace.com',
+      });
+    } catch (error: unknown | ZodError) {
+      if (error instanceof ZodError) {
+        Toast.show(error?.issues[0]?.message, Toast.LONG);
+      }
+      console.log('🚀 ~ appBtnPress ~ error:', error);
     }
-    const params = {
-      emailAddress,
-    };
-    console.log('resetPassword', params);
-    navigation.navigate('ForgotChangePassScreen', {
-      email: 'shaheer3.sa@algoace.com',
-    });
   };
 
   // Rendering
