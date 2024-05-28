@@ -1,7 +1,4 @@
-/*
- ** List of all the labels are being used in the app
- */
-export const LABELS = {
+const en = {
   listIsEmpty: 'List is empty',
   no: 'No',
   yes: 'Yes',
@@ -51,21 +48,5 @@ export const LABELS = {
   appLabel: 'Pupspotter',
 };
 
-export const MESSAGES = {
-  emailRequired: 'Email is required',
-  passwordRequired: 'Password is required',
-  firstNameRequired: 'First Name is required',
-  firstNameLessLength: 'First Name should be less then 30 characters',
-  lastNameLessLength: 'Last Name should be less then 30 characters',
-  firstNameShort: 'First name too short',
-  lastNameShort: 'Last name too short',
-  otpLength: 'OTP must be exactly 6 characters',
-  otpRequired: 'OTP required',
-  lastNameRequired: 'Last Name is required',
-  emailInvalid: 'Email is invalid',
-  passwordInvalid: 'Password is invalid',
-  firstNameInvalid: 'First Name is invalid',
-  lastNameInvalid: 'Last Name is invalid',
-  passwordNotMatch: 'Password does not match',
-  passwordLength: 'Invalid password it should on UpperCase, lowerCase, letter and one number',
-};
+export default en;
+export type Translations = typeof en;

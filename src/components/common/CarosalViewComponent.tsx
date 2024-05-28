@@ -28,7 +28,7 @@ export default function CarosalViewComponent(props: carosalViewComponentType): J
     selectedDotColor = COLORS.primary,
     unSelectedColor = COLORS.grey5,
   } = props;
-  //Refs
+  // Refs
   const scrollX = useRef(new Animated.Value(0)).current;
 
   // redering top image slider
@@ -39,11 +39,7 @@ export default function CarosalViewComponent(props: carosalViewComponentType): J
         {typeof item?.path === 'number' ? (
           <Image source={item?.path} style={GlobalStyles.mainImageStyle} resizeMode={'cover'} />
         ) : (
-          <Image
-            source={{uri: item?.path}}
-            style={GlobalStyles.mainImageStyle}
-            resizeMode={'cover'}
-          />
+          <Image source={{uri: item?.path}} style={GlobalStyles.mainImageStyle} resizeMode={'cover'} />
         )}
       </View>
     );

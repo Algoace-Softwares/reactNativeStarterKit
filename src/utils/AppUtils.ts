@@ -1,12 +1,9 @@
+import {Linking} from 'react-native';
 import {ErrorType, crashLogType} from './types';
-import {MMKV} from 'react-native-mmkv';
 /**
  * If you're using Crashlytics: https://rnfirebase.io/crashlytics/usage
  */
 // import crashlytics from '@react-native-firebase/crashlytics';
-
-// local storage
-const storage = new MMKV();
 
 // import {Platform} from 'react-native';
 
@@ -26,6 +23,13 @@ export class CommonUtils {
     }
   };
 
+  /**
+   * Helper for opening a give URL in an external browser.
+   */
+  openLinkInBrowser = (url: string): void => {
+    Linking.canOpenURL(url).then(canOpen => canOpen && Linking.openURL(url));
+  };
+
   /*
    ** Get unique object make array into object key value pair key would be the id
    */
@@ -38,12 +42,13 @@ export class CommonUtils {
     });
     return newData;
   };
+
   /*
    ** Shuffle arrays
    */
   shuffleArray = <Type>(array: Type[]): Type[] => {
-    let currentIndex = array.length,
-      randomIndex;
+    let currentIndex = array.length;
+    let randomIndex;
 
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -53,28 +58,14 @@ export class CommonUtils {
     }
     return array;
   };
+
   /*
    **Get unique array - remove duplicates
    */
   uniqueArray = <T>(array: T[]): T[] => {
     return array.filter((v, i, a) => a.indexOf(v) === i);
   };
-  /*
-   ** Getting local storage data
-   */
-  async getUserDataLocalStorage(key: string): Promise<unknown> {
-    try {
-      let jsonData = storage.getString(key);
-      console.log('response fetchDataFromLocalStorage:', jsonData);
-      if (jsonData) {
-        jsonData = JSON.parse(jsonData);
-        return jsonData;
-      }
-      return {};
-    } catch (error) {
-      console.log('response fetchDataFromLocalStorage:', error);
-    }
-  }
+
   /*
    ** Avg calculation of rating
    */

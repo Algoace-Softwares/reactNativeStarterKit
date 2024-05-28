@@ -40,10 +40,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
     appUtils.crashLogs({filename: 'ErrorBoundary', functionName: 'ErrorBoundary', error});
   }
 
-  //   // To avoid unnecessary re-renders
-  //   shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>): boolean {
-  //     return nextState.error !== nextProps.error;
-  //   }
+  // To avoid unnecessary re-renders
+  shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>): boolean {
+    return nextState.error !== nextProps.error;
+  }
 
   render() {
     if (this.state.error) {

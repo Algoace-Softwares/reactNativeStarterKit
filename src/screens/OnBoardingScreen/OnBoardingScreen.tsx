@@ -11,6 +11,7 @@ export default function OnBoardingScreen(): JSX.Element {
    * hooks
    */
   const navigation = useAppNavigation();
+
   /*
    * Functions
    */

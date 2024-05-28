@@ -4,9 +4,9 @@
  *
  * @format
  */
-
+import './src/i18n';
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, TextInput} from 'react-native';
+import {Text, TextInput} from 'react-native';
 import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
 import AppNavigator from './src/routes';
 import Config from './src/config';
@@ -52,23 +52,18 @@ function App(): React.JSX.Element {
    * Your main componenet
    */
   return (
-    // <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
-    //   <AppNavigator />
-    // </ErrorBoundary>
-    <AppNavigator />
+    <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
+      <AppNavigator />
+    </ErrorBoundary>
   );
 }
 
 export default App;
 
-// typescript
-// add umoozi type of width and heigh utils functions
 // zustand
 // react query
-// change to babel svg setting
-// zod
 // react native testing
 // internatilation
 // env setup
-// theme setup
+//  dark and light theme setup
 // coding best practice for text and scrol view in ignit boiler plate

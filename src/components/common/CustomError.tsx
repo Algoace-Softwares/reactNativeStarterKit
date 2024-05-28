@@ -1,6 +1,8 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {LABELS} from '../../labels';
+import {COLORS, GlobalStyles} from '../../assets';
+import AppButton from './AppButton';
 
 export type Props = {error: Error; resetError: () => void};
 /*
@@ -9,8 +11,12 @@ export type Props = {error: Error; resetError: () => void};
 const CustomError = (props: Props) => {
   // destructring props
   const {error, resetError} = props;
+  console.log('🚀 ~ CustomError ~ error:', error);
   /*
    ** Function
+   */
+  /*
+   ** Reseting to render the whole app
    */
   const resetingState = () => {
     resetError();
@@ -20,47 +26,39 @@ const CustomError = (props: Props) => {
       <View style={styles.content}>
         <Text style={styles.title}>{LABELS.oops}</Text>
         <Text style={styles.subtitle}>{LABELS.errorBoundaryLable}</Text>
-        <Text style={styles.error}>{error.toString()}</Text>
-        <TouchableOpacity style={styles.button} onPress={resetingState}>
-          <Text style={styles.buttonText}>{LABELS.tryAgain}</Text>
-        </TouchableOpacity>
+        {/* <Text style={styles.error}>{error.toString()}</Text> */}
+
+        <AppButton title={LABELS.tryAgain} onPress={resetingState} textStyle={styles.buttonTextStyle} />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonTextStyle: {
+    color: COLORS.white,
+    ...GlobalStyles.l2,
+  },
   container: {
-    backgroundColor: '#fafafa',
+    backgroundColor: COLORS.white,
     flex: 1,
     justifyContent: 'center',
   },
   content: {
     marginHorizontal: 16,
   },
+
+  subtitle: {
+    color: COLORS.black,
+    fontSize: 32,
+    fontWeight: '800',
+  },
+
   title: {
+    color: COLORS.black,
     fontSize: 48,
     fontWeight: '300',
     paddingBottom: 16,
-    color: '#000',
-  },
-  subtitle: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#000',
-  },
-  error: {
-    paddingVertical: 16,
-  },
-  button: {
-    backgroundColor: '#2196f3',
-    borderRadius: 50,
-    padding: 16,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-    textAlign: 'center',
   },
 });
 

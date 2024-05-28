@@ -1,27 +1,25 @@
 import {z} from 'zod';
 import {REGEX} from '../constants/regex';
+import {MESSAGES} from '../labels';
 /*
  ** Validtaion schema for  email
  */
 export const emailSchema = z.object({
-  email: z.string().min(1, {message: 'Email required'}).email({message: 'Invalid email'}).toLowerCase(),
+  email: z.string().min(1, {message: MESSAGES.emailRequired}).email({message: MESSAGES.emailInvalid}).toLowerCase(),
 });
 /*
  ** Validation schema for password
  */
 export const passwordSchema = z.object({
-  password: z.string().min(1, {message: 'Password required'}).regex(REGEX.password, {
-    message: 'Invalid password it should on UpperCase, lowerCase, letter and one number',
+  password: z.string().min(1, {message: MESSAGES.passwordRequired}).regex(REGEX.password, {
+    message: MESSAGES.passwordLength,
   }),
 });
 /*
  ** Validation schema for confirmationCode
  */
 export const confirmationCodeValidation = z.object({
-  confirmationCode: z
-    .string()
-    .min(1, {message: 'Please enter a 6-digit OTP'})
-    .length(6, {message: 'OTP must be exactly 6 characters'}),
+  confirmationCode: z.string().min(1, {message: MESSAGES.otpRequired}).length(6, {message: MESSAGES.otpLength}),
 });
 /*
  ** Login form schema
@@ -33,24 +31,24 @@ export const loginSchema = emailSchema.merge(passwordSchema);
 export const namesSchema = z.object({
   firstName: z
     .string()
-    .min(1, {message: 'firstName required'})
+    .min(1, {message: MESSAGES.firstNameRequired})
     .regex(REGEX.name, {
-      message: 'Invalid firstName',
+      message: MESSAGES.firstNameInvalid,
     })
-    .max(30, 'firstName should be at least 30 characters')
+    .max(30, MESSAGES.firstNameLessLength)
     .refine(value => value.trim().length >= 3, {
-      message: 'firstName too short',
+      message: MESSAGES.firstNameShort,
     }),
 
   lastName: z
     .string()
-    .min(1, {message: 'lastName required'})
+    .min(1, {message: MESSAGES.lastNameRequired})
     .regex(REGEX.name, {
-      message: 'Invalid lastName',
+      message: MESSAGES.lastNameInvalid,
     })
-    .max(30, 'lastName should be at 30 characters')
+    .max(30, MESSAGES.lastNameLessLength)
     .refine(value => value.trim().length >= 3, {
-      message: 'lastName too short',
+      message: MESSAGES.lastNameShort,
     }),
 });
 /*
@@ -59,20 +57,20 @@ export const namesSchema = z.object({
 export const changePasswordSchema = z
   .object({
     password: z.string().regex(REGEX.password, {
-      message: 'Invalid password it should on UpperCase, lowerCase, letter and one number',
+      message: MESSAGES.passwordLength,
     }),
     confirmPassword: z.string().regex(REGEX.password, {
-      message: 'Inavlid password it should on UpperCase, lowerCase, letter and one number',
+      message: MESSAGES.passwordLength,
     }),
     oldPassword: z
       .string()
       .regex(REGEX.password, {
-        message: 'Invalid password it should on UpperCase, lowerCase, letter and one number',
+        message: MESSAGES.passwordLength,
       })
       .optional(),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'Password does not match',
+    message: MESSAGES.passwordNotMatch,
     path: ['confirmPassword'],
   });
 /*
