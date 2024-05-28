@@ -49,6 +49,7 @@ export const LABELS = {
   errorBoundaryLable: 'Something went wrong try again later',
   tryAgain: 'Try again',
   appLabel: 'Pupspotter',
+  changeLanguage: 'Change language',
 };
 
 export const MESSAGES = {

@@ -6,7 +6,7 @@
  */
 import './src/i18n';
 import React, {useEffect} from 'react';
-import {Text, TextInput} from 'react-native';
+import {I18nManager, Text, TextInput} from 'react-native';
 import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
 import AppNavigator from './src/routes';
 import Config from './src/config';
@@ -23,6 +23,8 @@ interface TextWithDefaultProps extends Text {
 interface TextInputWithDefaultProps extends Text {
   defaultProps?: {allowFontScaling?: boolean};
 }
+// Forcefully content start from Left to Right - Phone setting does not effect here
+I18nManager.forceRTL(false);
 
 function App(): React.JSX.Element {
   /**

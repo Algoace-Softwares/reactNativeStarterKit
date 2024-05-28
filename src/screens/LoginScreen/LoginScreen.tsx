@@ -62,6 +62,9 @@ export default function LoginScreen(): JSX.Element {
 
       {/* Button */}
       <AppButton title={LABELS.login} onPress={appBtnPress} textStyle={styles.buttonTextStyle} loading={loading} />
+      <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+        <Text style={styles.forgotPassStyle}>{LABELS.changeLanguage}</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
         <Text style={styles.forgotPassStyle}>{LABELS.forgotPasswordsmall}</Text>
