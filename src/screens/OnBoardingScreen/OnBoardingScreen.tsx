@@ -1,17 +1,17 @@
 import {Text, View, SafeAreaView, Image, ImageBackground} from 'react-native';
 import React from 'react';
 import {GlobalStyles, COLORS, IMAGES} from '../../assets';
-import {LABELS} from '../../labels';
 import {AppButton, FocusAwareStatusBar} from '../../components';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {useTranslation} from 'react-i18next';
 
 export default function OnBoardingScreen(): JSX.Element {
   /*
    * hooks
    */
   const navigation = useAppNavigation();
-
+  const {t} = useTranslation();
   /*
    * Functions
    */
@@ -30,14 +30,14 @@ export default function OnBoardingScreen(): JSX.Element {
       {/* Logo */}
       <View style={styles.appLogoView}>
         <Image source={IMAGES.appLogo} style={styles.appLogoImageStyle} resizeMode={'contain'} />
-        <Text style={styles.appLableStyle}>{LABELS.appLabel}</Text>
+        <Text style={styles.appLableStyle}>{t('appLabel')}</Text>
       </View>
 
       {/* Buttons */}
       <View style={styles.btnContainer}>
-        <AppButton title={LABELS.login} onPress={onPressLogin} btnStyle={GlobalStyles.smallBtn1Style} />
+        <AppButton title={t('login')} onPress={onPressLogin} btnStyle={GlobalStyles.smallBtn1Style} />
         <AppButton
-          title={LABELS.signUp}
+          title={t('signUp')}
           onPress={onPressSignUp}
           btnStyle={GlobalStyles.smallBtn2Style}
           textStyle={GlobalStyles.btn2textStyle}

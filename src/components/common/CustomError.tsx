@@ -1,8 +1,8 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {LABELS} from '../../labels';
 import {COLORS, GlobalStyles} from '../../assets';
 import AppButton from './AppButton';
+import {en} from '../../labels';
 
 export type Props = {error: Error; resetError: () => void};
 /*
@@ -24,11 +24,11 @@ const CustomError = (props: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{LABELS.oops}</Text>
-        <Text style={styles.subtitle}>{LABELS.errorBoundaryLable}</Text>
+        <Text style={styles.title}>{en.oops}</Text>
+        <Text style={styles.subtitle}>{en.errorBoundaryLable}</Text>
         {/* <Text style={styles.error}>{error.toString()}</Text> */}
 
-        <AppButton title={LABELS.tryAgain} onPress={resetingState} textStyle={styles.buttonTextStyle} />
+        <AppButton title={en.tryAgain} onPress={resetingState} textStyle={styles.buttonTextStyle} />
       </View>
     </SafeAreaView>
   );

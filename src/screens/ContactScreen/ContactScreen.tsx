@@ -9,7 +9,6 @@ import {
   InputTextLableCountry,
   FocusAwareStatusBar,
 } from '../../components';
-import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import styles from './style';
@@ -17,6 +16,7 @@ import Toast from 'react-native-simple-toast';
 import {countryStates} from '../../data';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {useTranslation} from 'react-i18next';
 
 export default function ContactScreen() {
   /*
@@ -35,6 +35,8 @@ export default function ContactScreen() {
    ** Hooks
    */
   const navigation = useAppNavigation();
+  const {t} = useTranslation();
+
   /*
    ** Functions
    */
@@ -75,23 +77,23 @@ export default function ContactScreen() {
       {/* Main Body */}
       <BackButton fillColor={COLORS.white} />
       {/* Header */}
-      <AuthHeader text1={LABELS.contact} text2={LABELS.contactLable} />
+      <AuthHeader text1={t('contact')} text2={t('contactLabel')} />
       {/* Input fields */}
       <InputLablePhoneNumber
-        textLable={`Select ${LABELS.phoneNumber}`}
+        textLable={`${t('select')} ${t('phoneNumber')}`}
         viewStyle={styles.InputViewStyle}
         onChangeText={setPhoneNumber}
         value={phoneNumber}
       />
       <InputTextLableCountry
-        textLable={`Select ${LABELS.Country}`}
+        textLable={`${t('select')} ${t('country')}`}
         viewStyle={styles.InputViewStyle}
         onCountrySelect={setCountry}
         value={country}
-        placeHolder={'Select Country'}
+        placeHolder={t('selectCountry')}
       />
       <InputTextLabelDropDown
-        textLable={`Select ${LABELS.state}`}
+        textLable={`${t('select')} ${t('state')}`}
         viewStyle={styles.InputViewStyle}
         onChangeText={setState}
         value={state}
@@ -100,7 +102,7 @@ export default function ContactScreen() {
       />
 
       {/* Main button */}
-      <AppButton loading={loading} title={LABELS.signUp} onPress={SignUpPressed} />
+      <AppButton loading={loading} title={t('signUp')} onPress={SignUpPressed} />
     </View>
   );
 }

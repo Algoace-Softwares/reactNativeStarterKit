@@ -46,6 +46,7 @@ const en = {
   errorBoundaryLable: 'Something went wrong try again later',
   tryAgain: 'Try again',
   appLabel: 'Pupspotter',
+  changeLanguage: 'Change language',
   MESSAGES: {
     emailRequired: 'Email is required',
     passwordRequired: 'Password is required',

@@ -50,6 +50,7 @@ const fr: Translations = {
   errorBoundaryLable: "Quelque chose s'est mal passé, essayez à nouveau plus tard",
   tryAgain: 'Réessayer',
   appLabel: 'Pupspotter',
+  changeLanguage: 'Changer de langue',
   MESSAGES: {
     emailRequired: "L'email est obligatoire",
     passwordRequired: 'Le mot de passe est obligatoire',

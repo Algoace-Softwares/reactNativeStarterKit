@@ -1,5 +1,4 @@
-import en from '../labels/en';
-import fr from '../labels/fr';
+import {en, fr} from '../labels';
 
 export const resources = {
   en: {

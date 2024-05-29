@@ -9,8 +9,8 @@ import {
   KeyboardTypeOptions,
 } from 'react-native';
 import React, {useState} from 'react';
-import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS, HEIGHT, SVG} from '../../assets';
+import {useTranslation} from 'react-i18next';
 
 type dataItem = {
   id: number;
@@ -55,6 +55,10 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
   const [itemData, setItemData] = useState(dropDownData);
   const [isDropDown, setIsDropDown] = useState(false);
   /*
+   ** Hooks
+   */
+  const {t} = useTranslation();
+  /*
    ** Functions
    */
   /*
@@ -79,8 +83,9 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
       </TouchableOpacity>
     );
   };
-
-  // redering drop down view if data is there if not it will return list is empty
+  /*
+   ** Redering drop down view if data is there if not it will return list is empty
+   */
   const renderDropDownView = (): JSX.Element => {
     if (!isDropDown) {
       return <></>;
@@ -88,7 +93,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
     if (dropDownData.length === 0) {
       return (
         <View style={styles.dropDownViewStyle}>
-          <Text style={styles.renderItemTextStyle}>{LABELS.listIsEmpty}</Text>
+          <Text style={styles.renderItemTextStyle}>{t('listIsEmpty')}</Text>
         </View>
       );
     }
@@ -145,72 +150,58 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
 }
 
 const styles = StyleSheet.create({
-  upperTextStyle: {
-    color: COLORS.primary,
-  },
-
-  inputStyle: {
-    height: 45,
-    width: '100%',
-    borderWidth: 0.5,
-    borderRadius: 6,
-    backgroundColor: COLORS.primary,
+  dropDownViewStyle: {
+    backgroundColor: COLORS.white,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
     borderColor: COLORS.primary,
-    paddingHorizontal: 10,
-    marginTop: 10,
-  },
-  inputViewStyle: {
-    height: 45,
+    borderTopWidth: 0,
+    borderWidth: 0.5,
+    height: HEIGHT * 0.24,
+    marginTop: -4,
+    paddingBottom: 3,
     width: '100%',
+    // position: 'absolute',
+    // top: 70,
   },
   inputStyle2: {
-    width: '100%',
-    height: 45,
-    borderWidth: 0.5,
-    borderRadius: 6,
-    flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
     borderColor: COLORS.primary,
-    paddingLeft: 10,
-    marginTop: 10,
-  },
-  textInput2: {
-    height: '100%',
-    width: '95%',
-  },
-  rightButtonStyle: {
-    position: 'absolute',
-    right: 10,
-    height: 40,
-    width: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    // backgroundColor: 'red',
-  },
-  leftButtonStyle: {marginRight: 10},
-  dropDownViewStyle: {
-    width: '100%',
-    height: HEIGHT * 0.24,
-    backgroundColor: COLORS.white,
-    // position: 'absolute',
-    // top: 70,
-    borderColor: COLORS.primary,
+    borderRadius: 6,
     borderWidth: 0.5,
-    borderTopWidth: 0,
-    marginTop: -4,
-    paddingBottom: 3,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
+    flexDirection: 'row',
+    height: 45,
+    marginTop: 10,
+    paddingLeft: 10,
+    width: '100%',
   },
   renderItemStyle: {
-    width: '100%',
-    paddingLeft: 15,
-    marginVertical: 3,
     height: 30,
+    marginVertical: 3,
+    paddingLeft: 15,
+    width: '100%',
   },
   renderItemTextStyle: {
     color: COLORS.grey5,
     ...GlobalStyles.b2,
+  },
+  rightButtonStyle: {
+    alignItems: 'flex-end',
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 10,
+    width: 50,
+    // backgroundColor: 'red',
+  },
+
+  textInput2: {
+    height: '100%',
+    width: '95%',
+  },
+
+  upperTextStyle: {
+    color: COLORS.primary,
   },
 });

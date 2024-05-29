@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity} from 'react-native';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
-import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
+import {useSelectedLanguage} from '../../i18n/utils';
 import {useTranslation} from 'react-i18next';
-import {translate, useSelectedLanguage} from '../../i18n/utils';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -18,8 +17,8 @@ export default function LoginScreen(): JSX.Element {
   const [emailAddress, setEmailAddress] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading] = useState<boolean>(false);
-  const {t} = useTranslation();
   const {language, setLanguage} = useSelectedLanguage();
+  const {t} = useTranslation();
   /*
    * Hooks
    */
@@ -58,14 +57,14 @@ export default function LoginScreen(): JSX.Element {
       <BackButton fillColor={COLORS.white} />
 
       {/* Header */}
-      <AuthHeader text1={LABELS.welcomeBack} text2={LABELS.signInLabel} />
+      <AuthHeader text1={t('welcomeBack')} text2={t('signInLabel')} />
 
       {/* Input fields */}
       <InputTextLabel textLable={t('email')} onChangeText={setEmailAddress} value={emailAddress} />
-      <InputTextLabel textLable={translate('password')} onChangeText={setPassword} value={password} isPassword={true} />
+      <InputTextLabel textLable={t('password')} onChangeText={setPassword} value={password} isPassword={true} />
 
       {/* Button */}
-      <AppButton title={LABELS.login} onPress={appBtnPress} textStyle={styles.buttonTextStyle} loading={loading} />
+      <AppButton title={t('login')} onPress={appBtnPress} textStyle={styles.buttonTextStyle} loading={loading} />
       <TouchableOpacity
         style={styles.buttonStyle}
         onPress={() => {
@@ -75,11 +74,11 @@ export default function LoginScreen(): JSX.Element {
             setLanguage('en');
           }
         }}>
-        <Text style={styles.forgotPassStyle}>{LABELS.changeLanguage}</Text>
+        <Text style={styles.forgotPassStyle}>{t('changeLanguage')}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-        <Text style={styles.forgotPassStyle}>{LABELS.forgotPasswordsmall}</Text>
+        <Text style={styles.forgotPassStyle}>{t('forgotPasswordsmall')}</Text>
       </TouchableOpacity>
     </View>
   );
