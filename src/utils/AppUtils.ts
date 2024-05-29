@@ -1,5 +1,6 @@
 import {Linking} from 'react-native';
 import {ErrorType, crashLogType} from './types';
+
 /**
  * If you're using Crashlytics: https://rnfirebase.io/crashlytics/usage
  */

@@ -8,6 +8,8 @@ import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
+import {useTranslation} from 'react-i18next';
+import {translate, useSelectedLanguage} from '../../i18n/utils';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -16,6 +18,8 @@ export default function LoginScreen(): JSX.Element {
   const [emailAddress, setEmailAddress] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading] = useState<boolean>(false);
+  const {t} = useTranslation();
+  const {language, setLanguage} = useSelectedLanguage();
   /*
    * Hooks
    */
@@ -57,12 +61,20 @@ export default function LoginScreen(): JSX.Element {
       <AuthHeader text1={LABELS.welcomeBack} text2={LABELS.signInLabel} />
 
       {/* Input fields */}
-      <InputTextLabel textLable={LABELS.email} onChangeText={setEmailAddress} value={emailAddress} />
-      <InputTextLabel textLable={LABELS.password} onChangeText={setPassword} value={password} isPassword={true} />
+      <InputTextLabel textLable={t('email')} onChangeText={setEmailAddress} value={emailAddress} />
+      <InputTextLabel textLable={translate('password')} onChangeText={setPassword} value={password} isPassword={true} />
 
       {/* Button */}
       <AppButton title={LABELS.login} onPress={appBtnPress} textStyle={styles.buttonTextStyle} loading={loading} />
-      <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        onPress={() => {
+          if (language === 'en' || language === 'en-US') {
+            setLanguage('fr');
+          } else {
+            setLanguage('en');
+          }
+        }}>
         <Text style={styles.forgotPassStyle}>{LABELS.changeLanguage}</Text>
       </TouchableOpacity>
 
