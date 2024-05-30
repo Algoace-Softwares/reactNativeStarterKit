@@ -2,13 +2,13 @@ import {Text, View, SafeAreaView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {COLORS, GlobalStyles} from '../../assets';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, OTPFieldInput} from '../../components';
-import {LABELS} from '../../labels';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {styles} from './style';
 import {ZodError} from 'zod';
 import {confirmationCodeValidation} from '../../utils/SchemaValidation';
+import {useTranslation} from 'react-i18next';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
@@ -26,6 +26,10 @@ export default function ConfirmSignupScreen(): JSX.Element {
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
   const [loading] = useState<boolean>(false);
+  /*
+   ** Hooks
+   */
+  const {t} = useTranslation();
   /*
    ** Functions
    */
@@ -89,19 +93,19 @@ export default function ConfirmSignupScreen(): JSX.Element {
       {/* Main Body */}
       <BackButton fillColor={COLORS.white} />
       {/* Header */}
-      <AuthHeader text1={LABELS.confirmSignUp} text2={LABELS.verificationSentCode} />
-      {/* otp Input field */}
-      <OTPFieldInput textLable={LABELS.confirmationCode} onChangeText={setConfirmationCode} />
+      <AuthHeader text1={t('confirmSignUp')} text2={t('verificationSentCode')} />
+      {/* OTP Input field */}
+      <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
       {/* Main button */}
-      <AppButton title={LABELS.submit} onPress={submitCodePressed} loading={loading} />
+      <AppButton title={t('submit')} onPress={submitCodePressed} loading={loading} />
 
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
           <Text style={styles.renderTextStyle} onPress={onPressResendCode}>
-            {LABELS.didRecvCode} <Text style={styles.renderTextStyle}>{LABELS.resendCode}</Text>
+            {t('didRecvCode')} <Text style={styles.renderTextStyle}>{t('resendCode')}</Text>
           </Text>
         ) : (
-          <Text style={styles.renderTextStyle}>{`Wait for 00:${countDown}`}</Text>
+          <Text style={styles.renderTextStyle}>{`${t('waitFor')} 00:${countDown}`}</Text>
         )}
       </View>
     </View>

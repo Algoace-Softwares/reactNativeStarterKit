@@ -10,6 +10,7 @@ import {I18nManager, Text, TextInput} from 'react-native';
 import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
 import AppNavigator from './src/routes';
 import Config from './src/config';
+import {getLocales} from 'react-native-localize';
 
 /**
  * declearing interface to avoid typescript error for text
@@ -23,6 +24,7 @@ interface TextWithDefaultProps extends Text {
 interface TextInputWithDefaultProps extends Text {
   defaultProps?: {allowFontScaling?: boolean};
 }
+
 // Forcefully content start from Left to Right - Phone setting does not effect here
 I18nManager.forceRTL(false);
 
@@ -48,6 +50,7 @@ function App(): React.JSX.Element {
      * - All your app third part module initialization like @notifee
      *
      */
+    console.log('get locales', getLocales());
   }, []);
 
   /**
@@ -62,10 +65,11 @@ function App(): React.JSX.Element {
 
 export default App;
 
-// zustand
+// zustandZW
 // react query
 // react native testing
-// internatilation
+// ignite navigation setup
+// ignite header setup
 // env setup
 //  dark and light theme setup
 // coding best practice for text and scrol view in ignit boiler plate

@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View, Modal, TouchableOpacity, Platform} from 'react-native';
 import React, {useState} from 'react';
 import {GlobalStyles, HEIGHT, COLORS} from '../../assets';
-import {LABELS} from '../../labels';
 import DatePicker from 'react-native-date-picker';
+import {useTranslation} from 'react-i18next';
 
 interface datePickerModalType {
   visible: boolean;
@@ -21,6 +21,10 @@ export default function DatePickerModal(props: datePickerModalType): JSX.Element
    ** States
    */
   const [androidDate, setAndroidDate] = useState<Date>(new Date());
+  /*
+   ** Hooks
+   */
+  const {t} = useTranslation();
   /*
    ** Functions
    */
@@ -43,10 +47,10 @@ export default function DatePickerModal(props: datePickerModalType): JSX.Element
           <View style={styles.iPhoneStyle} />
           <View style={styles.titleViewStyle}>
             <TouchableOpacity onPress={() => refactorDate(androidDate)}>
-              <Text style={styles.title1Style}>{LABELS.selectDate}</Text>
+              <Text style={styles.title1Style}>{t('selectDate')}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setVisible(false)}>
-              <Text style={styles.title2Style}>{LABELS.cancel}</Text>
+              <Text style={styles.title2Style}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>
           {Platform.OS === 'android' ? (

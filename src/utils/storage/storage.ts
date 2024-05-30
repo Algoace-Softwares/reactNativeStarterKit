@@ -7,17 +7,12 @@ const storage = new MMKV();
  *
  * @param key The key to fetch.
  */
-export async function loadString(key: string): Promise<string | null> {
-  try {
-    const value = storage.getString(key);
-    if (value) {
-      return value;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    appUtils.crashLogs({functionName: 'loadString', error, filename: 'storage'});
-    throw new Error('Unable to fetch value');
+export function loadString(key: string): string | null {
+  const value = storage.getString(key);
+  if (value) {
+    return value;
+  } else {
+    return null;
   }
 }
 
@@ -27,13 +22,9 @@ export async function loadString(key: string): Promise<string | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export async function saveString(key: string, value: string): Promise<boolean> {
-  try {
-    storage.set(key, value);
-    return true;
-  } catch {
-    return false;
-  }
+export function saveString(key: string, value: string): boolean {
+  storage.set(key, value);
+  return true;
 }
 
 /**
@@ -61,13 +52,8 @@ export async function load<T>(key: string): Promise<T | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export async function save(key: string, value: string | boolean): Promise<boolean> {
-  try {
-    storage.set(key, JSON.stringify(value));
-    return true;
-  } catch {
-    return false;
-  }
+export function save(key: string, value: string | boolean) {
+  storage.set(key, JSON.stringify(value));
 }
 
 /**
@@ -75,23 +61,13 @@ export async function save(key: string, value: string | boolean): Promise<boolea
  *
  * @param key The key to kill.
  */
-export async function remove(key: string): Promise<boolean> {
-  try {
-    storage.delete(key);
-    return true;
-  } catch {
-    return false;
-  }
+export function remove(key: string) {
+  storage.delete(key);
 }
 
 /**
  * Burn it all to the ground.
  */
-export async function clear(): Promise<boolean> {
-  try {
-    storage.clearAll();
-    return true;
-  } catch {
-    return false;
-  }
+export function clear() {
+  storage.clearAll();
 }

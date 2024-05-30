@@ -1,28 +1,27 @@
-// TODO: write documentation for colors and palette in own markdown file and add links from here
-
 const palette = {
-  neutral100: '#FFFFFF',
-  neutral200: '#F4F2F1',
-  neutral300: '#D7CEC9',
-  neutral400: '#B6ACA6',
-  neutral500: '#978F8A',
-  neutral600: '#564E4A',
-  neutral700: '#3C3836',
-  neutral800: '#191015',
-  neutral900: '#000000',
+  neutral100: '#f5fff8',
+  neutral200: '#d6ffd8',
+  neutral300: '#b7ffb9',
+  neutral400: '#98ff9a',
+  neutral500: '#7aff7a',
+  neutral600: '#60e460',
+  neutral700: '#47cc47',
+  neutral800: '#2eb32e',
 
-  primary100: '#F4E0D9',
-  primary200: '#E8C1B4',
-  primary300: '#DDA28E',
-  primary400: '#D28468',
-  primary500: '#C76542',
-  primary600: '#A54F31',
+  primary000: '#D4E6F2',
+  primary100: '#80a8f7',
+  primary200: '#4071e6',
+  primary300: '#1c47cc',
+  primary400: '#0d2eab',
+  primary500: '#064aac',
+  primary600: '#053c93',
 
-  secondary100: '#DCDDE9',
-  secondary200: '#BCC0D6',
-  secondary300: '#9196B9',
-  secondary400: '#626894',
-  secondary500: '#41476E',
+  secondary100: '#a6a6a6',
+  secondary200: '#7a7a7a',
+  secondary300: '#5e5e5e',
+  secondary400: '#424242',
+  secondary500: '#4f4f4f',
+  secondary600: '#383838',
 
   accent100: '#FFEED4',
   accent200: '#FFE1B2',
@@ -31,10 +30,11 @@ const palette = {
   accent500: '#FFBB50',
 
   angry100: '#F2D6CD',
-  angry500: '#C03403',
+  angry500: '#EB5757',
 
   overlay20: 'rgba(25, 16, 21, 0.2)',
   overlay50: 'rgba(25, 16, 21, 0.5)',
+  overlay100: 'rgba(6, 74, 172, 0.1)',
 } as const;
 
 export const colors = {

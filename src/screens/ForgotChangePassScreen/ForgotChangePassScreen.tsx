@@ -1,7 +1,6 @@
 import {View, SafeAreaView, Text} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel, OTPFieldInput} from '../../components';
-import {LABELS} from '../../labels';
 import {GlobalStyles, COLORS} from '../../assets';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -10,6 +9,7 @@ import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {changePasswordSchema} from '../../utils/SchemaValidation';
 import {ZodError} from 'zod';
+import {useTranslation} from 'react-i18next';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   /*
@@ -17,6 +17,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
    */
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useAppNavigation();
+  const {t} = useTranslation();
   /*
    ** Routing params
    */
@@ -94,31 +95,27 @@ export default function ForgotChangePassScreen(): JSX.Element {
       <BackButton fillColor={COLORS.white} />
 
       {/* Headers */}
-      <AuthHeader
-        text1={LABELS.forgotPasswordBold}
-        text2={LABELS.forgotChangePasswordLable}
-        viewStyle={styles.mainView}
-      />
+      <AuthHeader text1={t('forgotPasswordBold')} text2={t('forgotChangePasswordLabel')} viewStyle={styles.mainView} />
 
       {/* Inputs fields */}
-      <InputTextLabel textLable={LABELS.password} onChangeText={setPassword} value={password} isPassword={true} />
+      <InputTextLabel textLable={t('password')} onChangeText={setPassword} value={password} isPassword={true} />
 
       <InputTextLabel
-        textLable={LABELS.reEnterPassword}
+        textLable={t('reEnterPassword')}
         onChangeText={setConfirmPassword}
         value={confirmPassword}
         isPassword={true}
       />
 
-      <OTPFieldInput textLable={LABELS.confirmationCode} onChangeText={setConfirmationCode} />
+      <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
 
       {/* Main button */}
-      <AppButton title={LABELS.resetPassword} onPress={resetPassPressed} loading={loading} />
+      <AppButton title={t('resetPassword')} onPress={resetPassPressed} loading={loading} />
 
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
           <Text style={styles.renderTextStyle} onPress={onPressResendCode}>
-            {LABELS.didRecvCode} <Text style={styles.renderTextStyle}>{LABELS.resendCode}</Text>
+            {t('didReceiveCode')} <Text style={styles.renderTextStyle}>{t('resendCode')}</Text>
           </Text>
         ) : (
           <Text style={styles.renderTextStyle}>{`Wait for 00:${countDown}`}</Text>

@@ -1,5 +1,5 @@
 import {IMAGES, SVG} from '../assets';
-import {LABELS} from '../labels';
+import {en} from '../labels';
 import BottomTab from '../routes/BottomTab';
 import {
   ConfirmSignupScreen,
@@ -80,14 +80,14 @@ export const TabScreens = [
     name: 'HomeScreen',
     component: HomeScreen,
     tabBarIcon: SVG.HomeIcon,
-    tabBarLabel: LABELS.home,
+    tabBarLabel: en.home,
   },
 
   {
     name: 'Profilescreen',
     component: ProfileScreen,
     tabBarIcon: SVG.ProfileIcon,
-    tabBarLabel: LABELS.profile,
+    tabBarLabel: en.profile,
   },
 ];
 

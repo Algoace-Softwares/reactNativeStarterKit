@@ -50,6 +50,25 @@ const fr: Translations = {
   errorBoundaryLable: "Quelque chose s'est mal passé, essayez à nouveau plus tard",
   tryAgain: 'Réessayer',
   appLabel: 'Pupspotter',
+  changeLanguage: 'Changer de langue',
+  MESSAGES: {
+    emailRequired: "L'email est obligatoire",
+    passwordRequired: 'Le mot de passe est obligatoire',
+    firstNameRequired: 'Le prénom est obligatoire',
+    firstNameLessLength: 'Le prénom doit comporter moins de 30 caractères',
+    lastNameLessLength: 'Le nom de famille doit comporter moins de 30 caractères',
+    firstNameShort: 'Prénom trop court',
+    lastNameShort: 'Nom de famille trop court',
+    otpLength: 'Le code OTP doit comporter exactement 6 caractères',
+    otpRequired: 'Le code OTP est obligatoire',
+    lastNameRequired: 'Le nom de famille est obligatoire',
+    emailInvalid: "L'email est invalide",
+    passwordInvalid: 'Le mot de passe est invalide',
+    firstNameInvalid: 'Le prénom est invalide',
+    lastNameInvalid: 'Le nom de famille est invalide',
+    passwordNotMatch: 'Les mots de passe ne correspondent pas',
+    passwordLength: 'Mot de passe invalide, il doit contenir une majuscule, une minuscule, une lettre et un chiffre',
+  },
 };
 
 export default fr;

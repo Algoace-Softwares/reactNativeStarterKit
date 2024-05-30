@@ -1,8 +1,8 @@
 import React from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {COLORS, GlobalStyles} from '../../assets';
-import {LABELS} from '../../labels';
 import AppButton from '../common/AppButton';
+import {useTranslation} from 'react-i18next';
 
 interface alertChoiceModalType {
   visible: boolean;
@@ -21,6 +21,10 @@ export default function AlertChoiceModal({
   label = '',
   loading = false,
 }: alertChoiceModalType): JSX.Element {
+  /*
+   ** Hooks
+   */
+  const {t} = useTranslation();
   // Functions
 
   // when user press ok btn
@@ -39,9 +43,9 @@ export default function AlertChoiceModal({
           <Text style={styles.textLabelStyle}>{label}</Text>
           {/* Main buttons */}
           <View style={styles.btnContainer}>
-            <AppButton title={LABELS.no} onPress={onPressbtn1} btnStyle={GlobalStyles.smallBtn1Style} />
+            <AppButton title={t('no')} onPress={onPressbtn1} btnStyle={GlobalStyles.smallBtn1Style} />
             <AppButton
-              title={LABELS.yes}
+              title={t('yes')}
               onPress={() => okBtnPressed()}
               btnStyle={GlobalStyles.smallBtn2Style}
               textStyle={GlobalStyles.btn2textStyle}

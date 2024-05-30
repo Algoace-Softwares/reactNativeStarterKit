@@ -47,12 +47,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.error) {
-      console.log('error boundary if', this.state.error);
-
       // Error path
       return <CustomError error={this.state.error} resetError={this.resetError} />;
     } else {
-      console.log('error boundary eles');
       return this.props.children;
     }
   }
