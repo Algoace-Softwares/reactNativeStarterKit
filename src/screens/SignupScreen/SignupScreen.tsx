@@ -1,6 +1,5 @@
 import {View, SafeAreaView, ScrollView} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS} from '../../assets';
 import {
   AppButton,
   AuthHeader,
@@ -18,6 +17,7 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {signupSchema} from '../../utils/SchemaValidation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function SignupScreen() {
   /*
@@ -86,10 +86,10 @@ export default function SignupScreen() {
   return (
     <ScrollView style={GlobalStyles.mainContainer} showsVerticalScrollIndicator={false}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
       {/* Main Body */}
       <View style={styles.mainContainer2}>
-        <BackButton fillColor={COLORS.white} />
+        <BackButton />
         {/* Headers */}
         <AuthHeader text1={t('signUp')} text2={t('signUpLabel')} />
         {/* Profile Image uploader */}

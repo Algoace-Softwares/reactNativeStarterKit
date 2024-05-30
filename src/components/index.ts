@@ -8,7 +8,6 @@ export {default as AuthHeader} from './common/AuthHeader';
 export {default as CommentBox} from './common/CommentBox';
 export {default as FocusAwareStatusBar} from './common/FocusAwareStatusBar';
 export {default as HeaderRightButton} from './common/HeaderRightButton';
-export {default as CarosalViewComponent} from './common/CarosalViewComponent';
 export {default as InputTextLabel} from './common/InputTextLable';
 export {default as InputTextLabelDropDown} from './common/InputTextLabelDropDown';
 export {default as Loading} from './common/Loading';

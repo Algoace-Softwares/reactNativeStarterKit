@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, WIDTH} from '../../assets';
+import {COLORS, WIDTH} from '../../theme';
 
 const styles = StyleSheet.create({
   loginButtonStyle: {
     alignSelf: 'center',
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.button,
     marginBottom: 20,
     marginTop: 35,
     width: WIDTH * 0.9,

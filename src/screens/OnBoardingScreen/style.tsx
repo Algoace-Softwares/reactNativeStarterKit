@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles, HEIGHT, WIDTH} from '../../assets';
+import {COLORS, GlobalStyles, HEIGHT, WIDTH} from '../../theme';
 
 const styles = StyleSheet.create({
   appLableStyle: {
     ...GlobalStyles.h2,
-    color: COLORS.white,
+    color: COLORS.background,
   },
   appLogoImageStyle: {
     height: HEIGHT * 0.1,

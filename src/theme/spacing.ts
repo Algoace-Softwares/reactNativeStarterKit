@@ -1,7 +1,7 @@
 /**
   Use these spacings for margins/paddings and other whitespace throughout your app.
  */
-export const spacing = {
+export const SPACING = {
   xxxs: 2,
   xxs: 4,
   xs: 8,
@@ -13,4 +13,4 @@ export const spacing = {
   xxxl: 64,
 } as const;
 
-export type Spacing = keyof typeof spacing;
+export type Spacing = keyof typeof SPACING;

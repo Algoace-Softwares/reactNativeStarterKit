@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity} from 'react-native';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
-import {GlobalStyles, COLORS} from '../../assets';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -50,10 +50,10 @@ export default function LoginScreen(): JSX.Element {
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
 
       {/* Main Body */}
-      <BackButton fillColor={COLORS.white} />
+      <BackButton />
 
       {/* Header */}
       <AuthHeader text1={t('welcomeBack')} text2={t('signInLabel')} />

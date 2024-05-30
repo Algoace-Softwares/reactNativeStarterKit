@@ -44,7 +44,7 @@ const palette = {
   black: '#000000',
 } as const;
 
-export const colors = {
+export const COLORS = {
   /**
    * The palette is available to use, but prefer using the name.
    * This is only included for rare, one-off cases. Try to use
@@ -67,6 +67,26 @@ export const colors = {
    * The default color of the screen background.
    */
   background: palette.white,
+  /**
+   * The default color of the button
+   */
+  button: palette.primary600,
+  /**
+   * The default color of the button border
+   */
+  buttonBorder: palette.primary600,
+  /**
+   * The default color of the button light
+   */
+  buttonLight: palette.primary100,
+  /**
+   * The default color of the button light
+   */
+  buttonText: palette.white,
+  /*
+   ** Default Status bar color
+   */
+  statusBar: palette.secondary000,
   /**
    * The default border color.
    */

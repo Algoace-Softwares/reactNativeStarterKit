@@ -1,10 +1,11 @@
 import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS, SVG} from '../../assets';
+import {SVG} from '../../assets';
+import {COLORS} from '../../theme';
 
 interface backBtnType {
-  fillColor: string;
+  fillColor?: string;
   viewStyle?: ViewStyle;
 }
 
@@ -12,7 +13,7 @@ export default function BackButton(props: backBtnType): JSX.Element {
   /*
    ** Props
    */
-  const {fillColor = 'white', viewStyle = {}} = props;
+  const {fillColor = COLORS.background, viewStyle = {}} = props;
   /*
    ** Hooks
    */
@@ -28,7 +29,7 @@ export default function BackButton(props: backBtnType): JSX.Element {
 const styles = StyleSheet.create({
   mainViewStyle: {
     alignItems: 'center',
-    backgroundColor: COLORS.grey5,
+    backgroundColor: COLORS.palette.secondary300,
     borderRadius: 20,
     height: 40,
     justifyContent: 'center',

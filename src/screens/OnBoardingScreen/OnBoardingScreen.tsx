@@ -1,10 +1,11 @@
 import {Text, View, SafeAreaView, Image, ImageBackground} from 'react-native';
 import React from 'react';
-import {GlobalStyles, COLORS, IMAGES} from '../../assets';
+import {IMAGES} from '../../assets';
 import {AppButton, FocusAwareStatusBar} from '../../components';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function OnBoardingScreen(): JSX.Element {
   /*
@@ -25,7 +26,7 @@ export default function OnBoardingScreen(): JSX.Element {
   return (
     <ImageBackground source={IMAGES.onBoarding} style={GlobalStyles.mainContainer} resizeMode={'cover'}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
 
       {/* Logo */}
       <View style={styles.appLogoView}>

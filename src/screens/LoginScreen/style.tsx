@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 const styles = StyleSheet.create({
   buttonStyle: {
@@ -10,10 +10,10 @@ const styles = StyleSheet.create({
     width: 150,
   },
   buttonTextStyle: {
-    color: COLORS.white,
+    color: COLORS.buttonText,
     ...GlobalStyles.l2,
   },
-  forgotPassStyle: {...GlobalStyles.b1, color: COLORS.seconday},
+  forgotPassStyle: {...GlobalStyles.b1, color: COLORS.textDim},
 });
 
 export default styles;
