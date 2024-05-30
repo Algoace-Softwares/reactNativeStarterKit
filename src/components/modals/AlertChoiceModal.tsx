@@ -1,8 +1,8 @@
 import React from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
 import AppButton from '../common/AppButton';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 interface alertChoiceModalType {
   visible: boolean;
@@ -50,7 +50,7 @@ export default function AlertChoiceModal({
               btnStyle={GlobalStyles.smallBtn2Style}
               textStyle={GlobalStyles.btn2textStyle}
               loading={loading}
-              loadingColor={COLORS.black}
+              loadingColor={COLORS.loaderSecondary}
             />
           </View>
         </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     alignItems: 'center',
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.palette.black,
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 17,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 
   modalView: {
     alignItems: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderRadius: 6,
     justifyContent: 'center',
     padding: 16,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 
   textLabelStyle: {
-    color: COLORS.black,
+    color: COLORS.text,
     ...GlobalStyles.l7,
   },
 });

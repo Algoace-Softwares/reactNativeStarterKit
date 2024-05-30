@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ViewStyle
 import React, {useEffect, useState} from 'react';
 import {SVG} from '../../assets';
 import {countriesData} from '../../data';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
 /*
  ** types
  */
@@ -68,6 +68,8 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
     setSelectedCountry(prevItem => {
       if (prevItem) {
         return {...prevItem, countryName: e};
+      } else {
+        return prevItem;
       }
     });
     setItemData(countriesData.filter(item => item.countryName?.toLowerCase()?.includes(e?.toLowerCase())));
@@ -138,61 +140,60 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
 }
 
 const styles = StyleSheet.create({
-  upperTextStyle: {
-    color: COLORS.text,
-  },
-
-  inputStyle2: {
-    width: '100%',
-    height: 45,
+  dropDownViewStyle: {
+    backgroundColor: COLORS.background,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    borderColor: COLORS.border,
+    borderTopWidth: 0,
     borderWidth: 0.5,
-    borderRadius: 6,
-    flexDirection: 'row',
+    height: HEIGHT * 0.24,
+    marginTop: -4,
+    paddingBottom: 3,
+    width: '100%',
+  },
+  flagEmojiStyle: {
+    fontSize: 35,
+  },
+  inputStyle2: {
     alignItems: 'center',
     alignSelf: 'center',
-    borderColor: COLORS.primary,
-    paddingLeft: 10,
+    borderColor: COLORS.border,
+    borderRadius: 6,
+    borderWidth: 0.5,
+    flexDirection: 'row',
+    height: 45,
     marginTop: 10,
+    paddingLeft: 10,
+    width: '100%',
   },
+  leftButtonStyle: {marginRight: 10},
+  renderItemStyle: {
+    height: 30,
+    marginVertical: 3,
+    paddingLeft: 15,
+    width: '100%',
+  },
+  renderItemTextStyle: {
+    color: COLORS.text,
+    ...GlobalStyles.b2,
+  },
+  rightButtonStyle: {
+    alignItems: 'flex-end',
+    height: 40,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 10,
+    width: 50,
+    // backgroundColor: 'red',
+  },
+
   textInput2: {
     height: '100%',
     width: '95%',
   },
-  rightButtonStyle: {
-    position: 'absolute',
-    right: 10,
-    height: 40,
-    width: 50,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    // backgroundColor: 'red',
-  },
-  leftButtonStyle: {marginRight: 10},
-  dropDownViewStyle: {
-    width: '100%',
-    height: HEIGHT * 0.24,
-    backgroundColor: COLORS.white,
-    // position: 'absolute',
-    // top: 70,
-    borderColor: COLORS.primary,
-    borderWidth: 0.5,
-    borderTopWidth: 0,
-    marginTop: -4,
-    paddingBottom: 3,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-  },
-  renderItemStyle: {
-    width: '100%',
-    paddingLeft: 15,
-    marginVertical: 3,
-    height: 30,
-  },
-  renderItemTextStyle: {
-    color: COLORS.grey5,
-    ...GlobalStyles.b2,
-  },
-  flagEmojiStyle: {
-    fontSize: 35,
+
+  upperTextStyle: {
+    color: COLORS.text,
   },
 });

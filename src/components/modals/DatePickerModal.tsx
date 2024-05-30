@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View, Modal, TouchableOpacity, Platform} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, HEIGHT, COLORS} from '../../assets';
 import DatePicker from 'react-native-date-picker';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
 
 interface datePickerModalType {
   visible: boolean;
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   iPhoneStyle: {
     alignSelf: 'center',
-    backgroundColor: COLORS.grey3,
+    backgroundColor: COLORS.palette.secondary400,
     borderRadius: 2.5,
     height: 5,
     position: 'absolute',
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     width: 85,
   },
   modalView: {
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.grey4,
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.border,
     borderTopLeftRadius: 17,
     borderTopRightRadius: 17,
     borderWidth: 0.5,
@@ -105,13 +105,13 @@ const styles = StyleSheet.create({
   },
 
   title1Style: {
-    color: COLORS.green2,
+    color: COLORS.separator,
     fontWeight: 'bold',
     ...GlobalStyles.h5,
   },
 
   title2Style: {
-    color: COLORS.grey6,
+    color: COLORS.text,
     fontWeight: 'bold',
     ...GlobalStyles.l1,
   },

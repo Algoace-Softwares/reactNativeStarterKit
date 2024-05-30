@@ -1,6 +1,6 @@
 import React from 'react';
 import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {COLORS, WIDTH} from '../../assets';
+import {COLORS, WIDTH} from '../../theme';
 
 interface appModalType {
   visible: boolean;
@@ -24,12 +24,12 @@ export default function AppModal({visible = false, setVisible, clickAnywhere = f
 const styles = StyleSheet.create({
   centeredView: {
     alignItems: 'center',
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.palette.black,
     flex: 1,
     justifyContent: 'center',
   },
   modalView: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     width: WIDTH * 0.9,
   },
 });

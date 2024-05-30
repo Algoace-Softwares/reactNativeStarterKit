@@ -106,7 +106,7 @@ export const COLORS = {
   /**
    * A subtle color used for lines.
    */
-  separator: palette.neutral300,
+  separator: palette.neutral400,
   /**
    * Error messages.
    */
