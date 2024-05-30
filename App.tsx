@@ -65,12 +65,11 @@ function App(): React.JSX.Element {
 
 export default App;
 
-// zustand
+// zustandZW
 // react query
 // react native testing
 // ignite navigation setup
 // ignite header setup
-// internatilation
 // env setup
 //  dark and light theme setup
 // coding best practice for text and scrol view in ignit boiler plate
