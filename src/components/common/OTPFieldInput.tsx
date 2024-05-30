@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
-import {GlobalStyles, COLORS} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 const CELL_COUNT = 6;
 
@@ -68,10 +68,10 @@ export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Elemen
 
 const styles = StyleSheet.create({
   cell: {
-    borderColor: COLORS.seconday,
+    borderColor: COLORS.border,
     borderRadius: 5,
     borderWidth: 1,
-    color: COLORS.seconday,
+    color: COLORS.text,
     fontSize: 24,
     height: 40,
     lineHeight: 38,
@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   focusCell: {
-    borderColor: COLORS.black,
+    borderColor: COLORS.palette.black,
   },
   upperTextStyle: {
-    color: COLORS.seconday,
+    color: COLORS.text,
     ...GlobalStyles.b1,
   },
   viewStyle: {

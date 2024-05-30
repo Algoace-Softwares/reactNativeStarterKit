@@ -1,8 +1,8 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
 import AppButton from './AppButton';
 import {en} from '../../labels';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export type Props = {error: Error; resetError: () => void};
 /*
@@ -36,11 +36,11 @@ const CustomError = (props: Props) => {
 
 const styles = StyleSheet.create({
   buttonTextStyle: {
-    color: COLORS.white,
+    color: COLORS.background,
     ...GlobalStyles.l2,
   },
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     flex: 1,
     justifyContent: 'center',
   },
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    color: COLORS.black,
+    color: COLORS.palette.black,
     fontSize: 32,
     fontWeight: '800',
   },
 
   title: {
-    color: COLORS.black,
+    color: COLORS.palette.black,
     fontSize: 48,
     fontWeight: '300',
     paddingBottom: 16,

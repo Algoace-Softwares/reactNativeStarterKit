@@ -9,7 +9,6 @@ import {
   InputTextLableCountry,
   FocusAwareStatusBar,
 } from '../../components';
-import {GlobalStyles, COLORS} from '../../assets';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import styles from './style';
 import Toast from 'react-native-simple-toast';
@@ -17,6 +16,7 @@ import {countryStates} from '../../data';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function ContactScreen() {
   /*
@@ -73,9 +73,9 @@ export default function ContactScreen() {
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
       {/* Main Body */}
-      <BackButton fillColor={COLORS.white} />
+      <BackButton />
       {/* Header */}
       <AuthHeader text1={t('contact')} text2={t('contactLabel')} />
       {/* Input fields */}

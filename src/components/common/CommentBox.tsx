@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TextInput, ViewStyle} from 'react-native';
 import React from 'react';
-import {GlobalStyles, COLORS} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 interface commentBoxType {
   textLable: string;
@@ -35,7 +35,7 @@ export default function CommentBox(props: commentBoxType): JSX.Element {
       <TextInput
         style={[styles.textInput2, textInputStyle]}
         scrollEnabled={false}
-        placeholderTextColor={COLORS.grey4}
+        placeholderTextColor={COLORS.textDim}
         textAlignVertical={'top'}
         blurOnSubmit={true}
         multiline
@@ -51,52 +51,19 @@ export default function CommentBox(props: commentBoxType): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  upperTextStyle: {
-    color: COLORS.grey2,
-  },
-
-  inputStyle: {
-    height: 45,
-    width: '100%',
-    borderWidth: 0.5,
-    borderRadius: 6,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.grey4,
-    paddingHorizontal: 10,
-    marginTop: 10,
-  },
-
-  inputViewStyle: {
-    height: 45,
-    width: '100%',
-  },
-  inputStyle2: {
-    width: '100%',
-    // backgroundColor: 'red',
-    height: 45,
-    borderWidth: 0.5,
-    borderRadius: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    // justifyContent: 'space-between',
-    alignSelf: 'center',
-    borderColor: COLORS.grey4,
-    marginTop: 10,
-  },
   textInput2: {
-    height: 110,
-    width: '80%',
-    paddingHorizontal: 10,
-    borderWidth: 0.5,
-    borderColor: COLORS.grey4,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
+    borderColor: COLORS.border,
     borderRadius: 6,
-    color: COLORS.black,
+    borderWidth: 0.5,
+    color: COLORS.palette.black,
+    height: 110,
+    paddingHorizontal: 10,
+    width: '80%',
   },
-  rightButtonStyle: {position: 'absolute', right: 20},
-  leftButtonStyle: {marginRight: 10},
+
   textLabel2Style: {
     ...GlobalStyles.b4,
-    color: COLORS.grey6,
+    color: COLORS.text,
   },
 });

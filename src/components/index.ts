@@ -13,7 +13,6 @@ export {default as InputTextLabelDropDown} from './common/InputTextLabelDropDown
 export {default as Loading} from './common/Loading';
 export {default as OTPFieldInput} from './common/OTPFieldInput';
 export {default as BackButton} from './common/BackButton';
-export {default as RadioBtn} from './common/RadioBtn';
 export {default as SaperatorLine} from './common/SaperatorLine';
 export {default as PhoneNumber} from './common/PhoneNumber';
 export {default as ProfileImageUploader} from './common/ProfileImageUploader';

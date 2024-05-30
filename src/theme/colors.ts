@@ -87,6 +87,14 @@ export const COLORS = {
    ** Default Status bar color
    */
   statusBar: palette.secondary000,
+  /*
+   ** Default loader color
+   */
+  loaderPrimary: palette.primary600,
+  /*
+   ** Default loader color
+   */
+  loaderSecondary: palette.secondary500,
   /**
    * The default border color.
    */
@@ -105,7 +113,6 @@ export const COLORS = {
   error: palette.angry500,
   /**
    * Error Background.
-   *
    */
   errorBackground: palette.angry100,
 };

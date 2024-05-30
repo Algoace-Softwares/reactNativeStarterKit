@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 const styles = StyleSheet.create({
   mainView: {
@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   renderTextStyle: {
-    color: COLORS.primary,
+    color: COLORS.textDim,
     ...GlobalStyles.b2,
     textDecorationLine: 'underline',
   },

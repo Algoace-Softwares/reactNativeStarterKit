@@ -1,6 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {WIDTH, COLORS, GlobalStyles} from '../../assets';
+import {COLORS, GlobalStyles, WIDTH} from '../../theme';
 
 export default function AppButton(props: appBtnType): JSX.Element {
   /*
@@ -11,7 +11,7 @@ export default function AppButton(props: appBtnType): JSX.Element {
     onPress,
     disabled = false,
     loading = false,
-    loadingColor = COLORS.white,
+    loadingColor = COLORS.background,
     btnStyle = {},
     textStyle = {},
     activeOpacity = 0.8,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.buttonBorder,
     borderRadius: 8,
     flexDirection: 'row',
     height: 45,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
   title: {
     ...GlobalStyles.l1,
-    color: COLORS.white,
+    color: COLORS.buttonText,
   },
 });
 

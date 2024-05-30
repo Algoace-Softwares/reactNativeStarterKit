@@ -1,7 +1,6 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React from 'react';
-import {GlobalStyles} from '../../assets/styles';
-import {COLORS} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 interface authHeaderType {
   text1: string;
@@ -25,13 +24,13 @@ export default function AuthHeader(props: authHeaderType): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  lowerTextStyle: {color: COLORS.seconday, ...GlobalStyles.b1, marginTop: 10},
+  lowerTextStyle: {color: COLORS.text, ...GlobalStyles.b1, marginTop: 10},
   mainView: {
     marginLeft: 21,
     marginVertical: 30,
   },
   upperTextStyle: {
-    color: COLORS.seconday,
+    color: COLORS.textDim,
     ...GlobalStyles.h1,
   },
 });

@@ -9,8 +9,9 @@ import {
   KeyboardTypeOptions,
 } from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS, HEIGHT, SVG} from '../../assets';
+import {SVG} from '../../assets';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
 
 type dataItem = {
   id: number;
@@ -151,10 +152,10 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
 
 const styles = StyleSheet.create({
   dropDownViewStyle: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.border,
     borderTopWidth: 0,
     borderWidth: 0.5,
     height: HEIGHT * 0.24,
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   inputStyle2: {
     alignItems: 'center',
     alignSelf: 'center',
-    borderColor: COLORS.primary,
+    borderColor: COLORS.border,
     borderRadius: 6,
     borderWidth: 0.5,
     flexDirection: 'row',
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   renderItemTextStyle: {
-    color: COLORS.grey5,
+    color: COLORS.text,
     ...GlobalStyles.b2,
   },
   rightButtonStyle: {
@@ -202,6 +203,6 @@ const styles = StyleSheet.create({
   },
 
   upperTextStyle: {
-    color: COLORS.primary,
+    color: COLORS.text,
   },
 });

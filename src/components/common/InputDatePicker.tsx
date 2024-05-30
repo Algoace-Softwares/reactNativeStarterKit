@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View, TouchableOpacity, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
-import {GlobalStyles, COLORS, WIDTH, SVG} from '../../assets';
 import DatePickerModal from '../modals/DatePickerModal';
+import {SVG} from '../../assets';
+import {COLORS, GlobalStyles, WIDTH} from '../../theme';
 
 interface InputDatePickerType {
   textLable: string;
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   inputStyle2: {
     alignItems: 'center',
     alignSelf: 'center',
-    borderColor: COLORS.grey4,
+    borderColor: COLORS.border,
     borderRadius: 6,
     borderWidth: 0.5,
     flexDirection: 'row',
@@ -79,12 +80,12 @@ const styles = StyleSheet.create({
     width: WIDTH - 40,
   },
   selectDateLabelStyle: {
-    color: COLORS.grey5,
+    color: COLORS.text,
     ...GlobalStyles.l2,
     marginLeft: 10,
   },
   upperTextStyle: {
-    color: COLORS.seconday,
+    color: COLORS.text,
     ...GlobalStyles.b1,
   },
 });

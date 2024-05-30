@@ -1,12 +1,12 @@
 import {View, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
-import {GlobalStyles, COLORS} from '../../assets';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {emailSchema} from '../../utils/SchemaValidation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   /*
@@ -49,9 +49,9 @@ export default function ForgotPasswordScreen(): JSX.Element {
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.onBoardingColor} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
       {/* Main Body */}
-      <BackButton fillColor={COLORS.white} />
+      <BackButton />
 
       {/* Header */}
       <AuthHeader text1={t('forgotPasswordBold')} text2={t('forgotPasswordLable')} />

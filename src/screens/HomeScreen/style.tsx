@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../assets';
+import {COLORS, GlobalStyles} from '../../theme';
 
 const styles = StyleSheet.create({
   buttonStyle: {
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: 150,
   },
-  forgotPassStyle: {...GlobalStyles.b1, color: COLORS.seconday},
+  forgotPassStyle: {...GlobalStyles.b1, color: COLORS.textDim},
   mainView: {
     alignItems: 'center',
     flex: 1,

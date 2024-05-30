@@ -1,6 +1,5 @@
 import {Text, View, SafeAreaView} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {COLORS, GlobalStyles} from '../../assets';
 import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, OTPFieldInput} from '../../components';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -9,6 +8,7 @@ import {styles} from './style';
 import {ZodError} from 'zod';
 import {confirmationCodeValidation} from '../../utils/SchemaValidation';
 import {useTranslation} from 'react-i18next';
+import {COLORS, GlobalStyles} from '../../theme';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
@@ -89,9 +89,9 @@ export default function ConfirmSignupScreen(): JSX.Element {
   return (
     <View style={GlobalStyles.mainContainer}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
       {/* Main Body */}
-      <BackButton fillColor={COLORS.white} />
+      <BackButton />
       {/* Header */}
       <AuthHeader text1={t('confirmSignUp')} text2={t('verificationSentCode')} />
       {/* OTP Input field */}

@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ViewStyle} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {GlobalStyles, COLORS, HEIGHT, SVG} from '../../assets';
+import {SVG} from '../../assets';
 import {countriesData} from '../../data';
+import {COLORS, GlobalStyles} from '../../theme';
 /*
  ** types
  */
@@ -138,23 +139,9 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
 
 const styles = StyleSheet.create({
   upperTextStyle: {
-    color: COLORS.primary,
+    color: COLORS.text,
   },
 
-  inputStyle: {
-    height: 45,
-    width: '100%',
-    borderWidth: 0.5,
-    borderRadius: 6,
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-    paddingHorizontal: 10,
-    marginTop: 10,
-  },
-  inputViewStyle: {
-    height: 45,
-    width: '100%',
-  },
   inputStyle2: {
     width: '100%',
     height: 45,
