@@ -1,10 +1,10 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet} from 'react-native';
-import {GlobalStyles, COLORS} from '../assets';
 import {TabScreens} from '../data';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomTabNavigatorParamList, tabBarIconType} from './types.navigation';
+import {COLORS, GlobalStyles} from '../theme';
 
 const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -23,8 +23,8 @@ const BottomTab = (): JSX.Element => {
       initialRouteName={'HomeScreen'}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.seconday,
+        tabBarActiveTintColor: COLORS.palette.primary400,
+        tabBarInactiveTintColor: COLORS.palette.secondary400,
         tabBarLabelStyle: {marginBottom: 5},
         tabBarStyle: styles(insets.bottom).tabBarStyle,
       }}>

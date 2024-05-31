@@ -73,3 +73,4 @@ export default App;
 // env setup
 //  dark and light theme setup
 // coding best practice for text and scrol view in ignit boiler plate
+// ignite image compoenent
