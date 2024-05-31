@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {authScreens, homeScreen} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
 import {useBackButtonHandler} from './navigationUtilities';
 import BaseConfig from '../config';
+import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
 
 const exitRoutes = BaseConfig.exitRoutes;
 
@@ -54,9 +54,10 @@ const HomeStackScreens = (): JSX.Element => {
  */
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = (): JSX.Element => {
+  /*
+   **  Hooks
+   */
   const [userData] = useState(null);
-  // hooks
-
   // back handler for android
   useBackButtonHandler(routeName => exitRoutes.includes(routeName));
   // const {userData} = useAppSelector(state => state.auth);
@@ -102,6 +103,8 @@ const RootNavigator = (): JSX.Element => {
  ** Main navigator
  */
 export default function AppNavigator(): JSX.Element {
+  console.log('DarkTheme', DarkTheme);
+  console.log('DefaultTheme', DefaultTheme);
   return (
     <NavigationContainer>
       <RootNavigator />

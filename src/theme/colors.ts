@@ -1,4 +1,8 @@
-const palette = {
+import {Appearance} from 'react-native';
+/*
+ ** Default colors
+ */
+const defaultPalette = {
   neutral100: '#f5fff8',
   neutral200: '#d6ffd8',
   neutral300: '#b7ffb9',
@@ -43,14 +47,62 @@ const palette = {
   white: '#ffffff',
   black: '#000000',
 } as const;
+/*
+ ** Dark Color theme
+ */
+const darkPalette = {
+  neutral100: '#1e291e',
+  neutral200: '#273427',
+  neutral300: '#314131',
+  neutral400: '#3a4d3a',
+  neutral500: '#445944',
+  neutral600: '#4e664e',
+  neutral700: '#588258',
+  neutral800: '#639f63',
 
-export const COLORS = {
+  primary000: '#0d2eab',
+  primary100: '#1c47cc',
+  primary200: '#4071e6',
+  primary300: '#80a8f7',
+  primary400: '#d4e6f2',
+  primary500: '#EAF3FF',
+  primary600: '#f0f7ff',
+  primary700: '#f5faff',
+
+  secondary000: '#383838',
+  secondary100: '#424242',
+  secondary200: '#5e5e5e',
+  secondary300: '#7a7a7a',
+  secondary400: '#a6a6a6',
+  secondary500: '#D0D0D0',
+  secondary600: '#dbdbdb',
+  secondary700: '#e6e6e6',
+
+  accent100: '#5a3c00',
+  accent200: '#6b4a00',
+  accent300: '#7b5900',
+  accent400: '#8c6700',
+  accent500: '#9d7600',
+  accent600: '#b98a00',
+
+  angry100: '#8b3a36',
+  angry500: '#FF6B6B',
+
+  overlay20: 'rgba(230, 230, 230, 0.2)',
+  overlay50: 'rgba(230, 230, 230, 0.5)',
+  overlay100: 'rgba(240, 240, 240, 0.1)',
+
+  white: '#ffffff',
+  black: '#000000',
+} as const;
+
+const DEFAULT_COLORS = {
   /**
    * The palette is available to use, but prefer using the name.
    * This is only included for rare, one-off cases. Try to use
    * semantic names as much as possible.
    */
-  palette,
+  palette: defaultPalette,
   /**
    * A helper for making something see-thru.
    */
@@ -58,61 +110,143 @@ export const COLORS = {
   /**
    * The default text color in many components.
    */
-  text: palette.secondary500,
+  text: defaultPalette.secondary500,
   /**
    * Secondary text information.
    */
-  textDim: palette.secondary100,
+  textDim: defaultPalette.secondary100,
   /**
    * The default color of the screen background.
    */
-  background: palette.white,
+  background: defaultPalette.white,
   /**
    * The default color of the button
    */
-  button: palette.primary600,
+  button: defaultPalette.primary600,
   /**
    * The default color of the button border
    */
-  buttonBorder: palette.primary600,
+  buttonBorder: defaultPalette.primary600,
   /**
    * The default color of the button light
    */
-  buttonLight: palette.primary100,
+  buttonLight: defaultPalette.primary100,
   /**
    * The default color of the button light
    */
-  buttonText: palette.white,
+  buttonText: defaultPalette.white,
   /*
    ** Default Status bar color
    */
-  statusBar: palette.secondary000,
+  statusBar: defaultPalette.secondary000,
   /*
    ** Default loader color
    */
-  loaderPrimary: palette.primary600,
+  loaderPrimary: defaultPalette.primary600,
   /*
    ** Default loader color
    */
-  loaderSecondary: palette.secondary500,
+  loaderSecondary: defaultPalette.secondary500,
   /**
    * The default border color.
    */
-  border: palette.secondary000,
+  border: defaultPalette.secondary000,
   /**
    * The main tinting color.
    */
-  tint: palette.primary500,
+  tint: defaultPalette.primary500,
   /**
    * A subtle color used for lines.
    */
-  separator: palette.neutral400,
+  separator: defaultPalette.neutral400,
   /**
    * Error messages.
    */
-  error: palette.angry500,
+  error: defaultPalette.angry500,
   /**
    * Error Background.
    */
-  errorBackground: palette.angry100,
+  errorBackground: defaultPalette.angry100,
 };
+
+const DARK_COLORS = {
+  /**
+   * The palette is available to use, but prefer using the name.
+   * This is only included for rare, one-off cases. Try to use
+   * semantic names as much as possible.
+   */
+  palette: darkPalette,
+  /**
+   * A helper for making something see-thru.
+   */
+  transparent: 'rgba(0, 0, 0, 0)',
+  /**
+   * The default text color in many components.
+   */
+  text: darkPalette.secondary500,
+  /**
+   * Secondary text information.
+   */
+  textDim: darkPalette.secondary100,
+  /**
+   * The default color of the screen background.
+   */
+  background: darkPalette.white,
+  /**
+   * The default color of the button
+   */
+  button: darkPalette.primary600,
+  /**
+   * The default color of the button border
+   */
+  buttonBorder: darkPalette.primary600,
+  /**
+   * The default color of the button light
+   */
+  buttonLight: darkPalette.primary100,
+  /**
+   * The default color of the button light
+   */
+  buttonText: darkPalette.white,
+  /*
+   ** Default Status bar color
+   */
+  statusBar: darkPalette.secondary000,
+  /*
+   ** Default loader color
+   */
+  loaderPrimary: darkPalette.primary600,
+  /*
+   ** Default loader color
+   */
+  loaderSecondary: darkPalette.secondary500,
+  /**
+   * The default border color.
+   */
+  border: darkPalette.secondary000,
+  /**
+   * The main tinting color.
+   */
+  tint: darkPalette.primary500,
+  /**
+   * A subtle color used for lines.
+   */
+  separator: darkPalette.neutral400,
+  /**
+   * Error messages.
+   */
+  error: darkPalette.angry500,
+  /**
+   * Error Background.
+   */
+  errorBackground: darkPalette.angry100,
+};
+/*
+ ** Returning theme based on user theme selection
+ */
+function getTheme() {
+  const colorScheme = Appearance.getColorScheme();
+  return colorScheme === 'dark' ? DARK_COLORS : DEFAULT_COLORS;
+}
+
+export const COLORS = getTheme();
