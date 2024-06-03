@@ -1,6 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {COLORS, GlobalStyles, WIDTH} from '../../theme';
+import {COLORS, Globaltypography, WIDTH} from '../../theme';
 
 export default function AppButton(props: appBtnType): JSX.Element {
   /*
@@ -16,6 +16,7 @@ export default function AppButton(props: appBtnType): JSX.Element {
     textStyle = {},
     activeOpacity = 0.8,
     children = null,
+    smallBtn = false,
   } = props;
 
   return (
@@ -23,7 +24,7 @@ export default function AppButton(props: appBtnType): JSX.Element {
       disabled={disabled}
       activeOpacity={activeOpacity}
       onPress={onPress}
-      style={[styles.btn, btnStyle]}>
+      style={[smallBtn ? styles.smallBtn : styles.largeBtn, btnStyle]}>
       {children && <View style={styles.childrenViewStyle}>{children}</View>}
       {title && (
         <Text style={[styles.title, textStyle]} numberOfLines={1}>
@@ -37,7 +38,10 @@ export default function AppButton(props: appBtnType): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  btn: {
+  childrenViewStyle: {
+    marginRight: 20,
+  },
+  largeBtn: {
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: COLORS.buttonBorder,
@@ -49,14 +53,22 @@ const styles = StyleSheet.create({
     width: WIDTH - 40,
     zIndex: 9,
   },
-  childrenViewStyle: {
-    marginRight: 20,
-  },
   loading: {marginLeft: 10},
+  smallBtn: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: COLORS.button,
+    borderRadius: 8,
+    flexDirection: 'row',
+    height: 45,
+    justifyContent: 'center',
+    marginTop: 20,
+    width: WIDTH * 0.4,
+  },
 
   title: {
-    ...GlobalStyles.l1,
-    color: COLORS.buttonText,
+    ...Globaltypography.button,
+    color: COLORS.buttonTextPrimary,
   },
 });
 
@@ -70,4 +82,5 @@ interface appBtnType {
   textStyle?: TextStyle;
   activeOpacity?: number;
   children?: JSX.Element | null;
+  smallBtn?: boolean;
 }

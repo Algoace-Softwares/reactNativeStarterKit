@@ -96,13 +96,17 @@ const darkPalette = {
   black: '#000000',
 } as const;
 
-const DEFAULT_COLORS = {
+export const DEFAULT_COLORS = {
   /**
    * The palette is available to use, but prefer using the name.
    * This is only included for rare, one-off cases. Try to use
    * semantic names as much as possible.
    */
   palette: defaultPalette,
+  /*
+   ** Primary color user in app
+   */
+  primary: defaultPalette.primary600,
   /**
    * A helper for making something see-thru.
    */
@@ -122,6 +126,10 @@ const DEFAULT_COLORS = {
   /**
    * The default color of the button
    */
+  card: defaultPalette.secondary400,
+  /**
+   * The default color of the button
+   */
   button: defaultPalette.primary600,
   /**
    * The default color of the button border
@@ -134,7 +142,11 @@ const DEFAULT_COLORS = {
   /**
    * The default color of the button light
    */
-  buttonText: defaultPalette.white,
+  buttonTextPrimary: defaultPalette.white,
+  /**
+   * The default color of the button light
+   */
+  buttonTextSeconday: defaultPalette.secondary500,
   /*
    ** Default Status bar color
    */
@@ -160,6 +172,10 @@ const DEFAULT_COLORS = {
    */
   separator: defaultPalette.neutral400,
   /**
+   * The default color of the notification.
+   */
+  notification: defaultPalette.accent400,
+  /**
    * Error messages.
    */
   error: defaultPalette.angry500,
@@ -169,13 +185,17 @@ const DEFAULT_COLORS = {
   errorBackground: defaultPalette.angry100,
 };
 
-const DARK_COLORS = {
+export const DARK_COLORS = {
   /**
    * The palette is available to use, but prefer using the name.
    * This is only included for rare, one-off cases. Try to use
    * semantic names as much as possible.
    */
   palette: darkPalette,
+  /*
+   ** Primary color user in app
+   */
+  primary: darkPalette.primary400,
   /**
    * A helper for making something see-thru.
    */
@@ -195,6 +215,10 @@ const DARK_COLORS = {
   /**
    * The default color of the button
    */
+  card: darkPalette.secondary400,
+  /**
+   * The default color of the button
+   */
   button: darkPalette.primary600,
   /**
    * The default color of the button border
@@ -207,7 +231,11 @@ const DARK_COLORS = {
   /**
    * The default color of the button light
    */
-  buttonText: darkPalette.white,
+  buttonTextPrimary: defaultPalette.white,
+  /**
+   * The default color of the button light
+   */
+  buttonTextSeconday: defaultPalette.secondary500,
   /*
    ** Default Status bar color
    */
@@ -233,6 +261,10 @@ const DARK_COLORS = {
    */
   separator: darkPalette.neutral400,
   /**
+   * The default color of the notification.
+   */
+  notification: defaultPalette.accent400,
+  /**
    * Error messages.
    */
   error: darkPalette.angry500,
@@ -250,3 +282,5 @@ function getTheme() {
 }
 
 export const COLORS = getTheme();
+
+export type Colors = typeof COLORS;

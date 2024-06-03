@@ -2,17 +2,21 @@ import {Text, View, SafeAreaView, Image, ImageBackground} from 'react-native';
 import React from 'react';
 import {IMAGES} from '../../assets';
 import {AppButton, FocusAwareStatusBar} from '../../components';
-import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
+import {Colors, COLORS, GlobalStyles} from '../../theme';
+import {useTheme} from '@react-navigation/native';
+import createStyles from './style';
 
 export default function OnBoardingScreen(): JSX.Element {
   /*
-   * hooks
+   * Hooks
    */
+  const {colors} = useTheme();
+  const styles = createStyles(colors as Colors);
   const navigation = useAppNavigation();
   const {t} = useTranslation();
+  console.log('🚀 ~ OnBoardingScreen ~ colors:', colors);
   /*
    * Functions
    */
@@ -24,7 +28,7 @@ export default function OnBoardingScreen(): JSX.Element {
   };
 
   return (
-    <ImageBackground source={IMAGES.onBoarding} style={GlobalStyles.mainContainer} resizeMode={'cover'}>
+    <ImageBackground source={IMAGES.onBoarding} style={styles.mainContainer} resizeMode={'cover'}>
       <SafeAreaView />
       <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
 
@@ -36,7 +40,7 @@ export default function OnBoardingScreen(): JSX.Element {
 
       {/* Buttons */}
       <View style={styles.btnContainer}>
-        <AppButton title={t('login')} onPress={onPressLogin} btnStyle={GlobalStyles.smallBtn1Style} />
+        <AppButton title={t('login')} onPress={onPressLogin} smallBtn />
         <AppButton
           title={t('signUp')}
           onPress={onPressSignUp}

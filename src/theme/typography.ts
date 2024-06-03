@@ -1,5 +1,7 @@
 // markdown file and add links from here
 
+import {StyleSheet} from 'react-native';
+
 // import {Platform} from 'react-native';
 
 const fonts = {
@@ -39,3 +41,36 @@ export const typography = {
    */
   // code: Platform.select({ios: fonts.courier, android: fonts.monospace}),
 };
+
+export const Globaltypography = StyleSheet.create({
+  Heading: {
+    fontFamily: typography.primary.Bold,
+    fontSize: 30,
+    fontWeight: '700',
+    lineHeight: 30,
+  },
+  HeadingDescription: {
+    fontFamily: typography.primary.Medium,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 16,
+  },
+  button: {
+    fontFamily: typography.primary.Medium,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 16,
+  },
+  smallButton: {
+    fontFamily: typography.primary.Regular,
+    fontSize: 13,
+    fontWeight: '400',
+    lineHeight: 15,
+  },
+  textInputHeading: {
+    fontFamily: typography.primary.Medium,
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 16,
+  },
+});

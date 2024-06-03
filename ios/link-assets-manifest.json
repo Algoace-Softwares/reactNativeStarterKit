@@ -74,6 +74,70 @@
       "sha1": "fb8fccca21550e71135f92bbaf8a2e8a12c90465"
     },
     {
+      "path": "src/assets/fonts/Sofia Pro Black Az.otf",
+      "sha1": "2c329f57045fc027d0f338056a4a1b82c052f556"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Black Italic Az.otf",
+      "sha1": "d8632297fd017fab89ec4f2e898f0368c6e2306d"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Bold Az.otf",
+      "sha1": "3e77b75a32477f1f3f1121b2bbcb5128c017a92f"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Bold Italic Az.otf",
+      "sha1": "f6034c6ee06e9984a5907b2079da86328773d2da"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro ExtraLight Az.otf",
+      "sha1": "e6f648f07b02c82b3eda00058ee19e74ff8868b5"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro ExtraLight Italic Az.otf",
+      "sha1": "6b4448049bb38861ded48f733d64d343d94007e7"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Light Az.otf",
+      "sha1": "844c27a9a4ed2defb0470b20351f8e89602d1b2f"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Light Italic Az.otf",
+      "sha1": "e59ad6ae539c35564e8304b5d56b4be544cd4e6d"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Medium Az.otf",
+      "sha1": "031fbc487fedfb1d112f5ee21d74dd5c91b8c240"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Medium Italic Az.otf",
+      "sha1": "3f4366529b522863a58c568251a614f44d952cf2"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Regular Az.otf",
+      "sha1": "a316b3beca0376331f497c9c44a33224512c5fe9"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Regular Italic Az.otf",
+      "sha1": "56e8215ce8c730593280ed7404c0549b33778e21"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Semi Bold Az.otf",
+      "sha1": "cc5717c99183d0009be73de5f938680aea962c7f"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro Semi Bold Italic Az.otf",
+      "sha1": "1d11e800a62164daac04899c073183a284e7cba6"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro UltraLight Az.otf",
+      "sha1": "f87854d06dc363d591081bc039e7b57fd96ec4eb"
+    },
+    {
+      "path": "src/assets/fonts/Sofia Pro UltraLight Italic Az.otf",
+      "sha1": "2c0c7597e54ef9aae677896add40b323e3677c8f"
+    },
+    {
       "path": "src/assets/fonts/index.ts",
       "sha1": "7735d1aba8872610747795a92f01acb94c63c677"
     }

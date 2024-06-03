@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
   buttonTextStyle: {
-    color: COLORS.buttonText,
+    color: COLORS.buttonTextPrimary,
     ...GlobalStyles.l2,
   },
   forgotPassStyle: {...GlobalStyles.b1, color: COLORS.textDim},

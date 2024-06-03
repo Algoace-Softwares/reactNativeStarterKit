@@ -5,6 +5,8 @@ import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './type
 import {useBackButtonHandler} from './navigationUtilities';
 import BaseConfig from '../config';
 import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {useColorScheme} from 'react-native';
+import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 
 const exitRoutes = BaseConfig.exitRoutes;
 
@@ -105,8 +107,14 @@ const RootNavigator = (): JSX.Element => {
 export default function AppNavigator(): JSX.Element {
   console.log('DarkTheme', DarkTheme);
   console.log('DefaultTheme', DefaultTheme);
+  const theme = useColorScheme();
+  const MyTheme = {
+    dark: theme === 'dark' && true,
+    colors: theme === 'dark' ? {...DARK_COLORS} : {...DEFAULT_COLORS},
+  };
+  console.log('🚀 ~ AppNavigator ~ MyTheme:', MyTheme);
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
