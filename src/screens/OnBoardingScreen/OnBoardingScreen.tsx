@@ -40,11 +40,12 @@ export default function OnBoardingScreen(): JSX.Element {
 
       {/* Buttons */}
       <View style={styles.btnContainer}>
-        <AppButton title={t('login')} onPress={onPressLogin} smallBtn />
+        <AppButton title={t('login')} onPress={onPressLogin} smallBtn={true} />
         <AppButton
           title={t('signUp')}
           onPress={onPressSignUp}
-          btnStyle={GlobalStyles.smallBtn2Style}
+          smallBtn={true}
+          btnStyle={styles.smallBtn2}
           textStyle={GlobalStyles.btn2textStyle}
         />
       </View>

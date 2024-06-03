@@ -65,6 +65,13 @@ const createStyles = (COLORS: Colors) =>
       backgroundColor: COLORS.background,
       flex: 1,
     },
+    smallBtn2: {
+      backgroundColor: COLORS.background,
+      borderColor: COLORS.buttonBorder,
+      borderWidth: 0.5,
+      height: 45,
+      width: WIDTH * 0.4,
+    },
   });
 
 export default createStyles;
