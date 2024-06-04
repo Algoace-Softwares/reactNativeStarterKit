@@ -1,10 +1,13 @@
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import React from 'react';
-import {COLORS, GlobalStyles} from '../../theme';
+import {TxKeyPath} from '../../i18n/types';
+import AppText from './AppText';
+import {useTheme} from '@react-navigation/native';
+import {CustomTheme} from '../../theme';
 
 interface authHeaderType {
-  text1: string;
-  text2?: string;
+  text1: TxKeyPath;
+  text2?: TxKeyPath;
   viewStyle?: ViewStyle;
   upperTextStyle?: ViewStyle;
 }
@@ -13,24 +16,29 @@ export default function AuthHeader(props: authHeaderType): JSX.Element {
   /*
    ** Props
    */
-  const {text1 = '', text2 = '', viewStyle = {}, upperTextStyle = {}} = props;
+  const {text1, text2, viewStyle = {}, upperTextStyle = {}} = props;
+  /*
+   ** Hooks
+   */
+  const {colors} = useTheme() as CustomTheme;
 
   return (
     <View style={[styles.mainView, viewStyle]}>
-      <Text style={[styles.upperTextStyle, upperTextStyle]}>{text1}</Text>
-      <Text style={styles.lowerTextStyle}>{text2}</Text>
+      <AppText presetStyle={'heading'} transText={text1} style={upperTextStyle} />
+      <AppText
+        presetStyle={'headingDescription'}
+        transText={text2}
+        style={styles.lowerTextStyle}
+        textColor={colors.textDim}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  lowerTextStyle: {color: COLORS.text, ...GlobalStyles.b1, marginTop: 10},
+  lowerTextStyle: {marginTop: 10},
   mainView: {
     marginLeft: 21,
     marginVertical: 30,
-  },
-  upperTextStyle: {
-    color: COLORS.textDim,
-    ...GlobalStyles.h1,
   },
 });

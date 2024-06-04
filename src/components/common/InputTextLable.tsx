@@ -1,10 +1,12 @@
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, ViewStyle, KeyboardTypeOptions} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity, ViewStyle, KeyboardTypeOptions} from 'react-native';
 import React, {useState} from 'react';
 import {SVG} from '../../assets';
-import {COLORS, GlobalStyles, WIDTH} from '../../theme';
+import {COLORS, WIDTH} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 interface inputTextLabelType {
-  textLable: string;
+  textLable?: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   editable?: boolean;
@@ -27,7 +29,7 @@ export default function InputTextLabel(props: inputTextLabelType): JSX.Element {
    ** Props
    */
   const {
-    textLable = '',
+    textLable,
     textInputStyle = {},
     textLabelStyle = {},
     editable = true,
@@ -48,10 +50,16 @@ export default function InputTextLabel(props: inputTextLabelType): JSX.Element {
    ** States
    */
   const [passSecure, setPassSecure] = useState<boolean>(true);
+  /*
+   ** Hooks
+   */
+  // const {colors} = useTheme();
+  // const styles = createStyles(colors as Colors);
+  // const {t} = useTranslation();
 
   return (
     <View style={[styles.mainContStyle, viewStyle]}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
 
       <View style={[styles.inputStyle2, textInputStyle]}>
         {leftIcon ? (
@@ -122,9 +130,5 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingLeft: 10,
     width: '95%',
-  },
-
-  upperTextStyle: {
-    color: COLORS.text,
   },
 });

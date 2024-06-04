@@ -1,19 +1,21 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../theme';
+import {Colors, Globaltypography} from '../../theme';
 
-const styles = StyleSheet.create({
-  buttonStyle: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 15,
+const createStyles = (COLORS: Colors) =>
+  StyleSheet.create({
+    buttonStyle: {
+      alignItems: 'center',
+      alignSelf: 'center',
+      marginTop: 15,
 
-    width: 150,
-  },
-  buttonTextStyle: {
-    color: COLORS.buttonTextPrimary,
-    ...GlobalStyles.l2,
-  },
-  forgotPassStyle: {...GlobalStyles.b1, color: COLORS.textDim},
-});
+      width: 150,
+    },
 
-export default styles;
+    forgotPassStyle: {...Globaltypography.default, color: COLORS.text},
+    mainContainer: {
+      backgroundColor: COLORS.background,
+      flex: 1,
+    },
+  });
+
+export default createStyles;

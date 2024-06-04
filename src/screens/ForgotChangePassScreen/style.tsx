@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {COLORS, GlobalStyles} from '../../theme';
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+  },
   mainView: {
     marginLeft: 21,
     marginVertical: 30,
   },
+
   renderTextStyle: {
-    color: COLORS.textDim,
-    ...GlobalStyles.b2,
     textDecorationLine: 'underline',
   },
   resendCodeViewstyle: {

@@ -1,3 +1,4 @@
+import {Theme} from '@react-navigation/native';
 import {Appearance} from 'react-native';
 /*
  ** Default colors
@@ -284,3 +285,6 @@ function getTheme() {
 export const COLORS = getTheme();
 
 export type Colors = typeof COLORS;
+export type CustomTheme = Theme & {
+  colors: Colors;
+};

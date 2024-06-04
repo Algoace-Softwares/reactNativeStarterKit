@@ -5,8 +5,7 @@ import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {emailSchema} from '../../utils/SchemaValidation';
-import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
+import styles from './style';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   /*
@@ -14,7 +13,6 @@ export default function ForgotPasswordScreen(): JSX.Element {
    */
   const [emailAddress, setEmailAddres] = useState<string>('');
   const [loading] = useState<boolean>(false);
-  const {t} = useTranslation();
   /*
    ** Hooks
    */
@@ -47,19 +45,19 @@ export default function ForgotPasswordScreen(): JSX.Element {
 
   // Rendering
   return (
-    <View style={GlobalStyles.mainContainer}>
+    <View style={styles.main}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
+      <FocusAwareStatusBar barStyle={'dark-content'} />
       {/* Main Body */}
       <BackButton />
 
       {/* Header */}
-      <AuthHeader text1={t('forgotPasswordBold')} text2={t('forgotPasswordLable')} />
+      <AuthHeader text1={'forgotPasswordBold'} text2={'forgotPasswordLable'} />
 
       {/* Input field */}
-      <InputTextLabel textLable={t('emailAddress')} onChangeText={setEmailAddres} value={emailAddress} />
+      <InputTextLabel textLable={'emailAddress'} onChangeText={setEmailAddres} value={emailAddress} />
       {/* Main button */}
-      <AppButton title={t('resetPassword')} onPress={resetPassPressed} loading={loading} />
+      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
     </View>
   );
 }

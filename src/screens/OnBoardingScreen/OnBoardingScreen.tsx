@@ -4,7 +4,7 @@ import {IMAGES} from '../../assets';
 import {AppButton, FocusAwareStatusBar} from '../../components';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {useTranslation} from 'react-i18next';
-import {Colors, COLORS, GlobalStyles} from '../../theme';
+import {Colors, COLORS} from '../../theme';
 import {useTheme} from '@react-navigation/native';
 import createStyles from './style';
 
@@ -46,7 +46,7 @@ export default function OnBoardingScreen(): JSX.Element {
           onPress={onPressSignUp}
           smallBtn={true}
           btnStyle={styles.smallBtn2}
-          textStyle={GlobalStyles.btn2textStyle}
+          textStyle={styles.smallBtn2Text}
         />
       </View>
     </ImageBackground>

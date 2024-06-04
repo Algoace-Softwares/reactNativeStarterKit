@@ -4,7 +4,7 @@ const en = {
   yes: 'Yes',
   cancel: 'Cancel',
   selectDate: 'Select Date',
-  didRecvCode: "Didn't receive code?",
+  didRecvCode: "Didn't receive code? Resend",
   contact: 'Contact',
   contactLable: 'Fill in your phone number and location',
   phoneNumber: 'Phone Number',

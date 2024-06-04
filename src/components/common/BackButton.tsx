@@ -1,6 +1,6 @@
-import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {SVG} from '../../assets';
 import {COLORS} from '../../theme';
 
@@ -36,6 +36,5 @@ const styles = StyleSheet.create({
     marginLeft: 21,
     marginTop: 21,
     width: 40,
-    zIndex: 9999,
   },
 });

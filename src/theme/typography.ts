@@ -43,29 +43,50 @@ export const typography = {
 };
 
 export const Globaltypography = StyleSheet.create({
-  Heading: {
-    fontFamily: typography.primary.Bold,
-    fontSize: 30,
-    fontWeight: '700',
-    lineHeight: 30,
-  },
-  HeadingDescription: {
-    fontFamily: typography.primary.Medium,
-    fontSize: 14,
-    fontWeight: '400',
-    lineHeight: 16,
-  },
   button: {
     fontFamily: typography.primary.Medium,
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 16,
   },
+  default: {
+    fontFamily: typography.primary.Regular,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+  },
+  formLabel: {
+    fontFamily: typography.primary.Regular,
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 21,
+  },
+
+  heading: {
+    fontFamily: typography.primary.Bold,
+    fontSize: 30,
+    fontWeight: '700',
+    lineHeight: 30,
+  },
+
+  headingDescription: {
+    fontFamily: typography.primary.Medium,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 16,
+  },
+
   smallButton: {
     fontFamily: typography.primary.Regular,
     fontSize: 13,
     fontWeight: '400',
     lineHeight: 15,
+  },
+  subHeading: {
+    fontFamily: typography.primary.Bold,
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 23,
   },
   textInputHeading: {
     fontFamily: typography.primary.Medium,

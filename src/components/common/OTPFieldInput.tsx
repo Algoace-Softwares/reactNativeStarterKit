@@ -1,12 +1,14 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell} from 'react-native-confirmation-code-field';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 const CELL_COUNT = 6;
 
 interface oTPFieldInputType {
-  textLable: string;
+  textLable: TxKeyPath;
   mainOtpStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   mianViewStyle?: ViewStyle;
@@ -19,7 +21,7 @@ export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Elemen
    ** Props
    */
   const {
-    textLable = '',
+    textLable = 'confirmationCode',
     mainOtpStyle = {},
     textLabelStyle = {},
     mianViewStyle = {},
@@ -40,7 +42,7 @@ export default function OTPFieldInput(properties: oTPFieldInputType): JSX.Elemen
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   return (
     <View style={[styles.viewStyle, mianViewStyle]}>
-      <Text style={[styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText presetStyle={'textInputHeading'} transText={textLable} style={textLabelStyle} />
       <CodeField
         ref={ref}
         {...props}
@@ -83,10 +85,6 @@ const styles = StyleSheet.create({
   },
   focusCell: {
     borderColor: COLORS.palette.black,
-  },
-  upperTextStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.b1,
   },
   viewStyle: {
     marginTop: 20,

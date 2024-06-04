@@ -6,7 +6,7 @@ const fr: Translations = {
   yes: 'Oui',
   cancel: 'Annuler',
   selectDate: 'Sélectionner la date',
-  didRecvCode: "Vous n'avez pas reçu le code?",
+  didRecvCode: "Vous n'avez pas reçu le code? Resend",
   contact: 'Contact',
   contactLable: 'Remplissez votre numéro de téléphone et votre emplacement',
   phoneNumber: 'Numéro de téléphone',

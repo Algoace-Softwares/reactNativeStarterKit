@@ -1,7 +1,15 @@
-import {View, SafeAreaView, Text} from 'react-native';
+import {View, SafeAreaView} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel, OTPFieldInput} from '../../components';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+  AppButton,
+  AppText,
+  AuthHeader,
+  BackButton,
+  FocusAwareStatusBar,
+  InputTextLabel,
+  OTPFieldInput,
+} from '../../components';
+import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
 import {AuthStackParamList} from '../../routes/types.navigation';
@@ -9,7 +17,7 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {changePasswordSchema} from '../../utils/SchemaValidation';
 import {ZodError} from 'zod';
 import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
+import {CustomTheme} from '../../theme';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   /*
@@ -18,6 +26,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useAppNavigation();
   const {t} = useTranslation();
+  const {colors} = useTheme() as CustomTheme;
   /*
    ** Routing params
    */
@@ -88,20 +97,20 @@ export default function ForgotChangePassScreen(): JSX.Element {
 
   // Rendering
   return (
-    <View style={GlobalStyles.mainContainer}>
+    <View style={styles.main}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
+      <FocusAwareStatusBar barStyle={'dark-content'} />
       {/* Main Content */}
       <BackButton />
 
       {/* Headers */}
-      <AuthHeader text1={t('forgotPasswordBold')} text2={t('forgotChangePasswordLabel')} viewStyle={styles.mainView} />
+      <AuthHeader text1={'forgotPasswordBold'} text2={'forgotChangePasswordLable'} viewStyle={styles.mainView} />
 
       {/* Inputs fields */}
-      <InputTextLabel textLable={t('password')} onChangeText={setPassword} value={password} isPassword={true} />
+      <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
       <InputTextLabel
-        textLable={t('reEnterPassword')}
+        textLable={'reEnterPassword'}
         onChangeText={setConfirmPassword}
         value={confirmPassword}
         isPassword={true}
@@ -110,15 +119,17 @@ export default function ForgotChangePassScreen(): JSX.Element {
       <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
 
       {/* Main button */}
-      <AppButton title={t('resetPassword')} onPress={resetPassPressed} loading={loading} />
+      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
 
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
-          <Text style={styles.renderTextStyle} onPress={onPressResendCode}>
-            {t('didReceiveCode')} <Text style={styles.renderTextStyle}>{t('resendCode')}</Text>
-          </Text>
+          <AppText presetStyle={'formLabel'} onPress={onPressResendCode} transText={'didRecvCode'} />
         ) : (
-          <Text style={styles.renderTextStyle}>{`Wait for 00:${countDown}`}</Text>
+          // <Text style={styles.renderTextStyle}>{`Wait for 00:${countDown}`}</Text>
+          <AppText
+            presetStyle={'formLabel'}
+            onPress={onPressResendCode}
+            textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
         )}
       </View>
     </View>

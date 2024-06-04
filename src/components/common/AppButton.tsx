@@ -1,6 +1,10 @@
+/* eslint-disable react-native/no-unused-styles */
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {COLORS, Globaltypography, WIDTH} from '../../theme';
+import {useTheme} from '@react-navigation/native';
+import {Colors, WIDTH, Globaltypography} from '../../theme';
+import {TxKeyPath} from '../../i18n/types';
+import {useTranslation} from 'react-i18next';
 
 export default function AppButton(props: appBtnType): JSX.Element {
   /*
@@ -11,13 +15,21 @@ export default function AppButton(props: appBtnType): JSX.Element {
     onPress,
     disabled = false,
     loading = false,
-    loadingColor = COLORS.background,
+    loadingColor,
     btnStyle = {},
     textStyle = {},
     activeOpacity = 0.8,
-    children = null,
+    RightChild = null,
+    leftChild = null,
     smallBtn = false,
   } = props;
+
+  /*
+   ** Hooks
+   */
+  const {colors} = useTheme();
+  const styles = createStyles(colors as Colors);
+  const {t} = useTranslation();
 
   return (
     <TouchableOpacity
@@ -25,55 +37,61 @@ export default function AppButton(props: appBtnType): JSX.Element {
       activeOpacity={activeOpacity}
       onPress={onPress}
       style={[smallBtn ? styles.smallBtn : styles.largeBtn, btnStyle]}>
-      {children && <View style={styles.childrenViewStyle}>{children}</View>}
+      {RightChild && <View style={styles.childrenViewStyle}>{RightChild}</View>}
       {title && (
         <Text style={[styles.title, textStyle]} numberOfLines={1}>
-          {title}
+          {t(title)}
         </Text>
       )}
+      {leftChild && <View style={styles.childrenViewStyle}>{leftChild}</View>}
 
-      {loading && <ActivityIndicator color={loadingColor} style={styles.loading} size={'small'} />}
+      {loading && <ActivityIndicator color={loadingColor || colors.background} style={styles.loading} size={'small'} />}
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  childrenViewStyle: {
-    marginRight: 20,
-  },
-  largeBtn: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: COLORS.buttonBorder,
-    borderRadius: 8,
-    flexDirection: 'row',
-    height: 45,
-    justifyContent: 'center',
-    marginTop: 20,
-    width: WIDTH - 40,
-    zIndex: 9,
-  },
-  loading: {marginLeft: 10},
-  smallBtn: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: COLORS.button,
-    borderRadius: 8,
-    flexDirection: 'row',
-    height: 45,
-    justifyContent: 'center',
-    marginTop: 20,
-    width: WIDTH * 0.4,
-  },
-
-  title: {
-    ...Globaltypography.button,
-    color: COLORS.buttonTextPrimary,
-  },
-});
+const createStyles = (colors: Colors) =>
+  StyleSheet.create({
+    childrenViewStyle: {
+      marginRight: 20,
+    },
+    largeBtn: {
+      alignItems: 'center',
+      alignSelf: 'center',
+      backgroundColor: colors.button,
+      borderColor: colors.buttonBorder,
+      borderRadius: 8,
+      borderWidth: 0.5,
+      flexDirection: 'row',
+      height: 45,
+      justifyContent: 'center',
+      marginTop: 20,
+      width: WIDTH - 40,
+    },
+    loading: {
+      marginLeft: 10,
+    },
+    smallBtn: {
+      alignItems: 'center',
+      alignSelf: 'center',
+      backgroundColor: colors.button,
+      borderColor: colors.buttonBorder,
+      borderRadius: 8,
+      borderWidth: 0.5,
+      flexDirection: 'row',
+      height: 45,
+      justifyContent: 'center',
+      marginTop: 20,
+      width: WIDTH * 0.4,
+    },
+    title: {
+      ...Globaltypography.button,
+      color: colors.buttonTextPrimary,
+    },
+  });
 
 interface appBtnType {
-  title: string;
+  title: TxKeyPath;
   onPress?: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -81,6 +99,7 @@ interface appBtnType {
   btnStyle?: ViewStyle;
   textStyle?: TextStyle;
   activeOpacity?: number;
-  children?: JSX.Element | null;
+  RightChild?: JSX.Element | null;
+  leftChild?: JSX.Element | null;
   smallBtn?: boolean;
 }
