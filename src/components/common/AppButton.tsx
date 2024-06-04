@@ -39,7 +39,7 @@ export default function AppButton(props: appBtnType): JSX.Element {
       {RightChild && <View style={styles.childrenViewStyle}>{RightChild}</View>}
       {title && (
         <AppText
-          style={[styles.title, textStyle]}
+          style={textStyle}
           numberOfLines={1}
           presetStyle={'button'}
           transText={title}
@@ -86,9 +86,6 @@ const createStyles = (colors: Colors) =>
       justifyContent: 'center',
       marginTop: 20,
       width: WIDTH * 0.4,
-    },
-    title: {
-      color: colors.buttonTextPrimary,
     },
   });
 

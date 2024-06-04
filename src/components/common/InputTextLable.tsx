@@ -53,9 +53,6 @@ export default function InputTextLabel(props: inputTextLabelType): JSX.Element {
   /*
    ** Hooks
    */
-  // const {colors} = useTheme();
-  // const styles = createStyles(colors as Colors);
-  // const {t} = useTranslation();
 
   return (
     <View style={[styles.mainContStyle, viewStyle]}>
