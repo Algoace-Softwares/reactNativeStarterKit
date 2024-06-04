@@ -1,0 +1,4 @@
+/*
+ ** icons
+ */
+export const ICONS = {};

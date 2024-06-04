@@ -21,6 +21,7 @@ export {default as InputTextLableCountry} from './common/InputTextLableCountry';
 export {default as InputLablePhoneNumber} from './common/InputLablePhoneNumber';
 export {default as CustomError} from './common/CustomError';
 export {default as AppText} from './common/AppText';
+export {default as AppIcon} from './common/AppIcon';
 /*
  ** Modals componenets
  */
