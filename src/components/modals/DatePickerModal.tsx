@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, Modal, TouchableOpacity, Platform} from 'react-n
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
+import {COLORS, HEIGHT} from '../../theme';
 
 interface datePickerModalType {
   visible: boolean;

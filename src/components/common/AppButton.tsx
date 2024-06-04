@@ -1,10 +1,10 @@
 /* eslint-disable react-native/no-unused-styles */
 import React from 'react';
-import {ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {useTheme} from '@react-navigation/native';
-import {Colors, WIDTH, Globaltypography} from '../../theme';
+import {Colors, WIDTH, CustomTheme} from '../../theme';
 import {TxKeyPath} from '../../i18n/types';
-import {useTranslation} from 'react-i18next';
+import AppText from './AppText';
 
 export default function AppButton(props: appBtnType): JSX.Element {
   /*
@@ -27,9 +27,8 @@ export default function AppButton(props: appBtnType): JSX.Element {
   /*
    ** Hooks
    */
-  const {colors} = useTheme();
-  const styles = createStyles(colors as Colors);
-  const {t} = useTranslation();
+  const {colors} = useTheme() as CustomTheme;
+  const styles = createStyles(colors);
 
   return (
     <TouchableOpacity
@@ -39,9 +38,13 @@ export default function AppButton(props: appBtnType): JSX.Element {
       style={[smallBtn ? styles.smallBtn : styles.largeBtn, btnStyle]}>
       {RightChild && <View style={styles.childrenViewStyle}>{RightChild}</View>}
       {title && (
-        <Text style={[styles.title, textStyle]} numberOfLines={1}>
-          {t(title)}
-        </Text>
+        <AppText
+          style={[styles.title, textStyle]}
+          numberOfLines={1}
+          presetStyle={'button'}
+          transText={title}
+          textColor={colors.buttonTextPrimary}
+        />
       )}
       {leftChild && <View style={styles.childrenViewStyle}>{leftChild}</View>}
 
@@ -85,7 +88,6 @@ const createStyles = (colors: Colors) =>
       width: WIDTH * 0.4,
     },
     title: {
-      ...Globaltypography.button,
       color: colors.buttonTextPrimary,
     },
   });

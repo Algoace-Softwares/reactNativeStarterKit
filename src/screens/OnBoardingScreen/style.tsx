@@ -1,12 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {Colors, Globaltypography, HEIGHT, WIDTH} from '../../theme';
+import {Colors, HEIGHT, WIDTH} from '../../theme';
 
 const createStyles = (COLORS: Colors) =>
   StyleSheet.create({
-    appLableStyle: {
-      ...Globaltypography.Heading,
-      color: COLORS.background,
-    },
     appLogoImageStyle: {
       height: HEIGHT * 0.1,
       width: WIDTH * 0.3,

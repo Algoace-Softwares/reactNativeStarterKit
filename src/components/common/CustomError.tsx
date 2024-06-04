@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import AppButton from './AppButton';
 import {en} from '../../labels';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS} from '../../theme';
 
 export type Props = {error: Error; resetError: () => void};
 /*
@@ -28,17 +28,13 @@ const CustomError = (props: Props) => {
         <Text style={styles.subtitle}>{en.errorBoundaryLable}</Text>
         {/* <Text style={styles.error}>{error.toString()}</Text> */}
 
-        <AppButton title={en.tryAgain} onPress={resetingState} textStyle={styles.buttonTextStyle} />
+        <AppButton title={'tryAgain'} onPress={resetingState} />
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonTextStyle: {
-    color: COLORS.background,
-    ...GlobalStyles.l2,
-  },
   container: {
     backgroundColor: COLORS.background,
     flex: 1,

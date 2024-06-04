@@ -1,10 +1,9 @@
-import {Text, View, SafeAreaView, Image, ImageBackground} from 'react-native';
+import {View, SafeAreaView, Image, ImageBackground} from 'react-native';
 import React from 'react';
 import {IMAGES} from '../../assets';
-import {AppButton, FocusAwareStatusBar} from '../../components';
+import {AppButton, AppText, FocusAwareStatusBar} from '../../components';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-import {useTranslation} from 'react-i18next';
-import {Colors, COLORS} from '../../theme';
+import {CustomTheme} from '../../theme';
 import {useTheme} from '@react-navigation/native';
 import createStyles from './style';
 
@@ -12,10 +11,9 @@ export default function OnBoardingScreen(): JSX.Element {
   /*
    * Hooks
    */
-  const {colors} = useTheme();
-  const styles = createStyles(colors as Colors);
+  const {colors} = useTheme() as CustomTheme;
+  const styles = createStyles(colors);
   const navigation = useAppNavigation();
-  const {t} = useTranslation();
   console.log('🚀 ~ OnBoardingScreen ~ colors:', colors);
   /*
    * Functions
@@ -30,19 +28,19 @@ export default function OnBoardingScreen(): JSX.Element {
   return (
     <ImageBackground source={IMAGES.onBoarding} style={styles.mainContainer} resizeMode={'cover'}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
+      <FocusAwareStatusBar barStyle={'dark-content'} />
 
       {/* Logo */}
       <View style={styles.appLogoView}>
         <Image source={IMAGES.appLogo} style={styles.appLogoImageStyle} resizeMode={'contain'} />
-        <Text style={styles.appLableStyle}>{t('appLabel')}</Text>
+        <AppText transText={'appLabel'} presetStyle={'heading'} textColor={colors.background} />
       </View>
 
       {/* Buttons */}
       <View style={styles.btnContainer}>
-        <AppButton title={t('login')} onPress={onPressLogin} smallBtn={true} />
+        <AppButton title={'login'} onPress={onPressLogin} smallBtn={true} />
         <AppButton
-          title={t('signUp')}
+          title={'signUp'}
           onPress={onPressSignUp}
           smallBtn={true}
           btnStyle={styles.smallBtn2}

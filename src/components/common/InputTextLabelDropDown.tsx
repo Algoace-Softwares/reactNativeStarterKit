@@ -1,24 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  ViewStyle,
-  KeyboardTypeOptions,
-} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity, FlatList, ViewStyle, KeyboardTypeOptions} from 'react-native';
 import React, {useState} from 'react';
 import {SVG} from '../../assets';
-import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
+import {COLORS, HEIGHT} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 type dataItem = {
   id: number;
   title: string;
 };
 interface InputTextLabelDropDownType {
-  textLable: string;
+  textLable: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   editable?: boolean;
@@ -37,7 +29,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
    ** Props
    */
   const {
-    textLable = '',
+    textLable,
     textInputStyle = {},
     textLabelStyle = {},
     editable = true,
@@ -58,7 +50,6 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
   /*
    ** Hooks
    */
-  const {t} = useTranslation();
   /*
    ** Functions
    */
@@ -80,7 +71,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
           onChangeText(item?.title);
           setIsDropDown(false);
         }}>
-        <Text style={styles.renderItemTextStyle}>{item?.title}</Text>
+        <AppText presetStyle={'default'}>{item?.title}</AppText>
       </TouchableOpacity>
     );
   };
@@ -94,7 +85,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
     if (dropDownData.length === 0) {
       return (
         <View style={styles.dropDownViewStyle}>
-          <Text style={styles.renderItemTextStyle}>{t('listIsEmpty')}</Text>
+          <AppText transText={'listIsEmpty'} presetStyle={'textInputHeading'} style={textLabelStyle} />
         </View>
       );
     }
@@ -114,7 +105,7 @@ export default function InputTextLabelDropDown(props: InputTextLabelDropDownType
   };
   return (
     <View style={viewStyle}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
       <View style={[styles.inputStyle2, textInputStyle]}>
         <TextInput
           style={styles.textInput2}
@@ -183,10 +174,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     width: '100%',
   },
-  renderItemTextStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.b2,
-  },
+
   rightButtonStyle: {
     alignItems: 'flex-end',
     height: 40,
@@ -200,9 +188,5 @@ const styles = StyleSheet.create({
   textInput2: {
     height: '100%',
     width: '95%',
-  },
-
-  upperTextStyle: {
-    color: COLORS.text,
   },
 });

@@ -1,10 +1,11 @@
-import {StyleSheet, Text, View, TextInput, ViewStyle} from 'react-native';
+import {StyleSheet, View, TextInput, ViewStyle} from 'react-native';
 import React from 'react';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 interface commentBoxType {
-  textLable: string;
-  textLable2?: string;
+  textLable: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   viewStyle: ViewStyle;
@@ -16,8 +17,7 @@ interface commentBoxType {
 export default function CommentBox(props: commentBoxType): JSX.Element {
   // destuctruing props
   const {
-    textLable = '',
-    textLable2 = '',
+    textLable,
     textInputStyle = {},
     textLabelStyle = {},
     viewStyle = {},
@@ -28,10 +28,7 @@ export default function CommentBox(props: commentBoxType): JSX.Element {
   // Rerendering
   return (
     <View style={viewStyle}>
-      <Text style={[GlobalStyles.b2, textLabelStyle]}>
-        {textLable}
-        <Text style={styles.textLabel2Style}>{textLable2}</Text>
-      </Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
       <TextInput
         style={[styles.textInput2, textInputStyle]}
         scrollEnabled={false}
@@ -60,10 +57,5 @@ const styles = StyleSheet.create({
     height: 110,
     paddingHorizontal: 10,
     width: '80%',
-  },
-
-  textLabel2Style: {
-    ...GlobalStyles.b4,
-    color: COLORS.text,
   },
 });

@@ -1,17 +1,18 @@
-import {StyleSheet, Text, View, TouchableOpacity, ViewStyle} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import DatePickerModal from '../modals/DatePickerModal';
 import {SVG} from '../../assets';
-import {COLORS, GlobalStyles, WIDTH} from '../../theme';
+import {COLORS, WIDTH} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 interface InputDatePickerType {
-  textLable: string;
+  textLable: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   viewStyle?: ViewStyle;
   onPressDate: (data: Date) => void;
   calenderIcon?: boolean;
-  placeHolder?: string;
   value: Date;
 }
 
@@ -20,13 +21,12 @@ export default function InputDatePicker(props: InputDatePickerType): JSX.Element
    ** Props
    */
   const {
-    textLable = '',
+    textLable,
     textInputStyle = {},
     textLabelStyle = {},
     viewStyle = {},
     onPressDate,
     calenderIcon = false,
-    placeHolder = 'Select date',
     value = new Date(),
   } = props;
   /*
@@ -40,14 +40,14 @@ export default function InputDatePicker(props: InputDatePickerType): JSX.Element
   const renderDateToDisplay = (): JSX.Element => {
     if (value) {
       const tempDate = new Date(value);
-      return <Text style={styles.selectDateLabelStyle}>{tempDate.toLocaleDateString('en-US')}</Text>;
+      return <AppText presetStyle={'default'}>{tempDate.toLocaleDateString('en-US')}</AppText>;
     } else {
-      return <Text style={styles.selectDateLabelStyle}>{placeHolder}</Text>;
+      return <AppText transText={'selectDate'} presetStyle={'default'} />;
     }
   };
   return (
     <TouchableOpacity style={[styles.mainContStyle, viewStyle]} onPress={() => setDatePickerModal(true)}>
-      <Text style={[styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
       <View style={[styles.inputStyle2, textInputStyle]}>
         {renderDateToDisplay()}
         {calenderIcon && <SVG.CalenderIcon />}
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     flexDirection: 'row',
     height: 45,
+    marginLeft: 10,
     marginTop: 10,
     width: '100%',
   },
@@ -78,14 +79,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 15,
     width: WIDTH - 40,
-  },
-  selectDateLabelStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.l2,
-    marginLeft: 10,
-  },
-  upperTextStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.b1,
   },
 });
