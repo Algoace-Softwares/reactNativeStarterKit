@@ -1,15 +1,16 @@
 import React from 'react';
-import {Modal, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {Modal, StyleSheet, TouchableOpacity, View} from 'react-native';
 import AppButton from '../common/AppButton';
-import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS} from '../../theme';
+import AppText from '../common/AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 interface alertChoiceModalType {
   visible: boolean;
   setVisible: (data: boolean) => void;
   clickAnywhere?: boolean;
   okBtnPressed: () => void;
-  label: string;
+  label: TxKeyPath;
   loading?: boolean;
 }
 
@@ -18,13 +19,12 @@ export default function AlertChoiceModal({
   setVisible,
   clickAnywhere = false,
   okBtnPressed,
-  label = '',
+  label,
   loading = false,
 }: alertChoiceModalType): JSX.Element {
   /*
    ** Hooks
    */
-  const {t} = useTranslation();
   // Functions
 
   // when user press ok btn
@@ -40,15 +40,16 @@ export default function AlertChoiceModal({
         style={styles.centeredView}
         onPress={() => clickAnywhere && setVisible(false)}>
         <View style={styles.modalView}>
-          <Text style={styles.textLabelStyle}>{label}</Text>
+          <AppText transText={label} presetStyle={'textInputHeading'} />
           {/* Main buttons */}
           <View style={styles.btnContainer}>
-            <AppButton title={t('no')} onPress={onPressbtn1} btnStyle={GlobalStyles.smallBtn1Style} />
+            <AppButton title={'no'} onPress={onPressbtn1} smallBtn={true} />
             <AppButton
-              title={t('yes')}
+              title={'yes'}
               onPress={() => okBtnPressed()}
-              btnStyle={GlobalStyles.smallBtn2Style}
-              textStyle={GlobalStyles.btn2textStyle}
+              btnStyle={styles.smallBtn2}
+              textStyle={styles.smallBtn2Text}
+              smallBtn={true}
               loading={loading}
               loadingColor={COLORS.loaderSecondary}
             />
@@ -83,8 +84,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  textLabelStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.l7,
+  smallBtn2: {
+    backgroundColor: COLORS.background,
+  },
+  smallBtn2Text: {
+    color: COLORS.buttonTextSeconday,
   },
 });

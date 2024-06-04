@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     marginTop: 35,
     width: WIDTH * 0.9,
   },
+  mainContainer: {
+    backgroundColor: COLORS.background,
+    flex: 1,
+  },
   mainContainer2: {
     justifyContent: 'flex-end',
   },

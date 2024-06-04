@@ -1,7 +1,9 @@
 import {StyleSheet, Text, View, TextInput, TouchableOpacity, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import {countriesData} from '../../data';
-import {COLORS, GlobalStyles} from '../../theme';
+import {COLORS} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 
 export type countriesDataItem = {
   countryName: string;
@@ -11,7 +13,7 @@ export type countriesDataItem = {
 };
 
 interface InputTextPhoneNumberType {
-  textLable: string;
+  textLable: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   viewStyle?: ViewStyle;
@@ -30,7 +32,7 @@ export default function InputTextPhoneNumber(props: InputTextPhoneNumberType): J
   const [detectedCountry, setDetectedCountry] = useState<countriesDataItem | undefined>(countriesData[0]);
 
   /*
-   **everytime when user type fillter condition execute to filte data
+   ** Everytime when user type fillter condition execute to filte data
    */
   const onChangeTextDropDown = (num: string): void => {
     if (num?.length < 6) {
@@ -38,7 +40,7 @@ export default function InputTextPhoneNumber(props: InputTextPhoneNumberType): J
         if (num?.includes(item?.countryDialCode)) {
           return item;
         }
-        return;
+        return item;
       });
       setDetectedCountry(tempData);
     }
@@ -46,7 +48,8 @@ export default function InputTextPhoneNumber(props: InputTextPhoneNumberType): J
 
   return (
     <View style={viewStyle}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
+
       <View style={[styles.inputStyle2, textInputStyle]}>
         <TouchableOpacity style={styles.leftButtonStyle}>
           {detectedCountry?.emoji && <Text style={styles.flagEmojiStyle}>{`${detectedCountry?.emoji}`}</Text>}
@@ -94,9 +97,5 @@ const styles = StyleSheet.create({
   textInput2: {
     height: '100%',
     width: '95%',
-  },
-
-  upperTextStyle: {
-    color: COLORS.text,
   },
 });

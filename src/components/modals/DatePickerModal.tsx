@@ -1,8 +1,9 @@
-import {StyleSheet, Text, View, Modal, TouchableOpacity, Platform} from 'react-native';
+import {StyleSheet, View, Modal, TouchableOpacity, Platform} from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
-import {useTranslation} from 'react-i18next';
-import {COLORS, HEIGHT} from '../../theme';
+import {COLORS, CustomTheme, HEIGHT} from '../../theme';
+import AppText from '../common/AppText';
+import {useTheme} from '@react-navigation/native';
 
 interface datePickerModalType {
   visible: boolean;
@@ -24,7 +25,7 @@ export default function DatePickerModal(props: datePickerModalType): JSX.Element
   /*
    ** Hooks
    */
-  const {t} = useTranslation();
+  const {colors} = useTheme() as CustomTheme;
   /*
    ** Functions
    */
@@ -47,10 +48,10 @@ export default function DatePickerModal(props: datePickerModalType): JSX.Element
           <View style={styles.iPhoneStyle} />
           <View style={styles.titleViewStyle}>
             <TouchableOpacity onPress={() => refactorDate(androidDate)}>
-              <Text style={styles.title1Style}>{t('selectDate')}</Text>
+              <AppText transText={'selectDate'} presetStyle={'subHeading'} textColor={colors.separator} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setVisible(false)}>
-              <Text style={styles.title2Style}>{t('cancel')}</Text>
+              <AppText transText={'cancel'} presetStyle={'subHeading'} />
             </TouchableOpacity>
           </View>
           {Platform.OS === 'android' ? (
@@ -102,18 +103,6 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.35,
     paddingHorizontal: 20,
     width: '100%',
-  },
-
-  title1Style: {
-    color: COLORS.separator,
-    fontWeight: 'bold',
-    ...GlobalStyles.h5,
-  },
-
-  title2Style: {
-    color: COLORS.text,
-    fontWeight: 'bold',
-    ...GlobalStyles.l1,
   },
 
   titleViewStyle: {

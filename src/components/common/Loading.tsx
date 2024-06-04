@@ -1,14 +1,22 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {COLORS} from '../../theme';
+import {COLORS, CustomTheme} from '../../theme';
+import {useTheme} from '@react-navigation/native';
 // App Imports
 
 export default function Loading(props: loadingType) {
-  // destructring props
+  /*
+   ** Destructring props
+   */
   const {fullScreen = false} = props;
+  /*
+   ** Hooks
+   */
+  const {colors} = useTheme() as CustomTheme;
+
   return (
     <View style={fullScreen ? styles.mainStyle : null}>
-      <ActivityIndicator color={COLORS.palette.primary400} size={'large'} />
+      <ActivityIndicator color={colors.loaderPrimary} size={'large'} />
     </View>
   );
 }

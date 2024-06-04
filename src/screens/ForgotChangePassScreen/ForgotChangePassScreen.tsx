@@ -125,7 +125,6 @@ export default function ForgotChangePassScreen(): JSX.Element {
         {resendCode ? (
           <AppText presetStyle={'formLabel'} onPress={onPressResendCode} transText={'didRecvCode'} />
         ) : (
-          // <Text style={styles.renderTextStyle}>{`Wait for 00:${countDown}`}</Text>
           <AppText
             presetStyle={'formLabel'}
             onPress={onPressResendCode}

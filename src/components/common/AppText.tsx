@@ -50,7 +50,9 @@ export default function AppText(props: TextProps) {
     </RNText>
   );
 }
-
+/*
+ ** Already define presets
+ */
 const presets = {
   ...Globaltypography,
 };

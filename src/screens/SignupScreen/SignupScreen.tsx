@@ -16,8 +16,6 @@ import {imageObjectType} from './types';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {signupSchema} from '../../utils/SchemaValidation';
-import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
 
 export default function SignupScreen() {
   /*
@@ -30,7 +28,6 @@ export default function SignupScreen() {
   const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
   const [loading, setLoading] = useState<boolean>(false);
   const [imageAsset, setImageAsset] = useState<imageObjectType | null>(null);
-  const {t} = useTranslation();
   /*
    * custom hooks
    */
@@ -84,24 +81,24 @@ export default function SignupScreen() {
   };
   // Rendering
   return (
-    <ScrollView style={GlobalStyles.mainContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
+      <FocusAwareStatusBar barStyle={'dark-content'} />
       {/* Main Body */}
       <View style={styles.mainContainer2}>
         <BackButton />
         {/* Headers */}
-        <AuthHeader text1={t('signUp')} text2={t('signUpLabel')} />
+        <AuthHeader text1={'signUp'} text2={'signUpLabel'} />
         {/* Profile Image uploader */}
         <ProfileImageUploader loading={loading} onPressCamera={onPressMedia} imageAsset={imageAsset} />
         {/* Input fields */}
-        <InputTextLabel textLable={t('firstName')} onChangeText={setFirstName} value={firstName} />
-        <InputTextLabel textLable={t('lastName')} onChangeText={setLastName} value={lastName} />
-        <InputDatePicker textLable={t('dob')} onPressDate={setDateOfBirth} value={dateOfBirth} />
-        <InputTextLabel textLable={t('emailAddress')} onChangeText={setEmailAddress} value={emailAddress} />
-        <InputTextLabel textLable={t('password')} onChangeText={setPassword} value={password} isPassword={true} />
+        <InputTextLabel textLable={'firstName'} onChangeText={setFirstName} value={firstName} />
+        <InputTextLabel textLable={'lastName'} onChangeText={setLastName} value={lastName} />
+        <InputDatePicker textLable={'dob'} onPressDate={setDateOfBirth} value={dateOfBirth} />
+        <InputTextLabel textLable={'emailAddress'} onChangeText={setEmailAddress} value={emailAddress} />
+        <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
-        <AppButton title={t('continue')} onPress={ContinuePressed} btnStyle={styles.loginButtonStyle} />
+        <AppButton title={'continue'} onPress={ContinuePressed} btnStyle={styles.loginButtonStyle} />
 
         {/* Main Button */}
       </View>

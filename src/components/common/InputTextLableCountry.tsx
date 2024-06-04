@@ -2,7 +2,9 @@ import {StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, ViewStyle
 import React, {useEffect, useState} from 'react';
 import {SVG} from '../../assets';
 import {countriesData} from '../../data';
-import {COLORS, GlobalStyles, HEIGHT} from '../../theme';
+import {COLORS, HEIGHT} from '../../theme';
+import AppText from './AppText';
+import {TxKeyPath} from '../../i18n/types';
 /*
  ** types
  */
@@ -14,7 +16,7 @@ export type countriesDataItem = {
 };
 
 interface InputTextLabelCountryType {
-  textLable: string;
+  textLable: TxKeyPath;
   textInputStyle?: ViewStyle;
   textLabelStyle?: ViewStyle;
   viewStyle?: ViewStyle;
@@ -26,7 +28,7 @@ interface InputTextLabelCountryType {
 export default function InputTextLabelCountry(props: InputTextLabelCountryType): JSX.Element {
   // destructring props
   const {
-    textLable = '',
+    textLable,
     textInputStyle = {},
     textLabelStyle = {},
     viewStyle = {},
@@ -86,14 +88,15 @@ export default function InputTextLabelCountry(props: InputTextLabelCountryType):
           setSelectedCountry(item);
           setIsDropDown(false);
         }}>
-        <Text style={styles.renderItemTextStyle}>{item?.countryName}</Text>
+        <AppText presetStyle={'default'}>{item?.countryName}</AppText>
       </TouchableOpacity>
     );
   };
 
   return (
     <View style={viewStyle}>
-      <Text style={[GlobalStyles.b1, styles.upperTextStyle, textLabelStyle]}>{textLable}</Text>
+      <AppText transText={textLable} presetStyle={'textInputHeading'} style={textLabelStyle} />
+
       <View style={[styles.inputStyle2, textInputStyle]}>
         <TouchableOpacity
           style={styles.leftButtonStyle}
@@ -174,10 +177,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     width: '100%',
   },
-  renderItemTextStyle: {
-    color: COLORS.text,
-    ...GlobalStyles.b2,
-  },
+
   rightButtonStyle: {
     alignItems: 'flex-end',
     height: 40,
@@ -191,9 +191,5 @@ const styles = StyleSheet.create({
   textInput2: {
     height: '100%',
     width: '95%',
-  },
-
-  upperTextStyle: {
-    color: COLORS.text,
   },
 });

@@ -1,14 +1,13 @@
-import {Text, View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, OTPFieldInput} from '../../components';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {AppButton, AppText, AuthHeader, BackButton, FocusAwareStatusBar, OTPFieldInput} from '../../components';
+import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {styles} from './style';
 import {ZodError} from 'zod';
 import {confirmationCodeValidation} from '../../utils/SchemaValidation';
-import {useTranslation} from 'react-i18next';
-import {COLORS, GlobalStyles} from '../../theme';
+import {CustomTheme} from '../../theme';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
@@ -29,7 +28,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
   /*
    ** Hooks
    */
-  const {t} = useTranslation();
+  const {colors} = useTheme() as CustomTheme;
   /*
    ** Functions
    */
@@ -87,25 +86,25 @@ export default function ConfirmSignupScreen(): JSX.Element {
   }, [resendCode, countDown]);
 
   return (
-    <View style={GlobalStyles.mainContainer}>
+    <View style={styles.mainContainer}>
       <SafeAreaView />
-      <FocusAwareStatusBar backgroundColor={COLORS.statusBar} barStyle={'dark-content'} />
+      <FocusAwareStatusBar barStyle={'dark-content'} />
       {/* Main Body */}
       <BackButton />
       {/* Header */}
-      <AuthHeader text1={t('confirmSignUp')} text2={t('verificationSentCode')} />
+      <AuthHeader text1={'confirmSignUp'} text2={'verificationSentCode'} />
       {/* OTP Input field */}
-      <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
+      <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
       {/* Main button */}
-      <AppButton title={t('submit')} onPress={submitCodePressed} loading={loading} />
-
+      <AppButton title={'submit'} onPress={submitCodePressed} loading={loading} />
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
-          <Text style={styles.renderTextStyle} onPress={onPressResendCode}>
-            {t('didRecvCode')} <Text style={styles.renderTextStyle}>{t('resendCode')}</Text>
-          </Text>
+          <AppText presetStyle={'formLabel'} onPress={onPressResendCode} transText={'didRecvCode'} />
         ) : (
-          <Text style={styles.renderTextStyle}>{`${t('waitFor')} 00:${countDown}`}</Text>
+          <AppText
+            presetStyle={'formLabel'}
+            onPress={onPressResendCode}
+            textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
         )}
       </View>
     </View>
