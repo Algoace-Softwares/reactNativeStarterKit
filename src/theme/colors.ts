@@ -125,6 +125,10 @@ export const DEFAULT_COLORS = {
    */
   background: defaultPalette.white,
   /**
+   * The default color for header
+   */
+  header: darkPalette.primary700,
+  /**
    * The default color of the button
    */
   card: defaultPalette.secondary400,
@@ -213,6 +217,10 @@ export const DARK_COLORS = {
    * The default color of the screen background.
    */
   background: darkPalette.white,
+  /**
+   * The default color for header
+   */
+  header: darkPalette.primary700,
   /**
    * The default color of the button
    */

@@ -1,8 +1,7 @@
 import React from 'react';
 import {Image, ImageStyle, StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle} from 'react-native';
 import {ICONS} from '../../assets';
-
-export type IconTypes = keyof typeof ICONS;
+import {IconTypes} from '../../assets/icons';
 
 interface IconProps extends TouchableOpacityProps {
   /**

@@ -1,6 +1,9 @@
 import React, {ReactElement} from 'react';
-import {StyleProp, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle} from 'react-native';
 import {TxKeyPath} from '../../i18n/types';
+import {IconTypes} from '../../assets/icons';
+import {Colors, CustomTheme, HEIGHT} from '../../theme';
+import {useTheme} from '@react-navigation/native';
 
 export interface HeaderProps {
   /**
@@ -65,7 +68,6 @@ export interface HeaderProps {
    * An optional tint color for the right icon
    */
   rightIconColor?: string;
-
   /**
    * Right action custom ReactElement if the built in action props don't suffice.
    * Overrides `rightIcon`, `rightTx` and `rightText`.
@@ -95,8 +97,11 @@ interface HeaderActionProps {
  * @returns {JSX.Element} The rendered `Header` component.
  */
 export default function AppHeader(props: HeaderProps) {
+  /*
+   ** Destruturing props
+   */
   const {
-    backgroundColor = colors.background,
+    backgroundColor,
     LeftActionComponent,
     leftIcon,
     leftIconColor,
@@ -108,15 +113,20 @@ export default function AppHeader(props: HeaderProps) {
     title,
     titleMode = 'center',
     titleContainerStyle: $titleContainerStyleOverride,
-    style: $styleOverride,
+    style,
     titleStyle: $titleStyleOverride,
-    containerStyle: $containerStyleOverride,
+    containerStyle,
     transTitle,
   } = props;
+  /*
+   ** Hooks
+   */
+  const {colors} = useTheme() as CustomTheme;
+  const titleContent = title || transTitle;
 
   return (
-    <View style={[$container, $containerInsets, {backgroundColor}, $containerStyleOverride]}>
-      <View style={[$wrapper, $styleOverride]}>
+    <View style={[$container(colors), {backgroundColor}, containerStyle]}>
+      <View style={[styles.contentContainerStyle, style]}>
         <HeaderAction
           tx={leftTx}
           text={leftText}
@@ -201,8 +211,11 @@ const $wrapper: ViewStyle = {
   justifyContent: 'space-between',
 };
 
-const $container: ViewStyle = {
-  width: '100%',
+const $container = (colors: Colors): ViewStyle => {
+  return {
+    width: '100%',
+    backgroundColor: colors.header,
+  };
 };
 
 const $title: TextStyle = {
@@ -249,3 +262,12 @@ const $titleWrapperFlex: ViewStyle = {
   justifyContent: 'center',
   flexGrow: 1,
 };
+
+const styles = StyleSheet.create({
+  contentContainerStyle: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: HEIGHT * 0.1,
+    justifyContent: 'space-between',
+  },
+});
