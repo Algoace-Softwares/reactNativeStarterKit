@@ -1,8 +1,7 @@
-/* eslint-disable react-native/no-unused-styles */
 import React from 'react';
 import {ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {useTheme} from '@react-navigation/native';
-import {Colors, WIDTH, CustomTheme} from '../../theme';
+import {Colors, WIDTH, CustomTheme, COLORS} from '../../theme';
 import {TxKeyPath} from '../../i18n/types';
 import AppText from './AppText';
 
@@ -28,14 +27,13 @@ export default function AppButton(props: appBtnType): JSX.Element {
    ** Hooks
    */
   const {colors} = useTheme() as CustomTheme;
-  const styles = createStyles(colors);
 
   return (
     <TouchableOpacity
       disabled={disabled}
       activeOpacity={activeOpacity}
       onPress={onPress}
-      style={[smallBtn ? styles.smallBtn : styles.largeBtn, btnStyle]}>
+      style={[styles.defaultBtnStyle, smallBtn ? $smallBtnStyle(colors) : $largeBtnStyle(colors), btnStyle]}>
       {RightChild && <View style={styles.childrenViewStyle}>{RightChild}</View>}
       {title && (
         <AppText
@@ -52,42 +50,46 @@ export default function AppButton(props: appBtnType): JSX.Element {
     </TouchableOpacity>
   );
 }
+/*
+ ** This style approach is used for synamic styles
+ */
+const $largeBtnStyle = (colors: Colors): ViewStyle => {
+  return {
+    backgroundColor: colors.button,
+    borderColor: colors.buttonBorder,
+    width: WIDTH - 40,
+  };
+};
 
-const createStyles = (colors: Colors) =>
-  StyleSheet.create({
-    childrenViewStyle: {
-      marginRight: 20,
-    },
-    largeBtn: {
-      alignItems: 'center',
-      alignSelf: 'center',
-      backgroundColor: colors.button,
-      borderColor: colors.buttonBorder,
-      borderRadius: 8,
-      borderWidth: 0.5,
-      flexDirection: 'row',
-      height: 45,
-      justifyContent: 'center',
-      marginTop: 20,
-      width: WIDTH - 40,
-    },
-    loading: {
-      marginLeft: 10,
-    },
-    smallBtn: {
-      alignItems: 'center',
-      alignSelf: 'center',
-      backgroundColor: colors.button,
-      borderColor: colors.buttonBorder,
-      borderRadius: 8,
-      borderWidth: 0.5,
-      flexDirection: 'row',
-      height: 45,
-      justifyContent: 'center',
-      marginTop: 20,
-      width: WIDTH * 0.4,
-    },
-  });
+const $smallBtnStyle = (colors: Colors): ViewStyle => {
+  return {
+    backgroundColor: colors.button,
+    borderColor: colors.buttonBorder,
+    width: WIDTH * 0.4,
+  };
+};
+
+const styles = StyleSheet.create({
+  childrenViewStyle: {
+    marginRight: 20,
+  },
+  defaultBtnStyle: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: COLORS.button,
+    borderColor: COLORS.buttonBorder,
+    borderRadius: 8,
+    borderWidth: 0.5,
+    flexDirection: 'row',
+    height: 45,
+    justifyContent: 'center',
+    marginTop: 20,
+    width: WIDTH - 40,
+  },
+  loading: {
+    marginLeft: 10,
+  },
+});
 
 interface appBtnType {
   title: TxKeyPath;

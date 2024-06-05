@@ -22,6 +22,8 @@ export {default as InputLablePhoneNumber} from './common/InputLablePhoneNumber';
 export {default as CustomError} from './common/CustomError';
 export {default as AppText} from './common/AppText';
 export {default as AppIcon} from './common/AppIcon';
+export {default as AppScreen} from './common/AppScreen';
+export {default as AppImage} from './common/AppImage';
 /*
  ** Modals componenets
  */
