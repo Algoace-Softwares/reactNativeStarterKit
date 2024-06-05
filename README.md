@@ -58,17 +58,26 @@ This is simple and easy to use starter kit following are the feature used in thi
 - Is user logged in or not flow
 - Built in screens
 - State managment setup
-- Common components
+- Common reusable components
+- HOC components
 - Some built in text input for phone number,country and cities.
-- Splash screen and built in fonts
+- Built in fonts
 - Api request flow
-- Predefine hooks (ImagePicker)
+- Predefine hooks
 - Local storage support(mmkv)
 - Already define navigation flow
 - TextInput validations
+- Zod schema validation
 - Custom eslint setup
 - Predefine Modals
 - Error Boundary
+- internationlaization i18n
+- system theme managment
+- dynamic header handling
+- dynamic styles
+- predefined industry standard folder and project structure
+- svg metro bundler handling
+- dynamic aspect ratio for image
 
 ## Things remaining
 

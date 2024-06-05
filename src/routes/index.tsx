@@ -4,7 +4,7 @@ import {authScreens, homeScreen} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
 import {useBackButtonHandler} from './navigationUtilities';
 import BaseConfig from '../config';
-import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 
@@ -105,17 +105,15 @@ const RootNavigator = (): JSX.Element => {
  ** Main navigator
  */
 export default function AppNavigator(): JSX.Element {
-  console.log('DarkTheme', DarkTheme);
-  console.log('DefaultTheme', DefaultTheme);
   /*
    **  Hooks
    */
   const theme = useColorScheme();
+
   const MyTheme = {
     dark: theme === 'dark' && true,
     colors: theme === 'dark' ? {...DARK_COLORS} : {...DEFAULT_COLORS},
   };
-  console.log('🚀 ~ AppNavigator ~ MyTheme:', MyTheme);
 
   return (
     <NavigationContainer theme={MyTheme}>

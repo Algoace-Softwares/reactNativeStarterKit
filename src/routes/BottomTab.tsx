@@ -1,10 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 import {TabScreens} from '../data';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomTabNavigatorParamList, tabBarIconType} from './types.navigation';
-import {COLORS, GlobalStyles} from '../theme';
+import {CustomTheme, Globaltypography} from '../theme';
+import {useTheme} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -14,19 +15,21 @@ const TabBarIconFunc = ({color, size, item}: tabBarIconType) => {
 };
 
 const BottomTab = (): JSX.Element => {
-  // hooks
+  /*
+   ** Hooks
+   */
   const insets = useSafeAreaInsets();
+  const {colors} = useTheme() as CustomTheme;
 
-  // rendring
   return (
     <Tab.Navigator
       initialRouteName={'HomeScreen'}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.palette.primary400,
-        tabBarInactiveTintColor: COLORS.palette.secondary400,
+        tabBarActiveTintColor: colors.palette.primary400,
+        tabBarInactiveTintColor: colors.palette.secondary400,
         tabBarLabelStyle: {marginBottom: 5},
-        tabBarStyle: styles(insets.bottom).tabBarStyle,
+        tabBarStyle: $tabBarStyle(insets.bottom),
       }}>
       {TabScreens.map((item, index) => (
         <Tab.Screen
@@ -36,7 +39,7 @@ const BottomTab = (): JSX.Element => {
           options={{
             tabBarIcon: ({color, size}) => TabBarIconFunc({color, size, item}),
             tabBarLabel: item.tabBarLabel,
-            tabBarLabelStyle: styles().label,
+            tabBarLabelStyle: styles.label,
           }}
         />
       ))}
@@ -44,21 +47,25 @@ const BottomTab = (): JSX.Element => {
   );
 };
 
-const styles = (bottomValue?: number) =>
-  StyleSheet.create({
-    label: {
-      ...GlobalStyles.l2,
+const styles = StyleSheet.create({
+  label: {
+    ...Globaltypography.formLabel,
+  },
+});
+/*
+ ** Dynamic styles
+ */
+const $tabBarStyle = (bottomSpace: number): ViewStyle => {
+  return {
+    height: 55 + Number(bottomSpace),
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 5,
+      height: 2,
     },
-    tabBarStyle: {
-      height: 55 + Number(bottomValue),
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 5,
-        height: 2,
-      },
-      shadowOpacity: 0.5,
-      shadowRadius: 3.84,
-    },
-  });
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+  };
+};
 
 export default BottomTab;
