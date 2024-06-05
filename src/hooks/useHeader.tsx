@@ -1,16 +1,20 @@
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {AppHeader} from '../components';
+import {HeaderProps} from '../components/common/AppHeader';
 
 /**
- * A hook to set the header for a screen.
+ * A hook that can be used to easily set the Header of a react-navigation screen from within the screen's component
  */
-export function useHeader() {
+
+export function useHeader(headerProps: HeaderProps, deps: React.DependencyList = []) {
   const navigation = useNavigation();
 
-  useLayoutEffect(() => {
+  React.useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      header: () => <></>,
+      header: () => <AppHeader {...headerProps} />,
     });
-  }, [navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, ...deps, headerProps]);
 }

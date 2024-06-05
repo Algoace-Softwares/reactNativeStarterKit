@@ -1,10 +1,10 @@
-import {View, SafeAreaView, ScrollView} from 'react-native';
+import {View} from 'react-native';
 import React, {useState} from 'react';
 import {
   AppButton,
+  AppScreen,
   AuthHeader,
   BackButton,
-  FocusAwareStatusBar,
   InputDatePicker,
   InputTextLabel,
   ProfileImageUploader,
@@ -81,9 +81,7 @@ export default function SignupScreen() {
   };
   // Rendering
   return (
-    <ScrollView style={styles.mainContainer} showsVerticalScrollIndicator={false}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
+    <AppScreen preset={'scroll'} ScrollViewProps={{showsVerticalScrollIndicator: false}}>
       {/* Main Body */}
       <View style={styles.mainContainer2}>
         <BackButton />
@@ -102,6 +100,6 @@ export default function SignupScreen() {
 
         {/* Main Button */}
       </View>
-    </ScrollView>
+    </AppScreen>
   );
 }

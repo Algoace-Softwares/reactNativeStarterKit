@@ -5,16 +5,24 @@ import {AppButton, AppText, FocusAwareStatusBar} from '../../components';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {CustomTheme} from '../../theme';
 import {useTheme} from '@react-navigation/native';
-import createStyles from './style';
+import {$mainContainer, $smallBtn2, $smallBtn2Text, styles} from './style';
 
 export default function OnBoardingScreen(): JSX.Element {
   /*
    * Hooks
    */
   const {colors} = useTheme() as CustomTheme;
-  const styles = createStyles(colors);
   const navigation = useAppNavigation();
   console.log('🚀 ~ OnBoardingScreen ~ colors:', colors);
+
+  // useHeader(
+  //   {
+  //     titleMode: 'center',
+  //     transTitle: 'Country',
+  //     LeftActionComponent: <BackButton />,
+  //   },
+  //   [],
+  // );
   /*
    * Functions
    */
@@ -26,13 +34,19 @@ export default function OnBoardingScreen(): JSX.Element {
   };
 
   return (
-    <ImageBackground source={IMAGES.onBoarding} style={styles.mainContainer} resizeMode={'cover'}>
+    <ImageBackground source={IMAGES.onBoarding} style={$mainContainer(colors)} resizeMode={'cover'}>
       <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
+      <FocusAwareStatusBar />
 
       {/* Logo */}
       <View style={styles.appLogoView}>
         <Image source={IMAGES.appLogo} style={styles.appLogoImageStyle} resizeMode={'contain'} />
+        {/* <AppImage
+          source={{
+            uri: 'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg',
+          }}
+          maxWidth={400}
+        /> */}
         <AppText transText={'appLabel'} presetStyle={'heading'} textColor={colors.background} />
       </View>
 
@@ -43,8 +57,8 @@ export default function OnBoardingScreen(): JSX.Element {
           title={'signUp'}
           onPress={onPressSignUp}
           smallBtn={true}
-          btnStyle={styles.smallBtn2}
-          textStyle={styles.smallBtn2Text}
+          btnStyle={$smallBtn2(colors)}
+          textStyle={$smallBtn2Text(colors)}
         />
       </View>
     </ImageBackground>

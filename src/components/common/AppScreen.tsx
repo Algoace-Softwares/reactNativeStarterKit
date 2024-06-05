@@ -123,7 +123,13 @@ export default function Screen(props: ScreenProps) {
   /*
    ** Destructing props
    */
-  const {backgroundColor, KeyboardAvoidingViewProps, keyboardOffset = 0, statusBarStyle = 'default', preset} = props;
+  const {
+    backgroundColor,
+    KeyboardAvoidingViewProps,
+    keyboardOffset = 0,
+    statusBarStyle = 'default',
+    preset = 'fixed',
+  } = props;
   /*
    ** Hooks
    */

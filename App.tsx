@@ -71,7 +71,3 @@ export default App;
 // ignite navigation setup
 // ignite header setup
 // env setup
-// dark and light theme setup
-// coding best practice for text and scrol view in ignit boiler plate
-// ignite image compoenent
-// change fonts theme

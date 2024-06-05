@@ -2,7 +2,7 @@ import React, {ReactElement} from 'react';
 import {StyleProp, StyleSheet, TextStyle, TouchableOpacityProps, View, ViewStyle} from 'react-native';
 import {TxKeyPath} from '../../i18n/types';
 import {IconTypes} from '../../assets/icons';
-import {Colors, CustomTheme, HEIGHT, SPACING} from '../../theme';
+import {CustomTheme, HEIGHT, SPACING} from '../../theme';
 import {useTheme} from '@react-navigation/native';
 import AppText from './AppText';
 import AppIcon from './AppIcon';
@@ -126,7 +126,7 @@ export default function AppHeader(props: HeaderProps) {
    ** Destruturing props
    */
   const {
-    backgroundColor,
+    backgroundColor = '',
     LeftActionComponent,
     leftIcon,
     leftIconColor,
@@ -151,9 +151,13 @@ export default function AppHeader(props: HeaderProps) {
    ** Checking if we get title as prop
    */
   const titleContent = title || transTitle;
+  /*
+   **Checking if we are recieving background color
+   */
+  const bgColor = backgroundColor || colors?.background;
 
   return (
-    <View style={[$container(colors), {backgroundColor}, containerStyle]}>
+    <View style={[$container(bgColor), containerStyle]}>
       <View style={[styles.contentContainerStyle, style]}>
         <HeaderAction
           icon={leftIcon}
@@ -191,10 +195,11 @@ export default function AppHeader(props: HeaderProps) {
 /*
  ** This style approach is used for synamic styles
  */
-const $container = (colors: Colors): ViewStyle => {
+const $container = (headerColor: string): ViewStyle => {
   return {
     width: '100%',
-    backgroundColor: colors.header,
+    backgroundColor: headerColor,
+    // paddingTop: topSpace - 20,
   };
 };
 
@@ -216,11 +221,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: HEIGHT * 0.1,
     justifyContent: 'space-between',
+    maxHeight: HEIGHT * 0.1,
+    paddingBottom: 10,
   },
   titleCenter: {
     alignItems: 'center',
     height: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: SPACING.xxl,
     position: 'absolute',
     width: '100%',

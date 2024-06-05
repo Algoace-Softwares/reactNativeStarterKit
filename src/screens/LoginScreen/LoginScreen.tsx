@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import {Text, View, SafeAreaView, TouchableOpacity} from 'react-native';
-import {AppButton, AppText, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
+import {Text, TouchableOpacity} from 'react-native';
+import {AppButton, AppScreen, AppText, AuthHeader, BackButton, InputTextLabel} from '../../components';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
-import {CustomTheme} from '../../theme';
-import {useTheme} from '@react-navigation/native';
-import createStyles from './style';
+
 import {useSelectedLanguage} from '../../i18n/utils';
+import styles from './style';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -23,8 +22,6 @@ export default function LoginScreen(): JSX.Element {
    */
 
   const navigation = useAppNavigation();
-  const {colors} = useTheme() as CustomTheme;
-  const styles = createStyles(colors);
   /*
    * Functions
    */
@@ -51,21 +48,14 @@ export default function LoginScreen(): JSX.Element {
     }
   };
   return (
-    <View style={styles.mainContainer}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
-
-      {/* Main Body */}
+    <AppScreen>
       <BackButton />
 
-      {/* Header */}
       <AuthHeader text1={'welcomeBack'} text2={'signInLabel'} />
 
-      {/* Input fields */}
       <InputTextLabel textLable={'email'} onChangeText={setEmailAddress} value={emailAddress} />
       <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
-      {/* Button */}
       <AppButton title={'login'} onPress={appBtnPress} loading={loading} />
       <TouchableOpacity
         style={styles.buttonStyle}
@@ -76,12 +66,12 @@ export default function LoginScreen(): JSX.Element {
             setLanguage('en');
           }
         }}>
-        <Text style={styles.forgotPassStyle}>{'change language'}</Text>
+        <Text>{'change language'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
         <AppText transText={'forgotPasswordsmall'} presetStyle={'default'} />
       </TouchableOpacity>
-    </View>
+    </AppScreen>
   );
 }

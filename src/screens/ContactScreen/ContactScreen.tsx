@@ -1,4 +1,3 @@
-import {View, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
 import {
   AppButton,
@@ -7,7 +6,7 @@ import {
   InputLablePhoneNumber,
   InputTextLabelDropDown,
   InputTextLableCountry,
-  FocusAwareStatusBar,
+  AppScreen,
 } from '../../components';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import styles from './style';
@@ -68,14 +67,9 @@ export default function ContactScreen() {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
-      {/* Main Body */}
+    <AppScreen>
       <BackButton />
-      {/* Header */}
       <AuthHeader text1={'contact'} text2={'contactLable'} />
-      {/* Input fields */}
       <InputLablePhoneNumber
         textLable={'phoneNumber'}
         viewStyle={styles.InputViewStyle}
@@ -100,6 +94,6 @@ export default function ContactScreen() {
 
       {/* Main button */}
       <AppButton loading={loading} title={'signUp'} onPress={SignUpPressed} />
-    </View>
+    </AppScreen>
   );
 }

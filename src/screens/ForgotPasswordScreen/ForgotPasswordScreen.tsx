@@ -1,11 +1,9 @@
-import {View, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
-import {AppButton, AuthHeader, BackButton, FocusAwareStatusBar, InputTextLabel} from '../../components';
+import {AppButton, AppScreen, AuthHeader, BackButton, InputTextLabel} from '../../components';
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {emailSchema} from '../../utils/SchemaValidation';
-import styles from './style';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   /*
@@ -45,19 +43,14 @@ export default function ForgotPasswordScreen(): JSX.Element {
 
   // Rendering
   return (
-    <View style={styles.main}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
-      {/* Main Body */}
+    <AppScreen>
       <BackButton />
 
-      {/* Header */}
       <AuthHeader text1={'forgotPasswordBold'} text2={'forgotPasswordLable'} />
 
-      {/* Input field */}
       <InputTextLabel textLable={'emailAddress'} onChangeText={setEmailAddres} value={emailAddress} />
-      {/* Main button */}
+
       <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
-    </View>
+    </AppScreen>
   );
 }

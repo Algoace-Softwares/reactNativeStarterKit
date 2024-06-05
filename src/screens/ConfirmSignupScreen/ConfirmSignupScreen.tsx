@@ -1,6 +1,6 @@
-import {View, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {AppButton, AppText, AuthHeader, BackButton, FocusAwareStatusBar, OTPFieldInput} from '../../components';
+import {AppButton, AppScreen, AppText, AuthHeader, BackButton, OTPFieldInput} from '../../components';
 import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import {AuthStackParamList} from '../../routes/types.navigation';
@@ -86,16 +86,10 @@ export default function ConfirmSignupScreen(): JSX.Element {
   }, [resendCode, countDown]);
 
   return (
-    <View style={styles.mainContainer}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
-      {/* Main Body */}
+    <AppScreen>
       <BackButton />
-      {/* Header */}
       <AuthHeader text1={'confirmSignUp'} text2={'verificationSentCode'} />
-      {/* OTP Input field */}
       <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
-      {/* Main button */}
       <AppButton title={'submit'} onPress={submitCodePressed} loading={loading} />
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
@@ -107,6 +101,6 @@ export default function ConfirmSignupScreen(): JSX.Element {
             textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
         )}
       </View>
-    </View>
+    </AppScreen>
   );
 }

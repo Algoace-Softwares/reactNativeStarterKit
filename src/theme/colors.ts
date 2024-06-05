@@ -208,7 +208,7 @@ export const DARK_COLORS = {
   /**
    * The default text color in many components.
    */
-  text: darkPalette.secondary500,
+  text: darkPalette.secondary200,
   /**
    * Secondary text information.
    */
@@ -240,7 +240,7 @@ export const DARK_COLORS = {
   /**
    * The default color of the button light
    */
-  buttonTextPrimary: defaultPalette.white,
+  buttonTextPrimary: defaultPalette.secondary200,
   /**
    * The default color of the button light
    */
@@ -293,6 +293,9 @@ function getTheme() {
 export const COLORS = getTheme();
 
 export type Colors = typeof COLORS;
+/*
+ ** Custome theme for adding new colors into it
+ */
 export type CustomTheme = Theme & {
   colors: Colors;
 };

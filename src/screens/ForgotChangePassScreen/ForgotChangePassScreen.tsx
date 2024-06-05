@@ -1,14 +1,6 @@
-import {View, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {
-  AppButton,
-  AppText,
-  AuthHeader,
-  BackButton,
-  FocusAwareStatusBar,
-  InputTextLabel,
-  OTPFieldInput,
-} from '../../components';
+import {AppButton, AppScreen, AppText, AuthHeader, BackButton, InputTextLabel, OTPFieldInput} from '../../components';
 import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
@@ -97,16 +89,11 @@ export default function ForgotChangePassScreen(): JSX.Element {
 
   // Rendering
   return (
-    <View style={styles.main}>
-      <SafeAreaView />
-      <FocusAwareStatusBar barStyle={'dark-content'} />
-      {/* Main Content */}
+    <AppScreen>
       <BackButton />
 
-      {/* Headers */}
       <AuthHeader text1={'forgotPasswordBold'} text2={'forgotChangePasswordLable'} viewStyle={styles.mainView} />
 
-      {/* Inputs fields */}
       <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
       <InputTextLabel
@@ -118,7 +105,6 @@ export default function ForgotChangePassScreen(): JSX.Element {
 
       <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
 
-      {/* Main button */}
       <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
 
       <View style={styles.resendCodeViewstyle}>
@@ -131,6 +117,6 @@ export default function ForgotChangePassScreen(): JSX.Element {
             textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
         )}
       </View>
-    </View>
+    </AppScreen>
   );
 }

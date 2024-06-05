@@ -107,12 +107,16 @@ const RootNavigator = (): JSX.Element => {
 export default function AppNavigator(): JSX.Element {
   console.log('DarkTheme', DarkTheme);
   console.log('DefaultTheme', DefaultTheme);
+  /*
+   **  Hooks
+   */
   const theme = useColorScheme();
   const MyTheme = {
     dark: theme === 'dark' && true,
     colors: theme === 'dark' ? {...DARK_COLORS} : {...DEFAULT_COLORS},
   };
   console.log('🚀 ~ AppNavigator ~ MyTheme:', MyTheme);
+
   return (
     <NavigationContainer theme={MyTheme}>
       <RootNavigator />

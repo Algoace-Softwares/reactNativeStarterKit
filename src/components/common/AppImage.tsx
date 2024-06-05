@@ -28,6 +28,7 @@ export function useAutoImage(
   remoteUri: string,
   dimensions?: [maxWidth?: number, maxHeight?: number],
 ): [width: number, height: number] {
+  console.log('🚀 ~ remoteUri useAutoImage:', remoteUri);
   const [[remoteWidth, remoteHeight], setRemoteImageDimensions] = useState([0, 0]);
   const remoteAspectRatio = remoteWidth / remoteHeight;
   const [maxWidth, maxHeight] = dimensions ?? [];
@@ -64,10 +65,13 @@ export default function AppImage(props: AppImageType) {
   const {maxWidth, maxHeight, ...ImageProps} = props;
 
   const source = props.source as ImageURISource;
+  console.log('🚀 ~ AppImage ~ source:', source);
   /*
    ** Calcaulating image width and height
    */
-  const [width, height] = useAutoImage(source?.uri as string, [maxWidth, maxHeight]);
+  const [width, height] = useAutoImage((source?.uri as string) ?? (source as string), [maxWidth, maxHeight]);
+  console.log('🚀 ~ AppImage ~ height:', height);
+  console.log('🚀 ~ AppImage ~ width:', width);
 
   return <Image {...ImageProps} style={[{width, height}, props.style]} />;
 }
