@@ -24,6 +24,7 @@ export {default as AppText} from './common/AppText';
 export {default as AppIcon} from './common/AppIcon';
 export {default as AppScreen} from './common/AppScreen';
 export {default as AppImage} from './common/AppImage';
+export {default as AppHeader} from './common/AppHeader';
 /*
  ** Modals componenets
  */

@@ -1,9 +1,11 @@
 import React, {ReactElement} from 'react';
-import {StyleProp, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, TextStyle, TouchableOpacityProps, View, ViewStyle} from 'react-native';
 import {TxKeyPath} from '../../i18n/types';
 import {IconTypes} from '../../assets/icons';
-import {Colors, CustomTheme, HEIGHT} from '../../theme';
+import {Colors, CustomTheme, HEIGHT, SPACING} from '../../theme';
 import {useTheme} from '@react-navigation/native';
+import AppText from './AppText';
+import AppIcon from './AppIcon';
 
 export interface HeaderProps {
   /**
@@ -83,18 +85,41 @@ interface HeaderActionProps {
   backgroundColor?: string;
   icon?: IconTypes;
   iconColor?: string;
-  text?: string;
-  tx?: TxKeyPath;
   onPress?: TouchableOpacityProps['onPress'];
   ActionComponent?: ReactElement;
 }
 
 /**
+ * Header action componenent
+ */
+function HeaderAction(props: HeaderActionProps) {
+  /*
+   ** Destruturing props
+   */
+  const {backgroundColor, icon, onPress, ActionComponent, iconColor} = props;
+  /*
+   ** If we getting custome header action them we would return that componenet only
+   */
+  if (ActionComponent) return ActionComponent;
+
+  if (icon) {
+    return (
+      <AppIcon
+        width={24}
+        height={24}
+        icon={icon}
+        color={iconColor}
+        onPress={onPress}
+        containerStyle={[styles.actionIconContainer, {backgroundColor}]}
+      />
+    );
+  }
+
+  return <View style={[styles.actionFillerConatiner, {backgroundColor}]} />;
+}
+/**
  * Header that appears on many screens. Will hold navigation buttons and screen title.
  * The Header is meant to be used with the `screenOptions.header` option on navigators, routes, or screen components via `navigation.setOptions({ header })`.
- * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/components/Header/}
- * @param {HeaderProps} props - The props for the `Header` component.
- * @returns {JSX.Element} The rendered `Header` component.
  */
 export default function AppHeader(props: HeaderProps) {
   /*
@@ -112,9 +137,9 @@ export default function AppHeader(props: HeaderProps) {
     rightIconColor,
     title,
     titleMode = 'center',
-    titleContainerStyle: $titleContainerStyleOverride,
+    titleContainerStyle,
     style,
-    titleStyle: $titleStyleOverride,
+    titleStyle,
     containerStyle,
     transTitle,
   } = props;
@@ -122,41 +147,40 @@ export default function AppHeader(props: HeaderProps) {
    ** Hooks
    */
   const {colors} = useTheme() as CustomTheme;
+  /*
+   ** Checking if we get title as prop
+   */
   const titleContent = title || transTitle;
 
   return (
     <View style={[$container(colors), {backgroundColor}, containerStyle]}>
       <View style={[styles.contentContainerStyle, style]}>
         <HeaderAction
-          tx={leftTx}
-          text={leftText}
           icon={leftIcon}
           iconColor={leftIconColor}
           onPress={onLeftPress}
-          txOptions={leftTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={LeftActionComponent}
         />
 
-        {!!titleContent && (
+        {titleContent && (
           <View
             style={[
-              titleMode === 'center' && $titleWrapperCenter,
-              titleMode === 'flex' && $titleWrapperFlex,
-              $titleContainerStyleOverride,
+              titleMode === 'center' && styles.titleCenter,
+              titleMode === 'flex' && styles.titleFlex,
+              titleContainerStyle,
             ]}
             pointerEvents='none'>
-            <Text weight='medium' size='md' text={titleContent} style={[$title, $titleStyleOverride]} />
+            <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
+              {title}
+            </AppText>
           </View>
         )}
 
         <HeaderAction
-          tx={rightTx}
-          text={rightText}
           icon={rightIcon}
           iconColor={rightIconColor}
           onPress={onRightPress}
-          txOptions={rightTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={RightActionComponent}
         />
@@ -164,53 +188,9 @@ export default function AppHeader(props: HeaderProps) {
     </View>
   );
 }
-
-/**
- * @param {HeaderActionProps} props - The props for the `HeaderAction` component.
- * @returns {JSX.Element} The rendered `HeaderAction` component.
+/*
+ ** This style approach is used for synamic styles
  */
-function HeaderAction(props: HeaderActionProps) {
-  const {backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor} = props;
-
-  const content = tx ? translate(tx, txOptions) : text;
-
-  if (ActionComponent) return ActionComponent;
-
-  if (content) {
-    return (
-      <TouchableOpacity
-        style={[$actionTextContainer, {backgroundColor}]}
-        onPress={onPress}
-        disabled={!onPress}
-        activeOpacity={0.8}>
-        <Text weight='medium' size='md' text={content} style={$actionText} />
-      </TouchableOpacity>
-    );
-  }
-
-  if (icon) {
-    return (
-      <Icon
-        size={24}
-        icon={icon}
-        color={iconColor}
-        onPress={onPress}
-        containerStyle={[$actionIconContainer, {backgroundColor}]}
-        style={isRTL ? {transform: [{rotate: '180deg'}]} : {}}
-      />
-    );
-  }
-
-  return <View style={[$actionFillerContainer, {backgroundColor}]} />;
-}
-
-const $wrapper: ViewStyle = {
-  height: 56,
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-};
-
 const $container = (colors: Colors): ViewStyle => {
   return {
     width: '100%',
@@ -218,56 +198,39 @@ const $container = (colors: Colors): ViewStyle => {
   };
 };
 
-const $title: TextStyle = {
-  textAlign: 'center',
-};
-
-const $actionTextContainer: ViewStyle = {
-  flexGrow: 0,
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  paddingHorizontal: spacing.md,
-  zIndex: 2,
-};
-
-const $actionText: TextStyle = {
-  color: colors.tint,
-};
-
-const $actionIconContainer: ViewStyle = {
-  flexGrow: 0,
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  paddingHorizontal: spacing.md,
-  zIndex: 2,
-};
-
-const $actionFillerContainer: ViewStyle = {
-  width: 16,
-};
-
-const $titleWrapperCenter: ViewStyle = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  width: '100%',
-  position: 'absolute',
-  paddingHorizontal: spacing.xxl,
-  zIndex: 1,
-};
-
-const $titleWrapperFlex: ViewStyle = {
-  justifyContent: 'center',
-  flexGrow: 1,
-};
-
 const styles = StyleSheet.create({
+  actionFillerConatiner: {
+    width: 16,
+  },
+  actionIconContainer: {
+    alignItems: 'center',
+    flexGrow: 0,
+    height: '100%',
+    justifyContent: 'center',
+    paddingHorizontal: SPACING.md,
+    zIndex: 2,
+  },
+
   contentContainerStyle: {
     alignItems: 'center',
     flexDirection: 'row',
     height: HEIGHT * 0.1,
     justifyContent: 'space-between',
+  },
+  titleCenter: {
+    alignItems: 'center',
+    height: '100%',
+    justifyContent: 'center',
+    paddingHorizontal: SPACING.xxl,
+    position: 'absolute',
+    width: '100%',
+    zIndex: 1,
+  },
+  titleFlex: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  titleStyle: {
+    textAlign: 'center',
   },
 });
