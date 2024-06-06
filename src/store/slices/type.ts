@@ -12,9 +12,18 @@ export interface UsersState {
   tokens: tokenType | undefined;
 }
 
+export interface appStateType {
+  theme: string;
+  language: string;
+}
+
 export interface BearSlice {
   bears: number;
   addBear: () => void;
+}
+export interface appSlice extends appStateType {
+  setTheme: () => void;
+  setLanguage: () => void;
 }
 
 export interface FishSlice extends UsersState {
