@@ -69,5 +69,4 @@ export default App;
 // react query
 // react native testing
 // ignite navigation setup
-// ignite header setup
 // env setup

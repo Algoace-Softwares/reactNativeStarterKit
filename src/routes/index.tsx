@@ -8,6 +8,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 
+/**
+ * This is a list of all the route names that will exit the app if the back button
+ * is pressed while in that screen. Only affects Android.
+ */
 const exitRoutes = BaseConfig.exitRoutes;
 
 /*
@@ -60,8 +64,7 @@ const RootNavigator = (): JSX.Element => {
    **  Hooks
    */
   const [userData] = useState(null);
-  // back handler for android
-  useBackButtonHandler(routeName => exitRoutes.includes(routeName));
+
   // const {userData} = useAppSelector(state => state.auth);
   // const dispatch = useAppDispatch();
   /*
@@ -109,6 +112,8 @@ export default function AppNavigator(): JSX.Element {
    **  Hooks
    */
   const theme = useColorScheme();
+  // back handler for android
+  useBackButtonHandler(routeName => exitRoutes.includes(routeName));
 
   const MyTheme = {
     dark: theme === 'dark' && true,

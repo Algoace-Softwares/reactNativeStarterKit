@@ -70,7 +70,7 @@ This is simple and easy to use starter kit following are the feature used in thi
 - Zod schema validation
 - Custom eslint setup
 - Predefine Modals
-- Error Boundary
+- Custom Error Boundary
 - internationlaization i18n
 - system theme managment
 - dynamic header handling
