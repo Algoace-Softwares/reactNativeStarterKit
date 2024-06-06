@@ -68,4 +68,3 @@ export default App;
 // zustandZW
 // react query
 // react native testing
-// env setup

@@ -80,3 +80,13 @@ export function resetRoot(state: Parameters<typeof navigationRef.resetRoot>[0] =
     navigationRef.resetRoot(state);
   }
 }
+/**
+ * use this to navigate without the navigation
+ * prop. If you have access to the navigation prop, do not use this.
+ */
+export function navigate(name: unknown, params?: unknown) {
+  if (navigationRef.isReady()) {
+    // @ts-expect-error
+    navigationRef.navigate(name as never, params as never);
+  }
+}

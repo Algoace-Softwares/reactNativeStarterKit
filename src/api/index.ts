@@ -4,12 +4,13 @@ import Toast from 'react-native-simple-toast';
 import {appUtils} from '../utils';
 import {saveString} from '../utils/storage/storage';
 import {jwtDecode} from 'jwt-decode';
+import {useAppStore} from '../store';
 
 // local storage
 
 // seTting up base url
 export const API = axios.create({
-  baseURL: '',
+  baseURL: API_KEY,
 });
 /*
  ** Before every api request following be taken
@@ -25,7 +26,9 @@ export const API = axios.create({
 API.interceptors.request.use(
   async function (config) {
     // getting access token
-    const {tokens} = store.getState().auth;
+    // const {tokens} = useStore.getState().auth;
+    const {tokens} = useAppStore.getState();
+
     let {accessToken} = tokens;
 
     // decoded token data

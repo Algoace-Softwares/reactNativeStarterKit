@@ -110,13 +110,13 @@ export default function AppNavigator(): JSX.Element {
    **  Hooks
    */
   const theme = useColorScheme();
-  console.log('env:', process);
-  console.log('env_bac url:', process.env.BASE_URL);
   /*
    ** Back handler for android
    */
   useBackButtonHandler(routeName => exitRoutes.includes(routeName));
-
+  /*
+   ** Constucting theme according to deafult mobile theme
+   */
   const MyTheme = {
     dark: theme === 'dark' && true,
     colors: theme === 'dark' ? {...DARK_COLORS} : {...DEFAULT_COLORS},

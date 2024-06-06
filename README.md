@@ -78,6 +78,7 @@ This is simple and easy to use starter kit following are the feature used in thi
 - predefined industry standard folder and project structure
 - svg metro bundler handling
 - dynamic aspect ratio for image
+- env setup
 
 ## Things remaining
 

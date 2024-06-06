@@ -1,7 +1,7 @@
 import {StateCreator} from 'zustand';
-import {BearSlice} from './type';
+import {userSlice} from './type';
 
-export const createBearSlice: StateCreator<BearSlice> = set => ({
+export const createUserSlice: StateCreator<userSlice> = set => ({
   bears: 0,
   addBear: () => set(state => ({bears: state.bears + 1})),
 });

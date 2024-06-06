@@ -1,6 +1,6 @@
 export interface crashLogType {
-  filename: string;
-  functionName: string;
+  filename?: string;
+  functionName?: string;
   error: unknown;
   errorType?: ErrorType;
 }

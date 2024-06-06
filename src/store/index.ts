@@ -1,11 +1,13 @@
 import {create} from 'zustand';
-import {createBearSlice} from './slices/userSlice';
-import {createFishSlice} from './slices/authSlice';
-import {appSlice, BearSlice, FishSlice} from './slices/type';
-import {createAppSlice} from './slices/appSlice';
+import {createAuthSlice} from './slices/authSlice/authSlice';
+import {createAppSlice} from './slices/appSlice/appSlice';
+import {createUserSlice} from './slices/userSlice/userSlice';
+import {authSlice} from './slices/authSlice/type';
+import {appSlice} from './slices/appSlice/type';
+import {userSlice} from './slices/userSlice/type';
 
-export const useBoundStore = create<BearSlice & FishSlice & appSlice>()((...a) => ({
-  ...createBearSlice(...a),
-  ...createFishSlice(...a),
+export const useAppStore = create<authSlice & appSlice & userSlice>()((...a) => ({
+  ...createUserSlice(...a),
+  ...createAuthSlice(...a),
   ...createAppSlice(...a),
 }));
