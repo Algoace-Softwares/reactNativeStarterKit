@@ -68,5 +68,4 @@ export default App;
 // zustandZW
 // react query
 // react native testing
-// ignite navigation setup
 // env setup

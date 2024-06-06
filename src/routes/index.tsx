@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {authScreens, homeScreen} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
-import {useBackButtonHandler} from './navigationUtilities';
+import {useBackButtonHandler, navigationRef} from './navigationUtilities';
 import BaseConfig from '../config';
 import {NavigationContainer} from '@react-navigation/native';
 import {useColorScheme} from 'react-native';
@@ -13,7 +13,6 @@ import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
  * is pressed while in that screen. Only affects Android.
  */
 const exitRoutes = BaseConfig.exitRoutes;
-
 /*
  ** Auth stack and navigator for rest of the screen
  */
@@ -34,7 +33,6 @@ const AuthStackScreens = (): JSX.Element => {
     </AuthStack.Navigator>
   );
 };
-
 /*
  ** Home stack and navigator for rest of the screen
  */
@@ -112,7 +110,11 @@ export default function AppNavigator(): JSX.Element {
    **  Hooks
    */
   const theme = useColorScheme();
-  // back handler for android
+  console.log('env:', process);
+  console.log('env_bac url:', process.env.BASE_URL);
+  /*
+   ** Back handler for android
+   */
   useBackButtonHandler(routeName => exitRoutes.includes(routeName));
 
   const MyTheme = {
@@ -121,7 +123,7 @@ export default function AppNavigator(): JSX.Element {
   };
 
   return (
-    <NavigationContainer theme={MyTheme}>
+    <NavigationContainer theme={MyTheme} ref={navigationRef}>
       <RootNavigator />
     </NavigationContainer>
   );
