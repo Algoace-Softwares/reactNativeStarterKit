@@ -8,7 +8,7 @@ import {translate} from '../i18n/utils';
 export const emailSchema = z.object({
   email: z
     .string()
-    .min(1, {message: translate('MESSAGES.emailInvalid')})
+    .min(1, {message: translate('MESSAGES.emailRequired')})
     .email({message: translate('MESSAGES.emailInvalid')})
     .toLowerCase(),
 });

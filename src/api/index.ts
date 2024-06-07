@@ -12,6 +12,7 @@ import {useAppStore} from '../store';
 export const API = axios.create({
   baseURL: API_KEY,
 });
+console.log('🚀 ~ API:', API);
 /*
  ** Before every api request following be taken
  1 - we are getting accessToken as well as refresh token from the api
@@ -25,6 +26,7 @@ export const API = axios.create({
  */
 API.interceptors.request.use(
   async function (config) {
+    console.log('🚀 ~ config:', config);
     // getting access token
     // const {tokens} = useStore.getState().auth;
     const {tokens} = useAppStore.getState();
@@ -74,10 +76,10 @@ API.interceptors.request.use(
 /*
  ** When axios return something
  */
-API.interceptors.response.use(
-  request => request,
-  error => {
-    appUtils.crashLogs(error);
-    return Promise.reject(error);
-  },
-);
+// API.interceptors.response.use(
+//   request => request,
+//   error => {
+//     appUtils.crashLogs(error);
+//     return Promise.reject(error);
+//   },
+// );

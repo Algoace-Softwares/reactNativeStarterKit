@@ -1,10 +1,8 @@
 import {create} from 'zustand';
-import {createAuthSlice} from './slices/authSlice/authSlice';
-import {createAppSlice} from './slices/appSlice/appSlice';
-import {createUserSlice} from './slices/userSlice/userSlice';
-import {authSlice} from './slices/authSlice/type';
-import {appSlice} from './slices/appSlice/type';
-import {userSlice} from './slices/userSlice/type';
+import {createAuthSlice} from './slices/authSlice';
+import {createUserSlice} from './slices/userSlice';
+import {appSlice, authSlice, userSlice} from './slices/type';
+import {createAppSlice} from './slices/appSlice';
 
 export const useAppStore = create<authSlice & appSlice & userSlice>()((...a) => ({
   ...createUserSlice(...a),

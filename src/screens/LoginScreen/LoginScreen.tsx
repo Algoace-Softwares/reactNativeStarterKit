@@ -6,18 +6,19 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
 import styles from './style';
+import {useAppStore} from '../../store';
 
 export default function LoginScreen(): JSX.Element {
   /*
    ** States
    */
-  const [emailAddress, setEmailAddress] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading] = useState<boolean>(false);
+  const [emailAddress, setEmailAddress] = useState<string>('shaheer.ahmed@algoace.com');
+  const [password, setPassword] = useState<string>('Admin1234');
+  const {signIn: signInUser, isLoading} = useAppStore(state => state);
+  console.log('🚀 ~ LoginScreen ~ isLoading:', isLoading);
   /*
    * Hooks
    */
-
   const navigation = useAppNavigation();
   /*
    * Functions
@@ -35,7 +36,8 @@ export default function LoginScreen(): JSX.Element {
 
       const data = loginSchema.parse(params);
       console.log('🚀 ~ appBtnPress ~ data:', data);
-
+      // singing user in app
+      signInUser(params);
       console.log('params:', params);
     } catch (error: unknown | ZodError) {
       if (error instanceof ZodError) {
@@ -53,7 +55,7 @@ export default function LoginScreen(): JSX.Element {
       <InputTextLabel textLable={'email'} onChangeText={setEmailAddress} value={emailAddress} />
       <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
-      <AppButton title={'login'} onPress={appBtnPress} loading={loading} />
+      <AppButton title={'login'} onPress={appBtnPress} loading={isLoading} />
 
       <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
         <AppText transText={'forgotPasswordsmall'} presetStyle={'default'} />

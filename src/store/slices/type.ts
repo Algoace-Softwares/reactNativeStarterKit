@@ -1,3 +1,16 @@
+/*
+ ** AppSlicesTypes
+ */
+export interface appStateType {
+  theme: string;
+  language: string;
+}
+
+export interface appSlice extends appStateType {
+  setTheme: (newTheme: string) => void;
+  setLanguage: (language: string) => void;
+}
+
 export interface tokenType {
   accessToken: string;
   refreshToken: string;
@@ -11,7 +24,9 @@ export interface authState {
   fishes: number;
   tokens: tokenType;
 }
-
+/*
+ ** Auth slice type
+ */
 export interface authSlice extends authState {
   signIn: (p: emailPassType) => void;
 
@@ -47,4 +62,12 @@ export interface SignUpParams {
   phoneNumber?: string;
   state?: string;
   city?: string;
+}
+/*
+ ** User slice type
+ */
+
+export interface userSlice {
+  bears: number;
+  addBear: () => void;
 }

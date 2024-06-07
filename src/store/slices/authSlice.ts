@@ -1,9 +1,9 @@
 import {StateCreator} from 'zustand';
-import {authSlice, authState, emailPassType, SignUpParams} from './type';
 import Toast from 'react-native-simple-toast';
-import {API} from '../../../api';
-import {appUtils} from '../../../utils';
-import {navigate} from '../../../routes/navigationUtilities';
+import {API} from '../../api';
+import {appUtils} from '../../utils';
+import {navigate} from '../../routes/navigationUtilities';
+import {authSlice, authState, emailPassType, SignUpParams} from './type';
 /*
  ** Initial states
  */
@@ -29,9 +29,11 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** Login functions
    */
   signIn: async (params: emailPassType) => {
+    console.log('🚀 ~ signIn: ~ params:', params);
     set({isLoading: true, isError: false, message: ''});
     try {
       const response = await API.post('/auth/signin', params);
+      console.log('🚀 ~ signIn: ~ response:', response);
       const userData = response.data;
       set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
     } catch (error: any) {
