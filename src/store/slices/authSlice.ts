@@ -1,9 +1,11 @@
 import {StateCreator} from 'zustand';
 import Toast from 'react-native-simple-toast';
-import {API} from '../../api';
+import {AUTH_API} from '../../api';
 import {appUtils} from '../../utils';
 import {navigate} from '../../routes/navigationUtilities';
 import {authSlice, authState, emailPassType, SignUpParams} from './type';
+import {save} from '../../utils/storage/storage';
+import {ASYNC_TOKEN_KEY} from '../../constants';
 /*
  ** Initial states
  */
@@ -32,7 +34,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     console.log('🚀 ~ signIn: ~ params:', params);
     set({isLoading: true, isError: false, message: ''});
     try {
-      const response = await API.post('/auth/signin', params);
+      const response = await AUTH_API.post('/auth/signin', params);
       console.log('🚀 ~ signIn: ~ response:', response);
       const userData = response.data;
       set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
@@ -48,7 +50,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
   signUp: async (params: SignUpParams) => {
     set({isLoading: true, isError: false, message: ''});
     try {
-      const response = await API.post('/auth/signup', params);
+      const response = await AUTH_API.post('/auth/signup', params);
       const userData = response.data;
       set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
     } catch (error: any) {
@@ -65,7 +67,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for forgotPassword logic
       // Example:
-      const response = await API.post('/auth/forgot/password', {email});
+      const response = await AUTH_API.post('/auth/forgot/password', {email});
       console.log('🚀 ~ forgotPassword: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Password reset email sent successfully'});
@@ -83,7 +85,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for forgotChangePassword logic
       // Example:
-      const response = await API.post('/auth/forgot/change/password', {email, password, code});
+      const response = await AUTH_API.post('/auth/forgot/change/password', {email, password, code});
       console.log('🚀 ~ forgotChangePassword: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Password changed successfully'});
@@ -101,7 +103,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for confirmSignup logic
       // Example:
-      const response = await API.post('/auth/confirm', {email, code});
+      const response = await AUTH_API.post('/auth/confirm', {email, code});
       console.log('🚀 ~ confirmSignup: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Account confirmed successfully'});
@@ -119,7 +121,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for changePassword logic
       // Example:
-      const response = await API.post('/auth/password', {userId, oldPassword, newPassword, accessToken});
+      const response = await AUTH_API.post('/auth/password', {userId, oldPassword, newPassword, accessToken});
       console.log('🚀 ~ changePassword: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Password changed successfully'});
@@ -141,7 +143,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for resendCode logic
       // Example:
-      const response = await API.post('/auth/code', {email});
+      const response = await AUTH_API.post('/auth/code', {email});
       console.log('🚀 ~ resendCode: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Code resent successfully'});
@@ -159,7 +161,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     try {
       // Call API for signOut logic
       // Example:
-      const response = await API.post('/auth/logout', {userId, accessToken});
+      const response = await AUTH_API.post('/auth/logout', {userId, accessToken});
       console.log('🚀 ~ signOut: ~ response:', response);
       // Handle success
       set({isLoading: false, isSuccess: true, message: 'Signed out successfully'});
@@ -175,9 +177,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
   deleteUser: async (userId: string) => {
     set({isLoading: true, isError: false, message: ''});
     try {
-      // Call API for signOut logic
-      // Example:
-      const response = await API.delete(`/user/${userId}`);
+      const response = await AUTH_API.delete(`/user/${userId}`);
       // Handle success
       console.log('🚀 ~ deleteUser: ~ response:', response);
       set({isLoading: false, isSuccess: true, message: 'delete User successfully'});

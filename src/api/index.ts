@@ -3,13 +3,15 @@ import {API_KEY, ASYNC_TOKEN_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
 import {appUtils} from '../utils';
 import {saveString} from '../utils/storage/storage';
-import {jwtDecode} from 'jwt-decode';
 import {useAppStore} from '../store';
 
 // local storage
 
 // seTting up base url
 export const API = axios.create({
+  baseURL: API_KEY,
+});
+export const AUTH_API = axios.create({
   baseURL: API_KEY,
 });
 console.log('🚀 ~ API:', API);
@@ -29,43 +31,10 @@ API.interceptors.request.use(
     console.log('🚀 ~ config:', config);
     // getting access token
     // const {tokens} = useStore.getState().auth;
-    const {tokens} = useAppStore.getState();
-
-    let {accessToken} = tokens;
-
-    // decoded token data
-    const decodedToken = jwtDecode(accessToken) as unknown as {exp: number};
-
-    // extraction timme stamp
-    const expiryTimestamp = new Date(decodedToken.exp * 1000);
-
-    // chgecking if token expire
-    if (expiryTimestamp < new Date()) {
-      console.log('token expire');
-      try {
-        // if token expire get new token
-        const response = await axios.post(`${API_KEY}/user/token`, {
-          refreshToken: tokens.refreshToken,
-        });
-        console.log('RESPONSE[GET_NEW_TOKEN]', response);
-
-        if (response?.status === 200) {
-          // getting token from server data
-          const newToken = response?.data?.tokens;
-          // saving new tokens locally
-          saveString(ASYNC_TOKEN_KEY, JSON.stringify(newToken));
-
-          accessToken = newToken?.accessToken;
-        }
-
-        // console.debug('Data returned', data);
-      } catch (error) {
-        Toast.show('Token expire unable to get new Token try again later', Toast.LONG);
-        console.log('ERROR[UNABLE_TO_GET_TOKEN]', error);
-      }
-      // injecting our token into header
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
+    const {accessToken} = useAppStore.getState().tokens;
+    // injecting our token into header
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    // }
 
     return config;
   },
@@ -74,12 +43,59 @@ API.interceptors.request.use(
   },
 );
 /*
+ ** When axios returns something
+ */
+API.interceptors.response.use(
+  response => response.data,
+  async error => {
+    /*
+     ** Original api that gets failed
+     */
+    const originalRequest = error.config;
+    /*
+     ** Checking if token gets expire
+     */
+    if (error.response && error.response.status === 401) {
+      // Access token has expired, attempt to refresh
+      const {refreshToken} = useAppStore.getState().tokens;
+
+      try {
+        const response = await AUTH_API.post('/refresh-token', {token: refreshToken});
+        const {newAccessToken, newRefreshToken} = response.data;
+
+        // Save new tokens
+        useAppStore.setState({
+          tokens: {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          },
+        });
+
+        // Save tokens to local storage
+        saveString(ASYNC_TOKEN_KEY, JSON.stringify({accessToken: newAccessToken, refreshToken: newRefreshToken}));
+
+        // Update the original request with the new token
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        // Retry the original request with the new token
+        return API(originalRequest);
+      } catch (refreshError: unknown | any) {
+        appUtils.crashLogs(refreshError);
+        Toast.show('Session expired. Please log in again.', Toast.LONG);
+        return Promise.reject(refreshError);
+      }
+    }
+    appUtils.crashLogs(error);
+    return Promise.reject(error);
+  },
+);
+/*
  ** When axios return something
  */
-// API.interceptors.response.use(
-//   request => request,
-//   error => {
-//     appUtils.crashLogs(error);
-//     return Promise.reject(error);
-//   },
-// );
+AUTH_API.interceptors.response.use(
+  request => request.data,
+  error => {
+    appUtils.crashLogs(error);
+    return Promise.reject(error);
+  },
+);
