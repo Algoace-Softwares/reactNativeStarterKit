@@ -66,8 +66,6 @@ const RootNavigator = (): JSX.Element => {
   const fetchUserData = useAppStore(state => state.fetchUserDataLocal);
   console.log('🚀 ~ RootNavigator ~ userData:', userData);
 
-  // const {userData} = useAppSelector(state => state.auth);
-  // const dispatch = useAppDispatch();
   /*
    ** check is user signed in or not
    */
