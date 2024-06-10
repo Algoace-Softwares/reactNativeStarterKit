@@ -1,6 +1,7 @@
 import {StateCreator} from 'zustand';
 import {appSlice, appStateType} from './type';
-import {sliceResetFns} from '..';
+import {sliceResetFns} from '../utils';
+
 /*
  ** Initial states
  */

@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand';
 import {userSlice, userState} from './type';
 import {API} from '../../api';
 import Toast from 'react-native-simple-toast';
-import {sliceResetFns} from '..';
+import {sliceResetFns} from '../utils';
 
 /*
  ** Initial states

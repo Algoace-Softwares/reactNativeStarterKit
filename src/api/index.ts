@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {API_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
-import {appUtils} from '../utils';
 import {useAppStore} from '../store';
 import {tokenType} from '../store/slices/type';
 
@@ -77,12 +76,11 @@ API.interceptors.response.use(
           return API(originalRequest);
         }
       } catch (refreshError: unknown | any) {
-        appUtils.crashLogs(refreshError);
+        console.log('🚀 ~ refreshError:', refreshError);
         Toast.show('Session expired. Please log in again.', Toast.LONG);
         return Promise.reject(refreshError);
       }
     }
-    appUtils.crashLogs({error});
     return Promise.reject(error);
   },
 );
@@ -93,8 +91,6 @@ API.interceptors.response.use(
 AUTH_API.interceptors.response.use(
   request => request,
   error => {
-    appUtils.crashLogs({error});
-
     return Promise.reject(error);
   },
 );

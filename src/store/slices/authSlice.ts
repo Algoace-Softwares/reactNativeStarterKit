@@ -7,7 +7,8 @@ import {authSlice, authState, emailPassType, SignUpParams, tokenType} from './ty
 import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../constants';
 import {loadStorage, saveStorage, saveStringStorage} from '../../utils/storage/storage';
 import {userDataType} from '../../@types';
-import {resetAllSlices, sliceResetFns, useAppStore} from '..';
+import {resetAllSlices, sliceResetFns} from '../utils';
+import {useAppStore} from '..';
 /*
  ** Initial states
  */
@@ -200,7 +201,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
         let user = loadStorage(ASYNC_USER_DATA_KEY) as userDataType;
         const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
 
-        if ('PK' in user && 'accessToken' in userToken) {
+        if (user && 'PK' in user && 'accessToken' in userToken) {
           console.log('user is logged in');
           set({userData: user, tokens: userToken});
           // getting latest user data amd
@@ -237,6 +238,10 @@ const handleAuthContextError = (funcName = '', error: unknown | any) => {
   if (error?.response?.data?.message === 'User is disabled.') {
     Toast.show('User is disabled kindly contact admin', Toast.LONG);
     navigate('AccountDisabledScreen');
+    return;
+  }
+  if (error?.response?.data?.message === 'Access Token has been revoked') {
+    resetAllSlices();
     return;
   }
   if (error?.response?.data?.message === 'Unable to verify user') {
