@@ -46,7 +46,6 @@ export interface authSlice extends authState {
   resetAuthSlice: () => void;
   resendCode: (email: string) => void;
   signOut: () => void;
-
   deleteUser: (userId: string) => void;
   fetchUserDataLocal: () => Promise<void>;
 }

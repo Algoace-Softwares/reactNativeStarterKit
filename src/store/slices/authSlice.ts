@@ -167,7 +167,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
 
       // Example:
       const response = await AUTH_API.post('/auth/logout', {userId: user?.PK, accessToken: tokens?.accessToken});
-
+      useAppStore.getState().resetAllSlices();
       console.log('🚀 ~ signOut: ~ response:', response);
       // Handle success
       set({authLoading: false, authSuccess: true, authMessage: 'Signed out successfully'});
