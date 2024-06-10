@@ -22,7 +22,7 @@ export function loadString(key: string): string | null {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export function saveString(key: string, value: string): boolean {
+export function saveStringStorage(key: string, value: string): boolean {
   storage.set(key, value);
   return true;
 }
@@ -32,7 +32,7 @@ export function saveString(key: string, value: string): boolean {
  *
  * @param key The key to fetch.
  */
-export async function load<T>(key: string): Promise<T | null> {
+export function loadStorage<T>(key: string): T | null {
   try {
     const value = storage.getString(key);
     if (value) {
@@ -52,7 +52,7 @@ export async function load<T>(key: string): Promise<T | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export function save(key: string, value: string | boolean) {
+export function saveStorage(key: string, value: string | boolean) {
   storage.set(key, JSON.stringify(value));
 }
 
@@ -61,13 +61,13 @@ export function save(key: string, value: string | boolean) {
  *
  * @param key The key to kill.
  */
-export function remove(key: string) {
+export function removeStorage(key: string) {
   storage.delete(key);
 }
 
 /**
  * Burn it all to the ground.
  */
-export function clear() {
+export function clearStorage() {
   storage.clearAll();
 }

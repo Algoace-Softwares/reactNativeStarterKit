@@ -3,15 +3,18 @@ import Toast from 'react-native-simple-toast';
 import {API} from '../../api';
 import {appUtils} from '../../utils';
 import {navigate} from '../../routes/navigationUtilities';
-import {authSlice, authState, emailPassType, SignUpParams} from './type';
+import {authSlice, authState, emailPassType, SignUpParams, tokenType} from './type';
+import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../constants';
+import {loadStorage, saveStorage, saveStringStorage} from '../../utils/storage/storage';
+import {userData} from '../../@types';
 /*
  ** Initial states
  */
 const initialState: authState = {
-  isError: false,
-  isLoading: false,
-  isSuccess: false,
-  message: '',
+  authError: false,
+  authLoading: false,
+  authSuccess: false,
+  authMessage: '',
   userData: undefined,
   fishes: 0,
   tokens: {
@@ -30,15 +33,21 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    */
   signIn: async (params: emailPassType) => {
     console.log('🚀 ~ signIn: ~ params:', params);
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
-      const response = await API.post('/auth/signin', params);
+      const response = await API.post('/auth/signin', {
+        emailAddress: params.email,
+        password: params.password,
+      });
+
       console.log('🚀 ~ signIn: ~ response:', response);
-      const userData = response.data;
-      set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
+      const user = response.data;
+      set({authLoading: false, authSuccess: true, userData: user, tokens: user?.tokens});
+      saveStorage(ASYNC_TOKEN_KEY, user?.tokens);
+      saveStorage(ASYNC_USER_DATA_KEY, user);
     } catch (error: any) {
       console.log('🚀 ~ signIn: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Sign-in failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Sign-in failed'});
       handleAuthContextError('signIn', error);
     }
   },
@@ -46,14 +55,14 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** signup functions
    */
   signUp: async (params: SignUpParams) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       const response = await API.post('/auth/signup', params);
-      const userData = response.data;
-      set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
+      const user = response.data;
+      set({authLoading: false, authSuccess: true, userData: user, tokens: user?.tokens});
     } catch (error: any) {
       console.log('🚀 ~ signUp: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Sign-up failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Sign-up failed'});
       handleAuthContextError('signUp', error);
     }
   },
@@ -61,17 +70,17 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** forgot password
    */
   forgotPassword: async (email: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for forgotPassword logic
       // Example:
       const response = await API.post('/auth/forgot/password', {email});
       console.log('🚀 ~ forgotPassword: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Password reset email sent successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Password reset email sent successfully'});
     } catch (error: any) {
       console.log('🚀 ~ forgotPassword: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Forgot password failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Forgot password failed'});
       handleAuthContextError('forgotPassword', error);
     }
   },
@@ -79,17 +88,17 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** forgot change password function
    */
   forgotChangePassword: async (email: string, password: string, code: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for forgotChangePassword logic
       // Example:
       const response = await API.post('/auth/forgot/change/password', {email, password, code});
       console.log('🚀 ~ forgotChangePassword: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Password changed successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Password changed successfully'});
     } catch (error: any) {
       console.log('🚀 ~ forgotChangePassword: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Change password failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Change password failed'});
       handleAuthContextError('forgotChangePassword', error);
     }
   },
@@ -97,17 +106,17 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** confirm signup functions
    */
   confirmSignup: async (email: string, code: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for confirmSignup logic
       // Example:
       const response = await API.post('/auth/confirm', {email, code});
       console.log('🚀 ~ confirmSignup: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Account confirmed successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Account confirmed successfully'});
     } catch (error: any) {
       console.log('🚀 ~ confirmSignup: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Confirm signup failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Confirm signup failed'});
       handleAuthContextError('confirmSignup', error);
     }
   },
@@ -115,39 +124,43 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** change password functions
    */
   changePassword: async (userId: string, oldPassword: string, newPassword: string, accessToken: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for changePassword logic
       // Example:
       const response = await API.post('/auth/password', {userId, oldPassword, newPassword, accessToken});
       console.log('🚀 ~ changePassword: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Password changed successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Password changed successfully'});
     } catch (error: any) {
       console.log('🚀 ~ changePassword: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Change password failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Change password failed'});
       handleAuthContextError('changePassword', error);
     }
   },
+
   /*
-   ** reset token functions
+   ** update tokening state as well as async
    */
-  resetToken: () => set(() => ({tokens: {accessToken: '', refreshToken: ''}})),
+  updateToken: tokens => {
+    set({tokens});
+    saveStringStorage(ASYNC_TOKEN_KEY, JSON.stringify(tokens));
+  },
   /*
    ** resend code functions
    */
   resendCode: async (email: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for resendCode logic
       // Example:
       const response = await API.post('/auth/code', {email});
       console.log('🚀 ~ resendCode: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Code resent successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Code resent successfully'});
     } catch (error: any) {
       console.log('🚀 ~ resendCode: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Resend code failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Resend code failed'});
       handleAuthContextError('resendCode', error);
     }
   },
@@ -155,17 +168,17 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** sign out functions
    */
   signOut: async (userId: string, accessToken: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for signOut logic
       // Example:
       const response = await API.post('/auth/logout', {userId, accessToken});
       console.log('🚀 ~ signOut: ~ response:', response);
       // Handle success
-      set({isLoading: false, isSuccess: true, message: 'Signed out successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'Signed out successfully'});
     } catch (error: any) {
       console.log('🚀 ~ signOut: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'Sign out failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'Sign out failed'});
       handleAuthContextError('signOut', error);
     }
   },
@@ -173,18 +186,42 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
    ** delete user functions
    */
   deleteUser: async (userId: string) => {
-    set({isLoading: true, isError: false, message: ''});
+    set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for signOut logic
       // Example:
       const response = await API.delete(`/user/${userId}`);
       // Handle success
       console.log('🚀 ~ deleteUser: ~ response:', response);
-      set({isLoading: false, isSuccess: true, message: 'delete User successfully'});
+      set({authLoading: false, authSuccess: true, authMessage: 'delete User successfully'});
     } catch (error: any) {
       console.log('🚀 ~ deleteUser: ~ error:', error);
-      set({isLoading: false, isError: true, message: error.message || 'delete user failed'});
+      set({authLoading: false, authError: true, authMessage: error.message || 'delete user failed'});
       handleAuthContextError('signOut', error);
+    }
+  },
+  /*
+   ** fetching user data from
+   */
+  fetchUserDataLocal: async () => {
+    set({authLoading: true, authError: false, authMessage: ''});
+    try {
+      let user = loadStorage(ASYNC_USER_DATA_KEY) as userData;
+      console.log('🚀 ~ fetchUserDataLocal: ~ user:', user);
+      const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
+      console.log('🚀 ~ fetchUserDataLocal: ~ userToken:', userToken);
+      if (user) {
+        set({authLoading: false, authSuccess: true, userData: user, tokens: userToken});
+        // getting latest user data amd
+        const response = await API.get(`/user/${user.PK}`);
+        user = response?.data;
+        console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
+        set({userData: user});
+      }
+      set({authLoading: false, authSuccess: true});
+    } catch (error: any) {
+      console.log('🚀 ~ fetchUserDataLocal: ~ error:', error);
+      set({authLoading: false, authError: true, authMessage: error.message || 'fetchUserDataLocal failed'});
     }
   },
 });

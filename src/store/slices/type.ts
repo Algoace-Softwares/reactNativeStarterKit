@@ -15,18 +15,18 @@ export interface tokenType {
   accessToken: string;
   refreshToken: string;
 }
-export interface authState {
-  userData: object | undefined;
-  isError: boolean;
-  isLoading: boolean;
-  isSuccess: boolean;
-  message: string | any;
-  fishes: number;
-  tokens: tokenType;
-}
 /*
  ** Auth slice type
  */
+export interface authState {
+  userData: object | undefined;
+  authError: boolean;
+  authLoading: boolean;
+  authSuccess: boolean;
+  authMessage: string;
+  fishes: number;
+  tokens: tokenType;
+}
 export interface authSlice extends authState {
   signIn: (p: emailPassType) => void;
 
@@ -40,13 +40,14 @@ export interface authSlice extends authState {
 
   changePassword: (userId: string, oldPassword: string, newPassword: string, accessToken: string) => void;
 
-  resetToken: () => void;
+  updateToken: (tokens: tokenType) => void;
 
   resendCode: (email: string) => void;
 
   signOut: (userId: string, accessToken: string) => void;
 
   deleteUser: (userId: string) => void;
+  fetchUserDataLocal: () => void;
 }
 
 export interface emailPassType {
@@ -67,7 +68,13 @@ export interface SignUpParams {
  ** User slice type
  */
 
-export interface userSlice {
+export interface userState {
+  userError: boolean;
+  userLoading: boolean;
+  userSuccess: boolean;
+  userMessage: string;
   bears: number;
+}
+export interface userSlice extends userState {
   addBear: () => void;
 }

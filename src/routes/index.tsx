@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {authScreens, homeScreen} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
@@ -7,6 +7,7 @@ import BaseConfig from '../config';
 import {NavigationContainer} from '@react-navigation/native';
 import {useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
+import {useAppStore} from '../store';
 
 /**
  * This is a list of all the route names that will exit the app if the back button
@@ -61,7 +62,10 @@ const RootNavigator = (): JSX.Element => {
   /*
    **  Hooks
    */
-  const [userData] = useState(null);
+
+  const userData = useAppStore(state => state.userData);
+  const fetchUserData = useAppStore(state => state.fetchUserDataLocal);
+  console.log('🚀 ~ RootNavigator ~ userData:', userData);
 
   // const {userData} = useAppSelector(state => state.auth);
   // const dispatch = useAppDispatch();
@@ -89,6 +93,8 @@ const RootNavigator = (): JSX.Element => {
     //     RNBootSplash.hide();
     //     console.log('error is:', e);
     //   });
+    console.log('running useffect');
+    fetchUserData();
   }, []);
 
   return (

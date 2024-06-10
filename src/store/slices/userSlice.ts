@@ -1,7 +1,18 @@
 import {StateCreator} from 'zustand';
-import {userSlice} from './type';
+import {userSlice, userState} from './type';
+
+/*
+ ** Initial states
+ */
+const initialState: userState = {
+  userError: false,
+  userLoading: false,
+  userSuccess: false,
+  userMessage: '',
+  bears: 0,
+};
 
 export const createUserSlice: StateCreator<userSlice> = set => ({
-  bears: 0,
+  ...initialState,
   addBear: () => set(state => ({bears: state.bears + 1})),
 });
