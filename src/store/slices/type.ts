@@ -11,7 +11,6 @@ export interface appStateType {
 export interface appSlice extends appStateType {
   setTheme: (newTheme: string) => void;
   setLanguage: (language: string) => void;
-  resetAppSlice: () => void;
 }
 
 export interface tokenType {
@@ -43,7 +42,6 @@ export interface authSlice extends authState {
 
   updateToken: (tokens: tokenType) => void;
   updateUserData: (user: userDataType) => void;
-  resetAuthSlice: () => void;
   resendCode: (email: string) => void;
   signOut: () => void;
   deleteUser: (userId: string) => void;
@@ -77,5 +75,4 @@ export interface userState {
 }
 export interface userSlice extends userState {
   addBear: () => void;
-  resetUserSlice: () => void;
 }
