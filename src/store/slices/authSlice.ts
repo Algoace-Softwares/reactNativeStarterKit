@@ -49,9 +49,21 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
         set({authLoading: false, authSuccess: true, userData: user?.data, tokens: user?.tokens});
         saveStorage(ASYNC_TOKEN_KEY, user?.tokens);
         saveStorage(ASYNC_USER_DATA_KEY, user?.data);
-      } catch (error: any) {
+      } catch (error: any | unknown) {
         console.log('🚀 ~ signIn: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Sign-in failed'});
+        /*
+         ** If user is not confirmed
+         */
+        if (error?.response?.data?.message === 'User not confirmed') {
+          useAppStore.getState().resendCode(params.email);
+          Toast.show('User is not confirmed', Toast.LONG);
+          navigate('ConfirmSignupScreen', {
+            email: params.email,
+            password: params.password,
+          });
+          return;
+        }
         handleAuthContextError('signIn', error);
       }
     },
@@ -62,23 +74,25 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         const response = await AUTH_API.post('/auth/signup', params);
-        const user = response.data;
-        set({authLoading: false, authSuccess: true, userData: user, tokens: user?.tokens});
+        console.log('🚀 ~ signUp: ~ response:', response);
+        Toast.show('Verification code has been sent to your email address', Toast.LONG);
+        set({authLoading: false, authSuccess: true});
       } catch (error: any) {
         console.log('🚀 ~ signUp: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Sign-up failed'});
         handleAuthContextError('signUp', error);
+        throw new Error(error.message || 'Sign-up failed');
       }
     },
     /*
      ** forgot password
      */
-    forgotPassword: async (email: string) => {
+    forgotPassword: async (emailAddress: string) => {
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         // Call API for forgotPassword logic
         // Example:
-        const response = await AUTH_API.post('/auth/forgot/password', {email});
+        const response = await AUTH_API.post('/auth/forgot/password', {emailAddress});
         console.log('🚀 ~ forgotPassword: ~ response:', response);
         // Handle success
         set({authLoading: false, authSuccess: true, authMessage: 'Password reset email sent successfully'});
@@ -86,17 +100,22 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
         console.log('🚀 ~ forgotPassword: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Forgot password failed'});
         handleAuthContextError('forgotPassword', error);
+        throw new Error(error.message || 'Forgot password failed');
       }
     },
     /*
      ** forgot change password function
      */
-    forgotChangePassword: async (email: string, password: string, code: string) => {
+    forgotChangePassword: async (emailAddress: string, password: string, confirmationCode: string) => {
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         // Call API for forgotChangePassword logic
         // Example:
-        const response = await AUTH_API.post('/auth/forgot/change/password', {email, password, code});
+        const response = await AUTH_API.post('/auth/forgot/change/password', {
+          emailAddress,
+          password,
+          confirmationCode,
+        });
         console.log('🚀 ~ forgotChangePassword: ~ response:', response);
         // Handle success
         set({authLoading: false, authSuccess: true, authMessage: 'Password changed successfully'});
@@ -104,20 +123,25 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
         console.log('🚀 ~ forgotChangePassword: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Change password failed'});
         handleAuthContextError('forgotChangePassword', error);
+        throw new Error(error.message || 'Change password failed');
       }
     },
     /*
      ** confirm signup functions
      */
-    confirmSignup: async (email: string, code: string) => {
+    confirmSignup: async (emailAddress: string, confirmationCode: string, password: string) => {
+      console.log('🚀 ~ confirmSignup: ~ confirmationCode:', confirmationCode);
+      console.log('🚀 ~ confirmSignup: ~ emailAddress:', emailAddress);
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         // Call API for confirmSignup logic
         // Example:
-        const response = await AUTH_API.post('/auth/confirm', {email, code});
+        const response = await AUTH_API.post('/auth/confirm', {emailAddress, confirmationCode});
         console.log('🚀 ~ confirmSignup: ~ response:', response);
         // Handle success
         set({authLoading: false, authSuccess: true, authMessage: 'Account confirmed successfully'});
+        Toast.show('Account confirmed successfully', Toast.LONG);
+        useAppStore.getState().signIn({email: emailAddress, password});
       } catch (error: any) {
         console.log('🚀 ~ confirmSignup: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Confirm signup failed'});
@@ -138,15 +162,17 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
     /*
      ** resend code functions
      */
-    resendCode: async (email: string) => {
+    resendCode: async (emailAddress: string) => {
+      console.log('🚀 ~ resendCode: ~ emailAddress:', emailAddress);
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         // Call API for resendCode logic
         // Example:
-        const response = await AUTH_API.post('/auth/code', {email});
+        const response = await AUTH_API.post('/auth/code', {emailAddress});
         console.log('🚀 ~ resendCode: ~ response:', response);
         // Handle success
         set({authLoading: false, authSuccess: true, authMessage: 'Code resent successfully'});
+        Toast.show('Code sent successfully', Toast.LONG);
       } catch (error: any) {
         console.log('🚀 ~ resendCode: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Resend code failed'});
@@ -253,9 +279,7 @@ const handleAuthContextError = (funcName = '', error: unknown | any) => {
     Toast.show('Internet Connecten error. try again later', Toast.LONG);
     return;
   }
-  if (error?.response?.data?.message === 'User is not confirmed.') {
-    Toast.show('User is not confirmed', Toast.LONG);
-  }
+
   if (error?.response?.data?.message) {
     const extractData = error.response.data.message;
     return Toast.show(extractData, Toast.LONG);

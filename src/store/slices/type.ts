@@ -32,17 +32,17 @@ export interface authState {
 export interface authSlice extends authState {
   signIn: (p: emailPassType) => void;
 
-  signUp: (p: SignUpParams) => void;
+  signUp: (p: SignUpParams) => Promise<void>;
 
-  forgotPassword: (email: string) => void;
+  forgotPassword: (email: string) => Promise<void>;
 
-  forgotChangePassword: (email: string, password: string, code: string) => void;
+  forgotChangePassword: (emailAddress: string, password: string, code: string) => Promise<void>;
 
-  confirmSignup: (email: string, code: string) => void;
+  confirmSignup: (email: string, code: string, password: string) => void;
 
   updateToken: (tokens: tokenType) => void;
   updateUserData: (user: userDataType) => void;
-  resendCode: (email: string) => void;
+  resendCode: (emailAddress: string) => void;
   signOut: () => void;
   deleteUser: (userId: string) => void;
   fetchUserDataLocal: () => Promise<void>;

@@ -8,12 +8,16 @@ import {styles} from './style';
 import {ZodError} from 'zod';
 import {confirmationCodeValidation} from '../../utils/SchemaValidation';
 import {CustomTheme} from '../../theme';
+import {useAppStore} from '../../store';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
    ** Hooks
    */
   const route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
+  const confirmSignUp = useAppStore(state => state.confirmSignup);
+  const isLoading = useAppStore(state => state.authLoading);
+  const resendConfirmationCode = useAppStore(state => state.resendCode);
   /*
    ** Routing params
    */
@@ -24,7 +28,6 @@ export default function ConfirmSignupScreen(): JSX.Element {
   const [confirmationCode, setConfirmationCode] = useState<string>('');
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
-  const [loading] = useState<boolean>(false);
   /*
    ** Hooks
    */
@@ -46,6 +49,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
       // api call
       console.log('params is', params);
       const data = confirmationCodeValidation.parse({confirmationCode});
+      confirmSignUp(params.email, params.confirmationCode, params.password);
       console.log('🚀 ~ submitCodePressed ~ data:', data);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -58,11 +62,8 @@ export default function ConfirmSignupScreen(): JSX.Element {
    ** When resend code is pressed
    */
   const onPressResendCode = (): void => {
-    const params = {
-      email,
-    };
     setResendCode(false);
-    console.log('params is', params);
+    resendConfirmationCode(email);
   };
   /*
    **   Lifecycle methods
@@ -90,15 +91,12 @@ export default function ConfirmSignupScreen(): JSX.Element {
       <BackButton />
       <AuthHeader text1={'confirmSignUp'} text2={'verificationSentCode'} />
       <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
-      <AppButton title={'submit'} onPress={submitCodePressed} loading={loading} />
+      <AppButton title={'submit'} onPress={submitCodePressed} loading={isLoading} />
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
           <AppText presetStyle={'formLabel'} onPress={onPressResendCode} transText={'didRecvCode'} />
         ) : (
-          <AppText
-            presetStyle={'formLabel'}
-            onPress={onPressResendCode}
-            textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
+          <AppText presetStyle={'formLabel'} textColor={colors.textDim}>{`Wait for 00:${countDown}`}</AppText>
         )}
       </View>
     </AppScreen>

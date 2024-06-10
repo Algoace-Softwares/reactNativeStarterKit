@@ -10,6 +10,7 @@ const HomeScreen = () => {
    */
   const userSignOut = useAppStore(state => state.signOut);
   const authLoading = useAppStore(state => state.authLoading);
+
   return (
     <View style={styles.mainView}>
       <Text>HomeScreen</Text>

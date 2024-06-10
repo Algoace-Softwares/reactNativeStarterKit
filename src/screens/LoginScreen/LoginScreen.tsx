@@ -20,7 +20,6 @@ export default function LoginScreen(): JSX.Element {
   const authLoading = useAppStore(state => state.authLoading);
 
   console.log('🚀 ~ LoginScreen ~ userData:', userData);
-  console.log('🚀 ~ LoginScreen ~ isLoading:', authLoading);
   /*
    * Hooks
    */
@@ -38,8 +37,7 @@ export default function LoginScreen(): JSX.Element {
         password,
       };
 
-      const data = loginSchema.parse(params);
-      console.log('🚀 ~ appBtnPress ~ data:', data);
+      loginSchema.parse(params);
       // singing user in app
       signIn(params);
       console.log('params:', params);

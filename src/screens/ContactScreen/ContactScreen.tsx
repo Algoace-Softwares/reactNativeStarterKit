@@ -14,6 +14,7 @@ import Toast from 'react-native-simple-toast';
 import {countryStates} from '../../data';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {useAppStore} from '../../store';
 
 export default function ContactScreen() {
   /*
@@ -24,15 +25,15 @@ export default function ContactScreen() {
   /*
    ** States
    */
-  const [loading] = useState<boolean>(false);
-  const [state, setState] = useState<string>('');
+  const [state, setState] = useState<string>('sindh');
   const [country, setCountry] = useState<string>('afghanistan');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('3344616166');
   /*
    ** Hooks
    */
   const navigation = useAppNavigation();
-
+  const signUp = useAppStore(appState => appState.signUp);
+  const isLoading = useAppStore(appState => appState.authLoading);
   /*
    ** Functions
    */
@@ -45,25 +46,33 @@ export default function ContactScreen() {
   /*
    ** when signUp pressedfor
    */
-  const SignUpPressed = (): any => {
+  const SignUpPressed = async () => {
     if (!checkTextFieldValidation()) {
       Toast.show('Input fields required', Toast.LONG);
       return;
     }
-    const params = {
-      email,
-      password,
-      firstName,
-      lastName,
-      phoneNumber,
-      state,
-    };
-    console.log('params is:', params);
-    // navigating to another screen
-    navigation.navigate('ConfirmSignupScreen', {
-      email,
-      password,
-    });
+    try {
+      const params = {
+        emailAddress: email?.toLowerCase(),
+        password,
+        firstName,
+        lastName,
+        phoneNumber: phoneNumber ? `+1${phoneNumber}` : undefined,
+        state,
+        city: country,
+      };
+
+      console.log('params is:', params);
+
+      await signUp(params);
+      // navigating to another screen
+      navigation.navigate('ConfirmSignupScreen', {
+        email,
+        password,
+      });
+    } catch (error) {
+      console.log('🚀 ~ SignUpPressed ~ error:', error);
+    }
   };
 
   return (
@@ -93,7 +102,7 @@ export default function ContactScreen() {
       />
 
       {/* Main button */}
-      <AppButton loading={loading} title={'signUp'} onPress={SignUpPressed} />
+      <AppButton loading={isLoading} title={'signUp'} onPress={SignUpPressed} />
     </AppScreen>
   );
 }

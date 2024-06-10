@@ -1,5 +1,5 @@
-import {View} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
 import {AppButton, AppScreen, AppText, AuthHeader, BackButton, InputTextLabel, OTPFieldInput} from '../../components';
 import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import Toast from 'react-native-simple-toast';
@@ -8,8 +8,8 @@ import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {changePasswordSchema} from '../../utils/SchemaValidation';
 import {ZodError} from 'zod';
-import {useTranslation} from 'react-i18next';
 import {CustomTheme} from '../../theme';
+import {useAppStore} from '../../store';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   /*
@@ -17,8 +17,10 @@ export default function ForgotChangePassScreen(): JSX.Element {
    */
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useAppNavigation();
-  const {t} = useTranslation();
   const {colors} = useTheme() as CustomTheme;
+  const forgotChangePassword = useAppStore(state => state.forgotChangePassword);
+  const isLoading = useAppStore(state => state.authLoading);
+  const resendConfirmationCode = useAppStore(state => state.resendCode);
   /*
    ** Routing params
    */
@@ -27,27 +29,27 @@ export default function ForgotChangePassScreen(): JSX.Element {
   /*
    ** States
    */
-  const [password, setPassword] = useState<string>('');
+  const [password, setPassword] = useState<string>('Admin1234');
   const [confirmationCode, setConfirmationCode] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('Admin1234');
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
-  const [loading] = useState<boolean>(false);
   /*
    ** Functions
    */
 
   // when reste btn is pressed
-  const resetPassPressed = (): void => {
+  const resetPassPressed = async () => {
     try {
       const params = {
         confirmationCode,
-        emailAddress: email?.trim(),
+        email: email?.trim(),
         password,
         confirmPassword,
       };
       const data = changePasswordSchema.parse(params);
       console.log('🚀 ~ resetPassPressed ~ data:', data);
+      await forgotChangePassword(params.email, params.password, params.confirmationCode);
       navigation.goBack();
       navigation.goBack();
     } catch (error) {
@@ -60,11 +62,8 @@ export default function ForgotChangePassScreen(): JSX.Element {
 
   // when resend code is pressed
   const onPressResendCode = (): void => {
-    const params = {
-      email,
-    };
     setResendCode(false);
-    console.log('params', params);
+    resendConfirmationCode(email);
   };
   /*
    ** Lifecycles
@@ -103,9 +102,9 @@ export default function ForgotChangePassScreen(): JSX.Element {
         isPassword={true}
       />
 
-      <OTPFieldInput textLable={t('confirmationCode')} onChangeText={setConfirmationCode} />
+      <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
 
-      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
+      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={isLoading} />
 
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (

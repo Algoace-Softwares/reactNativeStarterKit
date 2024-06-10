@@ -21,10 +21,10 @@ export default function SignupScreen() {
   /*
    ** State
    */
-  const [emailAddress, setEmailAddress] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
+  const [emailAddress, setEmailAddress] = useState<string>('shaheer.ahmed+3@algoace.com');
+  const [password, setPassword] = useState<string>('Admin1234');
+  const [firstName, setFirstName] = useState<string>('shaheer');
+  const [lastName, setLastName] = useState<string>('ahmed');
   const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
   const [loading, setLoading] = useState<boolean>(false);
   const [imageAsset, setImageAsset] = useState<imageObjectType | null>(null);
@@ -50,7 +50,7 @@ export default function SignupScreen() {
         lastName: lastName?.trim(),
         email: emailAddress?.trim()?.toLowerCase(),
         password: password?.trim(),
-        dateOfBirth,
+        dateOfBirth: dateOfBirth?.toISOString(),
       };
       const data = signupSchema.parse(params);
       console.log('🚀 ~ ContinuePressed ~ data:', data);
