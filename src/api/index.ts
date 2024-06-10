@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {API_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
-import {jwtDecode, JwtPayload} from 'jwt-decode';
+import {appUtils} from '../utils';
+import {saveString} from '../utils/storage/storage';
 import {useAppStore} from '../store';
 import {tokenType} from '../store/slices/type';
 
@@ -12,6 +13,11 @@ import {tokenType} from '../store/slices/type';
 export const API = axios.create({
   baseURL: API_KEY,
 });
+
+export const AUTH_API = axios.create({
+  baseURL: API_KEY,
+});
+
 /*
  ** Before every api request following be taken
  1 - we are getting accessToken as well as refresh token from the api
@@ -27,46 +33,13 @@ API.interceptors.request.use(
   async function (config) {
     console.log('🚀 ~ config:', config);
     // getting access token
-    let {accessToken, refreshToken} = useAppStore.getState().tokens;
-    console.log('🚀 ~ accessToken:', accessToken);
-    if (accessToken) {
-      // decoded token data
-      const decodedToken = jwtDecode<JwtPayload>(accessToken);
-      console.log('🚀 ~ decodedToken:', decodedToken);
-      if (decodedToken.exp) {
-        // extraction timme stamp
-        const expiryTimestamp = new Date(decodedToken.exp * 1000);
+   
+    const {accessToken} = useAppStore.getState().tokens;
+    // injecting our token into header
+    config.headers.Authorization = `Bearer ${accessToken}`;
 
-        // chgecking if token expire
-        if (expiryTimestamp < new Date()) {
-          console.log('token expire');
-          try {
-            // if token expire get new token
-            const response = await axios.post(`${API_KEY}/user/token`, {
-              refreshToken,
-            });
-            console.log('RESPONSE[GET_NEW_TOKEN]', response);
 
-            if (response?.status === 200) {
-              // getting token from server data
-              const newToken = response?.data?.tokens;
 
-              // saving token
-              useAppStore.getState().updateToken(newToken as tokenType);
-
-              accessToken = newToken?.accessToken;
-            }
-
-            // console.debug('Data returned', data);
-          } catch (error) {
-            Toast.show('Token expire unable to get new Token try again later', Toast.LONG);
-            console.log('ERROR[UNABLE_TO_GET_TOKEN]', error);
-          }
-          // injecting our token into header
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-      }
-    }
     return config;
   },
   function (error) {
@@ -74,11 +47,65 @@ API.interceptors.request.use(
   },
 );
 /*
+ ** When axios returns something
+ */
+API.interceptors.response.use(
+  response => response.data,
+  async error => {
+    /*
+     ** Original api that gets failed
+     */
+    const originalRequest = error.config;
+    /*
+     ** Checking if token gets expire
+     */
+    if (error.response && error.response.status === 401) {
+      // Access token has expired, attempt to refresh
+      const {refreshToken} = useAppStore.getState().tokens;
+
+      try {
+        const response = await AUTH_API.post('/refresh-token', {token: refreshToken});
+        const {newAccessToken, newRefreshToken} = response.data;
+
+        // Save new tokens
+        useAppStore.setState({
+          tokens: {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          },
+        });
+
+        // Save tokens to local storage
+        saveString(ASYNC_TOKEN_KEY, JSON.stringify({accessToken: newAccessToken, refreshToken: newRefreshToken}));
+
+        // Update the original request with the new token
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        // Retry the original request with the new token
+        return API(originalRequest);
+      } catch (refreshError: unknown | any) {
+        appUtils.crashLogs(refreshError);
+        Toast.show('Session expired. Please log in again.', Toast.LONG);
+        return Promise.reject(refreshError);
+      }
+    }
+    appUtils.crashLogs(error);
+    return Promise.reject(error);
+  },
+);
+/*
  ** When axios return something
  */
+
 API.interceptors.response.use(
   request => request?.data,
   error => {
+
+AUTH_API.interceptors.response.use(
+  request => request.data,
+  error => {
+    appUtils.crashLogs(error);
+
     return Promise.reject(error);
   },
 );
