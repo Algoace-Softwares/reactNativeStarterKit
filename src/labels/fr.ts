@@ -15,6 +15,7 @@ const fr: Translations = {
   home: 'Accueil',
   profile: 'Profil',
   login: 'Connexion',
+  logout: 'Se déconnecter',
   continuenWithFacebook: 'Continuer avec Facebook',
   continuenWithGoogle: 'Continuer avec Google',
   continuenWithApple: 'Continuer avec Apple',

@@ -2,7 +2,6 @@ import axios from 'axios';
 import {API_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
 import {appUtils} from '../utils';
-import {saveString} from '../utils/storage/storage';
 import {useAppStore} from '../store';
 import {tokenType} from '../store/slices/type';
 
@@ -31,14 +30,10 @@ export const AUTH_API = axios.create({
  */
 API.interceptors.request.use(
   async function (config) {
-    console.log('🚀 ~ config:', config);
     // getting access token
-   
     const {accessToken} = useAppStore.getState().tokens;
     // injecting our token into header
     config.headers.Authorization = `Bearer ${accessToken}`;
-
-
 
     return config;
   },
@@ -50,7 +45,7 @@ API.interceptors.request.use(
  ** When axios returns something
  */
 API.interceptors.response.use(
-  response => response.data,
+  response => response,
   async error => {
     /*
      ** Original api that gets failed
@@ -64,32 +59,30 @@ API.interceptors.response.use(
       const {refreshToken} = useAppStore.getState().tokens;
 
       try {
-        const response = await AUTH_API.post('/refresh-token', {token: refreshToken});
-        const {newAccessToken, newRefreshToken} = response.data;
-
-        // Save new tokens
-        useAppStore.setState({
-          tokens: {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
-          },
+        const response = await axios.post(`${API_KEY}/auth/token`, {
+          refreshToken,
         });
+        console.log('response refresh token', response);
 
-        // Save tokens to local storage
-        saveString(ASYNC_TOKEN_KEY, JSON.stringify({accessToken: newAccessToken, refreshToken: newRefreshToken}));
+        if (response?.status === 200 && response?.data?.tokens) {
+          const newTokens = response.data?.tokens as tokenType;
 
-        // Update the original request with the new token
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          // Save new tokens
+          useAppStore.getState().updateToken(newTokens);
 
-        // Retry the original request with the new token
-        return API(originalRequest);
+          // Update the original request with the new token
+          originalRequest.headers.Authorization = `Bearer ${newTokens?.accessToken}`;
+
+          // Retry the original request with the new token
+          return API(originalRequest);
+        }
       } catch (refreshError: unknown | any) {
         appUtils.crashLogs(refreshError);
         Toast.show('Session expired. Please log in again.', Toast.LONG);
         return Promise.reject(refreshError);
       }
     }
-    appUtils.crashLogs(error);
+    appUtils.crashLogs({error});
     return Promise.reject(error);
   },
 );
@@ -97,14 +90,10 @@ API.interceptors.response.use(
  ** When axios return something
  */
 
-API.interceptors.response.use(
-  request => request?.data,
-  error => {
-
 AUTH_API.interceptors.response.use(
-  request => request.data,
+  request => request,
   error => {
-    appUtils.crashLogs(error);
+    appUtils.crashLogs({error});
 
     return Promise.reject(error);
   },

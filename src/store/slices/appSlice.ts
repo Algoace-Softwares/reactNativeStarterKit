@@ -13,4 +13,8 @@ export const createAppSlice: StateCreator<appSlice> = set => ({
 
   setTheme: newTheme => set({theme: newTheme}),
   setLanguage: language => set({language}),
+  /*
+   ** reseting app slice
+   */
+  resetAppSlice: () => set(initialState),
 });

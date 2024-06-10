@@ -13,6 +13,7 @@ const en = {
   home: 'Home',
   profile: 'Profile',
   login: 'Login',
+  logout: 'Logout',
   continuenWithFacebook: 'Continue with Facebook',
   continuenWithGoogle: 'Continue with Google',
   continuenWithApple: 'Continue with Apple',

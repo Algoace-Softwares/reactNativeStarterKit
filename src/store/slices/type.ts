@@ -1,3 +1,5 @@
+import {userDataType} from '../../@types';
+
 /*
  ** AppSlicesTypes
  */
@@ -9,6 +11,7 @@ export interface appStateType {
 export interface appSlice extends appStateType {
   setTheme: (newTheme: string) => void;
   setLanguage: (language: string) => void;
+  resetAppSlice: () => void;
 }
 
 export interface tokenType {
@@ -19,7 +22,7 @@ export interface tokenType {
  ** Auth slice type
  */
 export interface authState {
-  userData: object | undefined;
+  userData: userDataType | undefined;
   authError: boolean;
   authLoading: boolean;
   authSuccess: boolean;
@@ -38,16 +41,14 @@ export interface authSlice extends authState {
 
   confirmSignup: (email: string, code: string) => void;
 
-  changePassword: (userId: string, oldPassword: string, newPassword: string, accessToken: string) => void;
-
   updateToken: (tokens: tokenType) => void;
-
+  updateUserData: (user: userDataType) => void;
+  resetAuthSlice: () => void;
   resendCode: (email: string) => void;
-
-  signOut: (userId: string, accessToken: string) => void;
+  signOut: () => void;
 
   deleteUser: (userId: string) => void;
-  fetchUserDataLocal: () => void;
+  fetchUserDataLocal: () => Promise<void>;
 }
 
 export interface emailPassType {
@@ -77,4 +78,5 @@ export interface userState {
 }
 export interface userSlice extends userState {
   addBear: () => void;
+  resetUserSlice: () => void;
 }

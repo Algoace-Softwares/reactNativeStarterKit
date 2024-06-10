@@ -13,7 +13,6 @@ export default function OnBoardingScreen(): JSX.Element {
    */
   const {colors} = useTheme() as CustomTheme;
   const navigation = useAppNavigation();
-  console.log('🚀 ~ OnBoardingScreen ~ colors:', colors);
   /*
    ** Dynamic header assigment
    */

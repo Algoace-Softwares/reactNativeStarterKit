@@ -1,4 +1,4 @@
-export type userData = {
+export type userDataType = {
   phoneNumber: string;
   userLastSeen: string;
   userRating: number;

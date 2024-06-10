@@ -52,7 +52,7 @@ export function loadStorage<T>(key: string): T | null {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export function saveStorage(key: string, value: string | boolean) {
+export function saveStorage(key: string, value: string | boolean | object) {
   storage.set(key, JSON.stringify(value));
 }
 

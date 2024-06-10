@@ -1,12 +1,13 @@
 import {StateCreator} from 'zustand';
 import Toast from 'react-native-simple-toast';
-import {AUTH_API} from '../../api';
+import {API, AUTH_API} from '../../api';
 import {appUtils} from '../../utils';
 import {navigate} from '../../routes/navigationUtilities';
 import {authSlice, authState, emailPassType, SignUpParams, tokenType} from './type';
 import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../constants';
 import {loadStorage, saveStorage, saveStringStorage} from '../../utils/storage/storage';
-import {userData} from '../../@types';
+import {userDataType} from '../../@types';
+import {useAppStore} from '..';
 /*
  ** Initial states
  */
@@ -35,17 +36,16 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
     console.log('🚀 ~ signIn: ~ params:', params);
     set({authLoading: true, authError: false, authMessage: ''});
     try {
-
       const response = await AUTH_API.post('/auth/signin', {
-      emailAddress: params.email,
-      password: params.password,
-    });
+        emailAddress: params.email,
+        password: params.password,
+      });
 
       console.log('🚀 ~ signIn: ~ response:', response);
       const user = response.data;
-      set({authLoading: false, authSuccess: true, userData: user, tokens: user?.tokens});
+      set({authLoading: false, authSuccess: true, userData: user?.data, tokens: user?.tokens});
       saveStorage(ASYNC_TOKEN_KEY, user?.tokens);
-      saveStorage(ASYNC_USER_DATA_KEY, user);
+      saveStorage(ASYNC_USER_DATA_KEY, user?.data);
     } catch (error: any) {
       console.log('🚀 ~ signIn: ~ error:', error);
       set({authLoading: false, authError: true, authMessage: error.message || 'Sign-in failed'});
@@ -58,11 +58,9 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
   signUp: async (params: SignUpParams) => {
     set({authLoading: true, authError: false, authMessage: ''});
     try {
-
       const response = await AUTH_API.post('/auth/signup', params);
-      const userData = response.data;
-      set({isLoading: false, isSuccess: true, userData: userData?.data, tokens: userData?.data});
-
+      const user = response.data;
+      set({authLoading: false, authSuccess: true, userData: user, tokens: user?.tokens});
     } catch (error: any) {
       console.log('🚀 ~ signUp: ~ error:', error);
       set({authLoading: false, authError: true, authMessage: error.message || 'Sign-up failed'});
@@ -123,31 +121,21 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
       handleAuthContextError('confirmSignup', error);
     }
   },
-  /*
-   ** change password functions
-   */
-  changePassword: async (userId: string, oldPassword: string, newPassword: string, accessToken: string) => {
-    set({authLoading: true, authError: false, authMessage: ''});
-    try {
-      // Call API for changePassword logic
-      // Example:
-      const response = await AUTH_API.post('/auth/password', {userId, oldPassword, newPassword, accessToken});
-      console.log('🚀 ~ changePassword: ~ response:', response);
-      // Handle success
-      set({authLoading: false, authSuccess: true, authMessage: 'Password changed successfully'});
-    } catch (error: any) {
-      console.log('🚀 ~ changePassword: ~ error:', error);
-      set({authLoading: false, authError: true, authMessage: error.message || 'Change password failed'});
-      handleAuthContextError('changePassword', error);
-    }
-  },
 
+  /*
+   ** reseting auth slice
+   */
+  resetAuthSlice: () => set(initialState),
   /*
    ** update tokening state as well as async
    */
   updateToken: tokens => {
     set({tokens});
     saveStringStorage(ASYNC_TOKEN_KEY, JSON.stringify(tokens));
+  },
+  updateUserData: user => {
+    set({userData: user});
+    saveStringStorage(ASYNC_USER_DATA_KEY, JSON.stringify(user));
   },
   /*
    ** resend code functions
@@ -170,12 +158,16 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
   /*
    ** sign out functions
    */
-  signOut: async (userId: string, accessToken: string) => {
+  signOut: async () => {
     set({authLoading: true, authError: false, authMessage: ''});
     try {
       // Call API for signOut logic
+      const user = useAppStore.getState().userData as userDataType;
+      const tokens = useAppStore.getState().tokens as tokenType;
+
       // Example:
-      const response = await AUTH_API.post('/auth/logout', {userId, accessToken});
+      const response = await AUTH_API.post('/auth/logout', {userId: user?.PK, accessToken: tokens?.accessToken});
+
       console.log('🚀 ~ signOut: ~ response:', response);
       // Handle success
       set({authLoading: false, authSuccess: true, authMessage: 'Signed out successfully'});
@@ -207,17 +199,18 @@ export const createAuthSlice: StateCreator<authSlice> = set => ({
   fetchUserDataLocal: async () => {
     set({authLoading: true, authError: false, authMessage: ''});
     try {
-      let user = loadStorage(ASYNC_USER_DATA_KEY) as userData;
-      console.log('🚀 ~ fetchUserDataLocal: ~ user:', user);
+      let user = loadStorage(ASYNC_USER_DATA_KEY) as userDataType;
       const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
-      console.log('🚀 ~ fetchUserDataLocal: ~ userToken:', userToken);
-      if (user) {
-        set({authLoading: false, authSuccess: true, userData: user, tokens: userToken});
+
+      if ('PK' in user && 'accessToken' in userToken) {
+        console.log('user is logged in');
+        set({userData: user, tokens: userToken});
         // getting latest user data amd
         const response = await API.get(`/user/${user.PK}`);
-        user = response?.data;
         console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
-        set({userData: user});
+        user = response?.data?.data;
+        // updating latest data in local as well as in store
+        useAppStore.getState().updateUserData(user);
       }
       set({authLoading: false, authSuccess: true});
     } catch (error: any) {
