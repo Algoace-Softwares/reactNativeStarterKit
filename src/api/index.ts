@@ -2,7 +2,7 @@ import axios from 'axios';
 import {API_KEY} from '../constants';
 import Toast from 'react-native-simple-toast';
 import {useAppStore} from '../store';
-import {tokenType} from '../store/slices/type';
+import {tokenType} from '../@types';
 
 // local storage
 
