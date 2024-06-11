@@ -1,41 +1,23 @@
 import {Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './style';
-import {AppButton} from '../../components';
-import {useAppStore} from '../../store';
-import {signOut} from '../../store/authSlice/authApiService';
+import {useDogs} from '../../store/userSlice/userApiServices';
 
 const HomeScreen = () => {
-  /*
-   ** Hooks
-   */
-  const userData = useAppStore(state => state.userData);
-  const userTokens = useAppStore(state => state.tokens);
-  /*
-   ** States
-   */
-  const [loading, setLoading] = useState<boolean>(false);
-  /*
-   ** Functions
-   */
-  const userSignOut = async () => {
-    try {
-      setLoading(true);
-      await signOut(userData?.PK as string, userTokens.accessToken);
-      setLoading(false);
-    } catch (error) {
-      console.log('🚀 ~ signOut ~ error:', error);
-      setLoading(false);
-    }
-  };
+  const {data, isPending, error} = useDogs();
+  console.log('🚀 ~ HomeScreen ~ data:', data);
+  console.log('🚀 ~ HomeScreen ~ error:', error);
+  console.log('🚀 ~ HomeScreen ~ isPending:', isPending);
   /*
    ** Lifecycle methods
    */
+  if (isPending) return <Text>'Loading...'</Text>;
+
+  if (error) return <Text>An error has occurred: ' + error.message</Text>;
 
   return (
     <View style={styles.mainView}>
       <Text>HomeScreen</Text>
-      <AppButton title={'logout'} onPress={() => userSignOut()} loading={loading} />
     </View>
   );
 };

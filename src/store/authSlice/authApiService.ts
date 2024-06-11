@@ -128,7 +128,9 @@ export const deleteUser = async (userId: string) => {
 export const fetchUserDataLocal = async () => {
   try {
     let user = loadStorage(ASYNC_USER_DATA_KEY) as userDataType;
+    console.log('🚀 ~ fetchUserDataLocal ~ user:', user);
     const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
+    console.log('🚀 ~ fetchUserDataLocal ~ userToken:', userToken);
 
     if (user && 'PK' in user && 'accessToken' in userToken) {
       console.log('User is logged in');

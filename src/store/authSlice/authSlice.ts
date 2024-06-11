@@ -1,6 +1,6 @@
 import {StateCreator} from 'zustand';
 import {sliceResetFns} from '../utils';
-import {saveStorage, saveStringStorage} from '../../utils/storage/storage';
+import {saveStringStorage} from '../../utils/storage/storage';
 import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../constants';
 import {authSlice, authState} from './types';
 
@@ -31,9 +31,11 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
       saveStringStorage(ASYNC_USER_DATA_KEY, JSON.stringify(user));
     },
     updateUserDataToken(user, tokens) {
+      console.log('🚀 ~ updateUserDataToken ~ tokens:', tokens);
+      console.log('🚀 ~ updateUserDataToken ~ user:', user);
       set({userData: user, tokens});
-      saveStorage(ASYNC_TOKEN_KEY, user);
-      saveStorage(ASYNC_USER_DATA_KEY, tokens);
+      saveStringStorage(ASYNC_USER_DATA_KEY, JSON.stringify(user));
+      saveStringStorage(ASYNC_TOKEN_KEY, JSON.stringify(tokens));
     },
   };
 };

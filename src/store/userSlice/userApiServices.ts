@@ -1,5 +1,7 @@
 import {API} from '../../api';
 import Toast from 'react-native-simple-toast';
+import {useQuery} from '@tanstack/react-query';
+import axios from 'axios';
 
 export const changePassword = async (userId: string, oldPassword: string, newPassword: string, accessToken: string) => {
   try {
@@ -11,4 +13,11 @@ export const changePassword = async (userId: string, oldPassword: string, newPas
   } catch (error: any) {
     console.log('🚀 ~ changePassword: ~ error:', error);
   }
+};
+
+export const useDogs = () => {
+  return useQuery({
+    queryKey: ['dogsData'],
+    queryFn: () => axios.get('https://api.github.com/repos/tannerlinsley/react-query').then(res => res.data),
+  });
 };

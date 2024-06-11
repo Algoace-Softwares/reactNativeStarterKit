@@ -11,6 +11,7 @@ import {ErrorBoundary} from './src/screens/ErrorBoundaryScreen/ErrorBoundary';
 import AppNavigator from './src/routes';
 import Config from './src/config';
 import {getLocales} from 'react-native-localize';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 /**
  * declearing interface to avoid typescript error for text
@@ -27,6 +28,8 @@ interface TextInputWithDefaultProps extends Text {
 
 // Forcefully content start from Left to Right - Phone setting does not effect here
 I18nManager.forceRTL(false);
+
+export const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
   /**
@@ -58,13 +61,14 @@ function App(): React.JSX.Element {
    */
   return (
     <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
-      <AppNavigator />
+      <QueryClientProvider client={queryClient}>
+        <AppNavigator />
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
 
 export default App;
 
-// react query
 // react native testing
 // ci/cd

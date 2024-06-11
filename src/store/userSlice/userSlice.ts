@@ -7,6 +7,7 @@ import {userSlice, userState} from './types';
  */
 const initialState: userState = {
   bears: 0,
+  userDogs: [],
 };
 
 export const createUserSlice: StateCreator<userSlice> = set => {

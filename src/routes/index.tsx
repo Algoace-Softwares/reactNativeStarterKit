@@ -8,6 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 import {useAppStore} from '../store';
+import {fetchUserDataLocal} from '../store/authSlice/authApiService';
 /**
  * This is a list of all the route names that will exit the app if the back button
  * is pressed while in that screen. Only affects Android.
@@ -63,7 +64,6 @@ const RootNavigator = (): JSX.Element => {
    */
 
   const userData = useAppStore(state => state.userData);
-  const fetchUserData = useAppStore(state => state.fetchUserDataLocal);
   console.log('🚀 ~ RootNavigator ~ userData:', userData);
 
   /*
@@ -102,8 +102,8 @@ const RootNavigator = (): JSX.Element => {
     //     console.log('🚀 ~ fetchUserDataLocal: ~ error:', error);
     //   }
     // };
-    fetchUserData().then(date => console.log('hidihng splash screen here', date));
-  }, [fetchUserData]);
+    fetchUserDataLocal().then(date => console.log('hidihng splash screen here', date));
+  }, []);
 
   return (
     <RootStack.Navigator>
