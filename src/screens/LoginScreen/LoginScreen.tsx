@@ -7,6 +7,7 @@ import {ZodError} from 'zod';
 import {loginSchema} from '../../utils/SchemaValidation';
 import styles from './style';
 import {useAppStore} from '../../store';
+import {signIn} from '../../store/authSlice/authApiService';
 
 export default function LoginScreen(): JSX.Element {
   /*
@@ -14,10 +15,9 @@ export default function LoginScreen(): JSX.Element {
    */
   const [emailAddress, setEmailAddress] = useState<string>('shaheer.ahmed@algoace.com');
   const [password, setPassword] = useState<string>('Admin1234');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const signIn = useAppStore(state => state.signIn);
   const userData = useAppStore(state => state.userData);
-  const authLoading = useAppStore(state => state.authLoading);
 
   console.log('🚀 ~ LoginScreen ~ userData:', userData);
   /*
@@ -30,18 +30,20 @@ export default function LoginScreen(): JSX.Element {
   /*
    *  Btn press to make user Login
    */
-  const appBtnPress = () => {
+  const appBtnPress = async () => {
     try {
       const params = {
         email: emailAddress?.trim(),
         password,
       };
-
       loginSchema.parse(params);
+      setLoading(true);
       // singing user in app
-      signIn(params);
+      await signIn(params);
+      setLoading(false);
       console.log('params:', params);
     } catch (error: unknown | ZodError) {
+      setLoading(false);
       if (error instanceof ZodError) {
         Toast.show(error?.issues[0]?.message, Toast.LONG);
       }
@@ -57,7 +59,7 @@ export default function LoginScreen(): JSX.Element {
       <InputTextLabel textLable={'email'} onChangeText={setEmailAddress} value={emailAddress} />
       <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
-      <AppButton title={'login'} onPress={appBtnPress} loading={authLoading} />
+      <AppButton title={'login'} onPress={appBtnPress} loading={loading} />
 
       <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
         <AppText transText={'forgotPasswordsmall'} presetStyle={'default'} />

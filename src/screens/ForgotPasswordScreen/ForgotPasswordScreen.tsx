@@ -4,19 +4,18 @@ import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
 import {emailSchema} from '../../utils/SchemaValidation';
-import {useAppStore} from '../../store';
+import {forgotPassword} from '../../store/authSlice/authApiService';
 
 export default function ForgotPasswordScreen(): JSX.Element {
   /*
    ** States
    */
   const [emailAddress, setEmailAddres] = useState<string>('shaheer.ahmed@algoace.com');
+  const [loading, setLoading] = useState<boolean>(false);
   /*
    ** Hooks
    */
   const navigation = useAppNavigation();
-  const forgotPassword = useAppStore(state => state.forgotPassword);
-  const isLoading = useAppStore(state => state.authLoading);
   /*
    ** Functions
    */
@@ -29,13 +28,15 @@ export default function ForgotPasswordScreen(): JSX.Element {
         email: emailAddress,
       };
       emailSchema.parse(params);
-
+      setLoading(true);
       await forgotPassword(params.email);
+      setLoading(true);
 
       navigation.navigate('ForgotChangePassScreen', {
         email: params.email,
       });
     } catch (error: unknown | ZodError) {
+      setLoading(true);
       console.log('🚀 ~ appBtnPress ~ error:', error);
       if (error instanceof ZodError) {
         Toast.show(error?.issues[0]?.message, Toast.LONG);
@@ -52,7 +53,7 @@ export default function ForgotPasswordScreen(): JSX.Element {
 
       <InputTextLabel textLable={'emailAddress'} onChangeText={setEmailAddres} value={emailAddress} />
 
-      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={isLoading} />
+      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
     </AppScreen>
   );
 }

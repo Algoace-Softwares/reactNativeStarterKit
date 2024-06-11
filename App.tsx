@@ -65,6 +65,6 @@ function App(): React.JSX.Element {
 
 export default App;
 
-// zustandZW
 // react query
 // react native testing
+// ci/cd

@@ -8,16 +8,13 @@ import {styles} from './style';
 import {ZodError} from 'zod';
 import {confirmationCodeValidation} from '../../utils/SchemaValidation';
 import {CustomTheme} from '../../theme';
-import {useAppStore} from '../../store';
+import {confirmSignup, resendConfirmationCode} from '../../store/authSlice/authApiService';
 
 export default function ConfirmSignupScreen(): JSX.Element {
   /*
    ** Hooks
    */
   const route = useRoute<RouteProp<AuthStackParamList, 'ConfirmSignupScreen'>>();
-  const confirmSignUp = useAppStore(state => state.confirmSignup);
-  const isLoading = useAppStore(state => state.authLoading);
-  const resendConfirmationCode = useAppStore(state => state.resendCode);
   /*
    ** Routing params
    */
@@ -28,6 +25,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
   const [confirmationCode, setConfirmationCode] = useState<string>('');
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   /*
    ** Hooks
    */
@@ -49,9 +47,14 @@ export default function ConfirmSignupScreen(): JSX.Element {
       // api call
       console.log('params is', params);
       const data = confirmationCodeValidation.parse({confirmationCode});
-      confirmSignUp(params.email, params.confirmationCode, params.password);
+      setLoading(true);
+      confirmSignup(params.email, params.confirmationCode, params.password);
+      setLoading(false);
+
       console.log('🚀 ~ submitCodePressed ~ data:', data);
     } catch (error) {
+      setLoading(false);
+
       if (error instanceof ZodError) {
         Toast.show(error?.issues[0]?.message, Toast.LONG);
       }
@@ -61,9 +64,16 @@ export default function ConfirmSignupScreen(): JSX.Element {
   /*
    ** When resend code is pressed
    */
-  const onPressResendCode = (): void => {
+  const onPressResendCode = async () => {
     setResendCode(false);
-    resendConfirmationCode(email);
+    try {
+      setLoading(true);
+      await resendConfirmationCode(email);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('🚀 ~ onPressResendCode ~ error:', error);
+    }
   };
   /*
    **   Lifecycle methods
@@ -91,7 +101,7 @@ export default function ConfirmSignupScreen(): JSX.Element {
       <BackButton />
       <AuthHeader text1={'confirmSignUp'} text2={'verificationSentCode'} />
       <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
-      <AppButton title={'submit'} onPress={submitCodePressed} loading={isLoading} />
+      <AppButton title={'submit'} onPress={submitCodePressed} loading={loading} />
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
           <AppText presetStyle={'formLabel'} onPress={onPressResendCode} transText={'didRecvCode'} />

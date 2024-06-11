@@ -27,7 +27,7 @@ export const signIn = async (params: emailPassType) => {
   } catch (error: any | unknown) {
     console.log('🚀 ~ signIn: ~ error:', error);
     if (error?.response?.data?.message === 'User not confirmed') {
-      resendCode(params.email);
+      resendConfirmationCode(params.email);
       Toast.show('User is not confirmed', Toast.LONG);
       navigate('ConfirmSignupScreen', {
         email: params.email,
@@ -91,7 +91,7 @@ export const confirmSignup = async (emailAddress: string, confirmationCode: stri
   }
 };
 
-export const resendCode = async (emailAddress: string) => {
+export const resendConfirmationCode = async (emailAddress: string) => {
   try {
     const response = await AUTH_API.post('/auth/code', {emailAddress});
     console.log('🚀 ~ resendCode: ~ response:', response);
@@ -102,12 +102,9 @@ export const resendCode = async (emailAddress: string) => {
   }
 };
 
-export const signOut = async () => {
+export const signOut = async (userId: string, accessToken: string) => {
   try {
-    const user = useAppStore.getState().userData;
-    const tokens = useAppStore.getState().tokens;
-
-    const response = await AUTH_API.post('/auth/logout', {userId: user?.PK, accessToken: tokens?.accessToken});
+    const response = await AUTH_API.post('/auth/logout', {userId, accessToken});
     console.log('🚀 ~ signOut: ~ response:', response);
 
     resetAllSlices();
@@ -135,8 +132,8 @@ export const fetchUserDataLocal = async () => {
 
     if (user && 'PK' in user && 'accessToken' in userToken) {
       console.log('User is logged in');
-      useAppStore.getState().updateUserDataToken(user, userToken);
 
+      useAppStore.setState({userData: user, tokens: userToken});
       const response = await AUTH_API.get(`/user/${user.PK}`);
       console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
       user = response?.data?.data;

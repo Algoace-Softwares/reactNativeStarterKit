@@ -14,7 +14,7 @@ import Toast from 'react-native-simple-toast';
 import {countryStates} from '../../data';
 import {AuthStackParamList} from '../../routes/types.navigation';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-import {useAppStore} from '../../store';
+import {signUp} from '../../store/authSlice/authApiService';
 
 export default function ContactScreen() {
   /*
@@ -28,12 +28,11 @@ export default function ContactScreen() {
   const [state, setState] = useState<string>('sindh');
   const [country, setCountry] = useState<string>('afghanistan');
   const [phoneNumber, setPhoneNumber] = useState<string>('3344616166');
+  const [loading, setLoading] = useState<boolean>(false);
   /*
    ** Hooks
    */
   const navigation = useAppNavigation();
-  const signUp = useAppStore(appState => appState.signUp);
-  const isLoading = useAppStore(appState => appState.authLoading);
   /*
    ** Functions
    */
@@ -63,14 +62,17 @@ export default function ContactScreen() {
       };
 
       console.log('params is:', params);
-
+      setLoading(true);
       await signUp(params);
+      setLoading(false);
+
       // navigating to another screen
       navigation.navigate('ConfirmSignupScreen', {
         email,
         password,
       });
     } catch (error) {
+      setLoading(false);
       console.log('🚀 ~ SignUpPressed ~ error:', error);
     }
   };
@@ -102,7 +104,7 @@ export default function ContactScreen() {
       />
 
       {/* Main button */}
-      <AppButton loading={isLoading} title={'signUp'} onPress={SignUpPressed} />
+      <AppButton loading={loading} title={'signUp'} onPress={SignUpPressed} />
     </AppScreen>
   );
 }

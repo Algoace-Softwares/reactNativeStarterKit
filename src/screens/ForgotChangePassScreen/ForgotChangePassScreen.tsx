@@ -9,7 +9,7 @@ import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {changePasswordSchema} from '../../utils/SchemaValidation';
 import {ZodError} from 'zod';
 import {CustomTheme} from '../../theme';
-import {useAppStore} from '../../store';
+import {forgotChangePassword, resendConfirmationCode} from '../../store/authSlice/authApiService';
 
 export default function ForgotChangePassScreen(): JSX.Element {
   /*
@@ -18,9 +18,6 @@ export default function ForgotChangePassScreen(): JSX.Element {
   const route = useRoute<RouteProp<AuthStackParamList, 'ForgotChangePassScreen'>>();
   const navigation = useAppNavigation();
   const {colors} = useTheme() as CustomTheme;
-  const forgotChangePassword = useAppStore(state => state.forgotChangePassword);
-  const isLoading = useAppStore(state => state.authLoading);
-  const resendConfirmationCode = useAppStore(state => state.resendCode);
   /*
    ** Routing params
    */
@@ -34,10 +31,10 @@ export default function ForgotChangePassScreen(): JSX.Element {
   const [confirmPassword, setConfirmPassword] = useState<string>('Admin1234');
   const [countDown, setCountDown] = useState<number>(59);
   const [resendCode, setResendCode] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   /*
    ** Functions
    */
-
   // when reste btn is pressed
   const resetPassPressed = async () => {
     try {
@@ -49,21 +46,32 @@ export default function ForgotChangePassScreen(): JSX.Element {
       };
       const data = changePasswordSchema.parse(params);
       console.log('🚀 ~ resetPassPressed ~ data:', data);
+      setLoading(true);
       await forgotChangePassword(params.email, params.password, params.confirmationCode);
+      setLoading(false);
+
       navigation.goBack();
       navigation.goBack();
     } catch (error) {
+      console.log('🚀 ~ appBtnPress ~ error:', error);
+      setLoading(true);
       if (error instanceof ZodError) {
         Toast.show(error?.issues[0]?.message, Toast.LONG);
       }
-      console.log('🚀 ~ appBtnPress ~ error:', error);
     }
   };
 
   // when resend code is pressed
-  const onPressResendCode = (): void => {
+  const onPressResendCode = async () => {
     setResendCode(false);
-    resendConfirmationCode(email);
+    try {
+      setLoading(true);
+      await resendConfirmationCode(email);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('🚀 ~ onPressResendCode ~ error:', error);
+    }
   };
   /*
    ** Lifecycles
@@ -104,7 +112,7 @@ export default function ForgotChangePassScreen(): JSX.Element {
 
       <OTPFieldInput textLable={'confirmationCode'} onChangeText={setConfirmationCode} />
 
-      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={isLoading} />
+      <AppButton title={'resetPassword'} onPress={resetPassPressed} loading={loading} />
 
       <View style={styles.resendCodeViewstyle}>
         {resendCode ? (
