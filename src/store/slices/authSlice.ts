@@ -8,7 +8,6 @@ import {ASYNC_TOKEN_KEY, ASYNC_USER_DATA_KEY} from '../../constants';
 import {loadStorage, saveStorage, saveStringStorage} from '../../utils/storage/storage';
 import {userDataType} from '../../@types';
 import {resetAllSlices, sliceResetFns} from '../utils';
-import {useAppStore} from '..';
 /*
  ** Initial states
  */
@@ -25,7 +24,7 @@ const initialState: authState = {
   },
 };
 
-export const createAuthSlice: StateCreator<authSlice> = set => {
+export const createAuthSlice: StateCreator<authSlice> = (set, get) => {
   sliceResetFns.add(() => set(initialState));
   return {
     ...initialState,
@@ -46,7 +45,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
 
         console.log('🚀 ~ signIn: ~ response:', response);
         const user = response.data;
-        set({authLoading: false, authSuccess: true, userData: user?.data, tokens: user?.tokens});
+        set({userData: user?.data, tokens: user?.tokens});
         saveStorage(ASYNC_TOKEN_KEY, user?.tokens);
         saveStorage(ASYNC_USER_DATA_KEY, user?.data);
       } catch (error: any | unknown) {
@@ -56,7 +55,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
          ** If user is not confirmed
          */
         if (error?.response?.data?.message === 'User not confirmed') {
-          useAppStore.getState().resendCode(params.email);
+          get().resendCode(params.email);
           Toast.show('User is not confirmed', Toast.LONG);
           navigate('ConfirmSignupScreen', {
             email: params.email,
@@ -141,7 +140,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
         // Handle success
         set({authLoading: false, authSuccess: true, authMessage: 'Account confirmed successfully'});
         Toast.show('Account confirmed successfully', Toast.LONG);
-        useAppStore.getState().signIn({email: emailAddress, password});
+        get().signIn({email: emailAddress, password});
       } catch (error: any) {
         console.log('🚀 ~ confirmSignup: ~ error:', error);
         set({authLoading: false, authError: true, authMessage: error.message || 'Confirm signup failed'});
@@ -186,8 +185,8 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
       set({authLoading: true, authError: false, authMessage: ''});
       try {
         // Call API for signOut logic
-        const user = useAppStore.getState().userData as userDataType;
-        const tokens = useAppStore.getState().tokens as tokenType;
+        const user = get().userData as userDataType;
+        const tokens = get().tokens as tokenType;
 
         // Example:
         const response = await AUTH_API.post('/auth/logout', {userId: user?.PK, accessToken: tokens?.accessToken});
@@ -235,7 +234,7 @@ export const createAuthSlice: StateCreator<authSlice> = set => {
           console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
           user = response?.data?.data;
           // updating latest data in local as well as in store
-          useAppStore.getState().updateUserData(user);
+          get().updateUserData(user);
         }
         set({authLoading: false, authSuccess: true});
       } catch (error: any) {
