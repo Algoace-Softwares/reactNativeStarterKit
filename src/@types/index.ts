@@ -22,3 +22,7 @@ export type userDataType = {
   PK: string;
   userProfileImage: string;
 };
+export interface tokenType {
+  accessToken: string;
+  refreshToken: string;
+}
