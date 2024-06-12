@@ -30,7 +30,7 @@ export default function LoginScreen(): JSX.Element {
   /*
    *  Btn press to make user Login
    */
-  const appBtnPress = () => {
+  const appBtnPress = async () => {
     try {
       const params = {
         email: emailAddress?.trim(),
