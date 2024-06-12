@@ -11,5 +11,7 @@ jobs:
         node-version: '20'
       name: installding dependencies
     - run: yarn install
+      name: checking linteing errors
+    - run: yarn lint
       name: checking node version
     - run: node -v
