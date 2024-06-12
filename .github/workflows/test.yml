@@ -5,8 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      name: setting up node
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
+      name: installding dependencies
     - run: yarn install
+      name: checking node version
     - run: node -v
