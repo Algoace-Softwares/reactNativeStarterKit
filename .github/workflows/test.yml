@@ -1,7 +1,8 @@
 name: My first github actions
 on: [push]
 jobs:
-  print-hello-world:
+  build-app:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello world!!!!!!!!"
+    - uses: actions/checkout@v4
+    - run: tree
