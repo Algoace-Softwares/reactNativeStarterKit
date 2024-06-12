@@ -16,6 +16,8 @@ jobs:
     - run: yarn lint
       name: checking node version
     - run: node -v
+      name: Run ESLint
+    - run: npm run lint
       name: List files in the repository
     - run: |
           ls ${{ github.workspace }}
