@@ -40,11 +40,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Change directory to android
-        run: cd android
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v1
+        with:
+          gradle-version: '8.5'
 
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
-      - name: Build with Gradle
-        run: android/gradlew build
+      - name: Change directory to android and build
+        run: |
+          cd android
+          ./gradlew build
