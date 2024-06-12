@@ -59,4 +59,4 @@ jobs:
       - name: Change directory to android and build
         run: |
           cd android
-          ./gradlew build
+          ./gradlew build --continue
