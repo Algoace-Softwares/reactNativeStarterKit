@@ -79,6 +79,7 @@ This is simple and easy to use starter kit following are the feature used in thi
 - svg metro bundler handling
 - dynamic aspect ratio for image
 - env setup
+- Github actions for CI set up
 
 ## Things remaining
 

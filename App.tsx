@@ -69,6 +69,3 @@ function App(): React.JSX.Element {
 }
 
 export default App;
-
-// react native testing
-// ci/cd
