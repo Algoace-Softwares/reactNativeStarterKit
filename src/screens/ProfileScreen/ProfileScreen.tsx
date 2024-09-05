@@ -21,7 +21,7 @@ const ProfileScreen = () => {
   const userSignOut = async () => {
     try {
       setLoading(true);
-      await signOut(userData?.PK as string, userTokens.accessToken);
+      await signOut(userData?._id as string, userTokens.accessToken);
       setLoading(false);
     } catch (error) {
       console.log('🚀 ~ signOut ~ error:', error);

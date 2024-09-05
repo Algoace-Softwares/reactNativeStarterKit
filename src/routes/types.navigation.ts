@@ -34,6 +34,8 @@ export type AuthStackParamList = {
 };
 export type HomeStackParamList = {
   BottomTab: NavigatorScreenParams<BottomTabNavigatorParamList>;
+  ChatScreen: undefined;
+  SettingScreen: undefined;
 };
 
 export type HomeScreenNavigationProp = CompositeNavigationProp<

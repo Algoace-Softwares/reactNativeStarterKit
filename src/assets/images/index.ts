@@ -7,4 +7,5 @@ export const IMAGES = {
   onBoarding3: require('./bording3.png'),
   onBoarding: require('./onBoarding.png'),
   appLogo: require('./appLogo.png'),
+  blankAvatar: require('./blankAvatar.png'),
 };

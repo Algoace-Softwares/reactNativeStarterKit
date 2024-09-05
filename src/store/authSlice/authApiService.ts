@@ -38,6 +38,26 @@ export const signIn = async (params: emailPassType) => {
     handleAuthContextError('signIn', error);
   }
 };
+/*
+ ** Get user data by email
+ */
+export const signInEmail = async ({email}: {email: string}) => {
+  try {
+    // Call API for changePassword logic
+    const response = await AUTH_API.get('/user', {params: {email}});
+    console.log('🚀 ~ signInEmail ~ response:', response);
+    const user = response.data;
+    if (user?.data) {
+      /*
+       ** updating user data as well as tokens
+       */
+      useAppStore.getState().updateUserData(user?.data);
+    }
+    // Handle success
+  } catch (error: any) {
+    console.log('🚀 ~ signInEmail ~ error:', error);
+  }
+};
 
 export const signUp = async (params: SignUpParams) => {
   try {
@@ -132,11 +152,11 @@ export const fetchUserDataLocal = async () => {
     const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
     console.log('🚀 ~ fetchUserDataLocal ~ userToken:', userToken);
 
-    if (user && 'PK' in user && 'accessToken' in userToken) {
+    if (user && '_id' in user) {
       console.log('User is logged in');
 
       useAppStore.setState({userData: user, tokens: userToken});
-      const response = await AUTH_API.get(`/user/${user.PK}`);
+      const response = await AUTH_API.get(`/user`, {params: {email: user.email}});
       console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
       user = response?.data?.data;
       useAppStore.getState().updateUserData(user);

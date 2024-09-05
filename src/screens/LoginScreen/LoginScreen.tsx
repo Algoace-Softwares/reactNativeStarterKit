@@ -4,17 +4,16 @@ import {AppButton, AppScreen, AppText, AuthHeader, BackButton, InputTextLabel} f
 import Toast from 'react-native-simple-toast';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {ZodError} from 'zod';
-import {loginSchema} from '../../utils/SchemaValidation';
+import {emailSchema} from '../../utils/SchemaValidation';
 import styles from './style';
 import {useAppStore} from '../../store';
-import {signIn} from '../../store/authSlice/authApiService';
+import {signInEmail} from '../../store/authSlice/authApiService';
 
 export default function LoginScreen(): JSX.Element {
   /*
    ** States
    */
-  const [emailAddress, setEmailAddress] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [emailAddress, setEmailAddress] = useState<string>('shaheer.ahmed@algoace.com');
   const [loading, setLoading] = useState<boolean>(false);
 
   const userData = useAppStore(state => state.userData);
@@ -34,20 +33,19 @@ export default function LoginScreen(): JSX.Element {
     try {
       const params = {
         email: emailAddress?.trim(),
-        password,
       };
-      loginSchema.parse(params);
+      emailSchema.parse(params);
       setLoading(true);
       // singing user in app
-      await signIn(params);
+      await signInEmail(params);
       setLoading(false);
       console.log('params:', params);
     } catch (error: unknown | ZodError) {
+      console.log('🚀 ~ appBtnPress ~ error:', error);
       setLoading(false);
       if (error instanceof ZodError) {
         Toast.show(error?.issues[0]?.message, Toast.LONG);
       }
-      console.log('🚀 ~ appBtnPress ~ error:', error);
     }
   };
   return (
@@ -57,7 +55,6 @@ export default function LoginScreen(): JSX.Element {
       <AuthHeader text1={'welcomeBack'} text2={'signInLabel'} />
 
       <InputTextLabel textLable={'email'} onChangeText={setEmailAddress} value={emailAddress} />
-      <InputTextLabel textLable={'password'} onChangeText={setPassword} value={password} isPassword={true} />
 
       <AppButton title={'login'} onPress={appBtnPress} loading={loading} />
 

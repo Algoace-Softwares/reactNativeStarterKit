@@ -14,6 +14,8 @@ const en = {
   profile: 'Profile',
   login: 'Login',
   logout: 'Logout',
+  chatScreen: 'Chat Screen',
+  notFound: 'Not found',
   continuenWithFacebook: 'Continue with Facebook',
   continuenWithGoogle: 'Continue with Google',
   continuenWithApple: 'Continue with Apple',

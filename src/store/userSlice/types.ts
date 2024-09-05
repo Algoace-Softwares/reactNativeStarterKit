@@ -2,10 +2,11 @@
  ** User slice type
  */
 
+import {chatRoomType} from '../../@types';
+
 export interface userState {
-  bears: number;
-  userDogs: unknown[];
+  chatRooms: chatRoomType[];
 }
 export interface userSlice extends userState {
-  addBear: () => void;
+  setChatRooms: (chatRooms: chatRoomType[]) => void;
 }

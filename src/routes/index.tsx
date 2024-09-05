@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {authScreens, homeScreen} from '../data';
+import {authScreens, homeScreens} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
 import {useBackButtonHandler, navigationRef} from './navigationUtilities';
 import BaseConfig from '../config';
@@ -41,7 +41,7 @@ const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const HomeStackScreens = (): JSX.Element => {
   return (
     <HomeStack.Navigator>
-      {homeScreen.map(item => {
+      {homeScreens.map(item => {
         return (
           <HomeStack.Screen
             key={item.id}

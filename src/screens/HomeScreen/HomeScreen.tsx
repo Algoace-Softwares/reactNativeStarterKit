@@ -1,23 +1,27 @@
 import {Text, View} from 'react-native';
 import React from 'react';
 import styles from './style';
-import {useDogs} from '../../store/userSlice/userApiServices';
+import {AppButton} from '../../components';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const HomeScreen = () => {
-  const {data, isPending, error} = useDogs();
-  console.log('🚀 ~ HomeScreen ~ data:', data);
-  console.log('🚀 ~ HomeScreen ~ error:', error);
-  console.log('🚀 ~ HomeScreen ~ isPending:', isPending);
+  /*
+   * Hooks
+   */
+  const navigation = useAppNavigation();
   /*
    ** Lifecycle methods
    */
-  if (isPending) return <Text>'Loading...'</Text>;
-
-  if (error) return <Text>An error has occurred: ' + error.message</Text>;
 
   return (
     <View style={styles.mainView}>
       <Text>HomeScreen</Text>
+      <AppButton
+        title={'chatScreen'}
+        onPress={() => {
+          navigation.navigate('ChatScreen');
+        }}
+      />
     </View>
   );
 };
