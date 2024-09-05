@@ -12,4 +12,5 @@ export const SVG = {
   DropDownIcon: require('./dropDown.svg').default,
   DropUpIcon: require('./dropUp.svg').default,
   UserIcon: require('./user.svg').default,
+  PlusIcon: require('./plus.svg').default,
 };

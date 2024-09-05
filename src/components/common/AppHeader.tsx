@@ -217,15 +217,16 @@ const styles = StyleSheet.create({
   },
 
   contentContainerStyle: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    // backgroundColor: 'red',
     flexDirection: 'row',
     height: HEIGHT * 0.1,
-    justifyContent: 'space-between',
+    // justifyContent: 'flex-end',
     maxHeight: HEIGHT * 0.1,
-    paddingBottom: 10,
+    // paddingHorizontal: 10,
   },
   titleCenter: {
-    alignItems: 'center',
+    // alignItems: 'center',
     height: '100%',
     justifyContent: 'flex-end',
     paddingHorizontal: SPACING.xxl,

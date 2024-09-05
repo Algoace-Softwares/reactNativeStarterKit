@@ -2,6 +2,7 @@ import {IMAGES, SVG} from '../assets';
 import {en} from '../labels';
 import BottomTab from '../routes/BottomTab';
 import {
+  ChatRoomsScreen,
   ChatScreen,
   ConfirmSignupScreen,
   ForgotChangePassScreen,
@@ -74,6 +75,11 @@ export const homeScreens = [
     id: 3,
     screenName: 'ChatScreen',
     component: ChatScreen,
+  },
+  {
+    id: 4,
+    screenName: 'ChatRoomsScreen',
+    component: ChatRoomsScreen,
   },
 ];
 

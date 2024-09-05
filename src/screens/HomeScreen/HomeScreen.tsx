@@ -17,9 +17,9 @@ const HomeScreen = () => {
     <View style={styles.mainView}>
       <Text>HomeScreen</Text>
       <AppButton
-        title={'chatScreen'}
+        title={'chatRoomsScreen'}
         onPress={() => {
-          navigation.navigate('ChatScreen');
+          navigation.navigate('ChatRoomsScreen');
         }}
       />
     </View>

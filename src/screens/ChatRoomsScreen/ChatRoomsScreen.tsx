@@ -6,8 +6,9 @@ import {getChatRooms} from '../../store/userSlice/userApiServices';
 import RoomCard from '../../components/RoomCard';
 import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
+import styles from './style';
 
-const ChatScreen = () => {
+const ChatRoomsScreen = () => {
   /*
    * Hooks
    */
@@ -47,7 +48,7 @@ const ChatScreen = () => {
   useHeader(
     {
       titleMode: 'center',
-      transTitle: 'chatScreen',
+      transTitle: 'chatRoomsScreen',
       LeftActionComponent: <BackButton />,
     },
     [],
@@ -58,8 +59,11 @@ const ChatScreen = () => {
       <FlatList
         data={chatRooms}
         keyExtractor={(_, index) => `index-${index}`}
-        ListEmptyComponent={<AppText transText={'notFound'} presetStyle={'default'} />}
+        ListEmptyComponent={
+          <AppText transText={'notFound'} presetStyle={'default'} style={styles.notFoundLableStyling} />
+        }
         ListHeaderComponent={loading ? <Loading fullScreen /> : <></>}
+        style={styles.flatListContStyle}
         horizontal={false}
         // extraData={extraDataForMessageList}
         showsVerticalScrollIndicator={false}
@@ -70,4 +74,4 @@ const ChatScreen = () => {
   );
 };
 
-export default ChatScreen;
+export default ChatRoomsScreen;

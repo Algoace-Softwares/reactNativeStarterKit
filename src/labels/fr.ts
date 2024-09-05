@@ -17,6 +17,7 @@ const fr: Translations = {
   login: 'Connexion',
   logout: 'Se déconnecter',
   chatScreen: 'Chat Screen',
+  chatRoomsScreen: 'Chat Rooms Screen',
   notFound: 'Not found',
   continuenWithFacebook: 'Continuer avec Facebook',
   continuenWithGoogle: 'Continuer avec Google',

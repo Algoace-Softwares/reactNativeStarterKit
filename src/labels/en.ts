@@ -15,6 +15,7 @@ const en = {
   login: 'Login',
   logout: 'Logout',
   chatScreen: 'Chat Screen',
+  chatRoomsScreen: 'Chat Rooms Screen',
   notFound: 'Not found',
   continuenWithFacebook: 'Continue with Facebook',
   continuenWithGoogle: 'Continue with Google',
