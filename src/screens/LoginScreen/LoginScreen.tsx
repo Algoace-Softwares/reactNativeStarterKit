@@ -13,8 +13,8 @@ export default function LoginScreen(): JSX.Element {
   /*
    ** States
    */
-  const [emailAddress, setEmailAddress] = useState<string>('shaheer.ahmed@algoace.com');
-  const [password, setPassword] = useState<string>('Admin1234');
+  const [emailAddress, setEmailAddress] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const userData = useAppStore(state => state.userData);
