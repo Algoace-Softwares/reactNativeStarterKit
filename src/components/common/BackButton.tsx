@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {SVG} from '../../assets';
-import {COLORS, CustomTheme} from '../../theme';
+import {COLORS, CustomTheme, SPACING} from '../../theme';
 
 interface backBtnType {
   fillColor?: string;
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 40,
     justifyContent: 'center',
-    marginLeft: 21,
+    marginLeft: SPACING.sm,
     width: 40,
   },
 });

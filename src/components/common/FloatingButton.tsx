@@ -2,7 +2,7 @@ import React from 'react';
 import {useTheme} from '@react-navigation/native';
 import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {SVG} from '../../assets';
-import {COLORS, CustomTheme, HEIGHT, WIDTH} from '../../theme';
+import {COLORS, CustomTheme, DEFAULT_COLORS, HEIGHT, WIDTH} from '../../theme';
 
 interface floatingBtnType {
   fillColor?: string;
@@ -33,11 +33,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.primary,
     borderRadius: 100,
+    elevation: 7,
     height: 60,
     justifyContent: 'center',
     position: 'absolute',
     right: WIDTH * 0.1,
-    top: HEIGHT - 200,
+    shadowColor: DEFAULT_COLORS.palette.black,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    top: HEIGHT - 160,
     width: 60,
   },
 });

@@ -13,6 +13,7 @@ const fr: Translations = {
   phoneNumber: 'Numéro de téléphone',
   state: 'État',
   findUser: 'trouver un utilisateur',
+  noResultFound: 'Aucun résultat trouvé',
   Country: 'Pays',
   home: 'Accueil',
   profile: 'Profil',

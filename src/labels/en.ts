@@ -11,6 +11,7 @@ const en = {
   state: 'State',
   userSearchScreen: 'User Search Screen',
   findUser: 'Find user',
+  noResultFound: 'No result found',
   Country: 'Country',
   home: 'Home',
   profile: 'Profile',

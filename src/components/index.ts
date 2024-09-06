@@ -3,6 +3,7 @@ App componenets
 *
  */
 export {default as MessengerCard} from './MessengerCard';
+export {default as UserCard} from './UserCard';
 /*
  ** Common components
  */
