@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'space-around',
     marginLeft: SPACING.sm,
-    // backgroundColor: 'red',
+    paddingVertical: SPACING.xs,
     width: '70%',
   },
   mainViewStyle: {
