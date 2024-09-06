@@ -9,6 +9,8 @@ const en = {
   contactLable: 'Fill in your phone number and location',
   phoneNumber: 'Phone Number',
   state: 'State',
+  userSearchScreen: 'User Search Screen',
+  findUser: 'Find user',
   Country: 'Country',
   home: 'Home',
   profile: 'Profile',

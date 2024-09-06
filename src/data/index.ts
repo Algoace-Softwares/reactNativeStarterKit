@@ -13,6 +13,7 @@ import {
   ProfileScreen,
   SettingScreen,
   SignupScreen,
+  UserSearchScreen,
 } from '../screens';
 import ContactScreen from '../screens/ContactScreen/ContactScreen';
 
@@ -80,6 +81,11 @@ export const homeScreens = [
     id: 4,
     screenName: 'ChatRoomsScreen',
     component: ChatRoomsScreen,
+  },
+  {
+    id: 5,
+    screenName: 'UserSearchScreen',
+    component: UserSearchScreen,
   },
 ];
 

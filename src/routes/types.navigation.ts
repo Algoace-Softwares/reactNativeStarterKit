@@ -37,6 +37,7 @@ export type HomeStackParamList = {
   ChatScreen: undefined;
   ChatRoomsScreen: undefined;
   SettingScreen: undefined;
+  UserSearchScreen: undefined;
 };
 
 export type HomeScreenNavigationProp = CompositeNavigationProp<

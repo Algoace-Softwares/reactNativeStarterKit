@@ -7,6 +7,7 @@ import RoomCard from '../../components/RoomCard';
 import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
 import styles from './style';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const ChatRoomsScreen = () => {
   /*
@@ -15,6 +16,7 @@ const ChatRoomsScreen = () => {
   const chatRooms = useAppStore(state => state.chatRooms);
   const userData = useAppStore(state => state.userData);
   const setChatRooms = useAppStore(state => state.setChatRooms);
+  const navigation = useAppNavigation();
   /*
    ** States
    */
@@ -69,7 +71,10 @@ const ChatRoomsScreen = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({item: chatItem}) => <RoomCard item={chatItem} onLongPress={data => console.log(data)} />}
       />
-      <FloatingButton fillColor={COLORS.buttonTextSeconday} />
+      <FloatingButton
+        fillColor={COLORS.buttonTextSeconday}
+        onPressBtn={() => navigation.navigate('UserSearchScreen')}
+      />
     </AppScreen>
   );
 };

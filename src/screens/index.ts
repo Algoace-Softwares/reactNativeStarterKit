@@ -12,4 +12,5 @@ export {default as ConfirmSignupScreen} from './ConfirmSignupScreen/ConfirmSignu
 export {default as SettingScreen} from './SettingScreen/SettingScreen';
 export {default as ChatScreen} from './ChatScreen/ChatScreen';
 export {default as ChatRoomsScreen} from './ChatRoomsScreen/ChatRoomsScreen';
+export {default as UserSearchScreen} from './UserSearchScreen/UserSearchScreen';
 // export {ErrorBoundary} from './ErrorBoundaryScreen/ErrorBoundary';
