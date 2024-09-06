@@ -1,5 +1,8 @@
-// app componenets
-
+/* 
+App componenets
+*
+ */
+export {default as MessengerCard} from './MessengerCard';
 /*
  ** Common components
  */

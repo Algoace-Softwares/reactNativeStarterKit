@@ -34,19 +34,27 @@ export interface FcmTokenType {
   deviceId: string;
   fcmToken: string;
 }
+export type chatRoomMember = {
+  _id: string;
+  email: string;
+  name: string;
+  nickName: string;
+  profileImage: string;
+};
 
 export interface chatRoomType {
   readonly _id?: string;
   readonly createdBy: string;
-  admins: string;
-  members: string;
+  admins: string[];
+  members: chatRoomMember[];
   isGroupChat: boolean;
-  lastMessage: string;
+  lastMessage?: string;
   roomName: string;
-  roomPrivacy: 'PUBLIC' | 'PRIVATE';
+  roomPrivacy: string;
   profileImage?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 export interface chatMessageType {

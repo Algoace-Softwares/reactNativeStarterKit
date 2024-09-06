@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {AppScreen, AppText, BackButton, FloatingButton, Loading} from '../../components';
 import {useAppStore} from '../../store';
 import {getChatRooms} from '../../store/userSlice/userApiServices';
-import RoomCard from '../../components/RoomCard';
+import RoomCard from '../../components/MessengerCard';
 import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
 

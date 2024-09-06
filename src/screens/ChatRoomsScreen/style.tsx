@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
   flatListContStyle: {
     paddingTop: 20,
   },
+  listContainer: {
+    paddingVertical: 10,
+  },
   mainView: {
     alignItems: 'center',
     flex: 1,
