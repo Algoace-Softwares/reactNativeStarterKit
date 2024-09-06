@@ -6,6 +6,7 @@ import {SVG} from '../assets';
 import {useTheme} from '@react-navigation/native';
 import AppImage from './common/AppImage';
 import AppText from './common/AppText';
+import {useAppNavigation} from '../hooks/useAppNavigation';
 
 interface roomCardType {
   onLongPress: (item: chatRoomType) => void;
@@ -15,10 +16,11 @@ interface roomCardType {
 export default function MessengerCard(props: roomCardType): JSX.Element {
   // destuctruing props
   const {item, onLongPress} = props;
-  const {colors} = useTheme();
   /*
    ** Hooks
    */
+  const {colors} = useTheme();
+  const navigation = useAppNavigation();
   /*
    ** Functions
    */
@@ -47,7 +49,10 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
   };
   // Rerendering
   return (
-    <TouchableOpacity style={styles.mainViewStyle} onLongPress={() => onLongPress(item)}>
+    <TouchableOpacity
+      style={styles.mainViewStyle}
+      onLongPress={() => onLongPress(item)}
+      onPress={() => navigation.navigate('ChatScreen', {roomId: item?._id})}>
       <View style={styles.containerStyle}>
         {item.profileImage ? (
           <AppImage source={{uri: item.profileImage}} style={styles.userProfilePic} maxHeight={60} maxWidth={60} />

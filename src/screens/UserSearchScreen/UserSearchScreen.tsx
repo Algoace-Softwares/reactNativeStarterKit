@@ -7,12 +7,14 @@ import {AUTH_API} from '../../api';
 import Toast from 'react-native-simple-toast';
 import {FlatList} from 'react-native';
 import styles from './style';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const UserSearchScreen = () => {
   /*
    * Hooks
    */
   const userData = useAppStore(state => state.userData);
+  const navigation = useAppNavigation();
   console.log('🚀 ~ UserSearchScreen ~ userData:', userData);
   /*
    ** States
@@ -42,7 +44,6 @@ const UserSearchScreen = () => {
   const onChangeText = async (text: string) => {
     console.log('🚀 ~ onChangeText ~ text:', text);
     setLoading(true);
-    setSearchText(text);
     try {
       const response = await AUTH_API.get('/user/all', {params: {page: 1, limit: 50, name: text?.toLowerCase()}});
       console.log('🚀 ~ onChangeText ~ response:', response);
@@ -50,11 +51,13 @@ const UserSearchScreen = () => {
       const pageNum = response.data.data.page;
       console.log('🚀 ~ onChangeText ~ searchedUsers:', searchedUsers);
       console.log('🚀 ~ onChangeText ~ pageNum:', pageNum);
-      if (searchText?.length === 0 && searchedUsers) {
-        setUsers([]);
-      } else if (searchedUsers && pageNum === 1) {
+      if (searchedUsers && pageNum === 1) {
+        console.log('2');
+
         setUsers(response.data.data.items);
       } else if (searchedUsers && pageNum > 1) {
+        console.log('3');
+
         setUsers([...users, ...searchedUsers]);
       }
       setLoading(false);
@@ -66,9 +69,16 @@ const UserSearchScreen = () => {
   };
   return (
     <AppScreen>
-      <InputTextLabel value={searchText} onChangeText={onChangeText} placeHolder={'Search here.....'} />
+      <InputTextLabel
+        value={searchText}
+        onChangeText={text => {
+          setSearchText(text);
+          onChangeText(text);
+        }}
+        placeHolder={'Search here.....'}
+      />
       <FlatList
-        data={users}
+        data={searchText ? users : []}
         keyExtractor={(_, index) => `index-${index}`}
         ListEmptyComponent={
           searchText?.length > 1 ? (
@@ -78,10 +88,9 @@ const UserSearchScreen = () => {
         ListHeaderComponent={loading ? <Loading fullScreen /> : <></>}
         style={styles.flatListContStyle}
         horizontal={false}
-        // extraData={extraDataForMessageList}
         showsVerticalScrollIndicator={false}
         renderItem={({item: user}) => {
-          return <UserCard item={user} onPressCard={data => console.log(data)} />;
+          return <UserCard item={user} onPressCard={data => navigation.navigate('ChatScreen')} />;
         }}
       />
     </AppScreen>

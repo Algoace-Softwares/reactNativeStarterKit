@@ -1,46 +1,45 @@
-import {FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {AppScreen, AppText, BackButton, FloatingButton, Loading} from '../../components';
+import React, {useCallback, useState} from 'react';
+import {AppScreen, BackButton} from '../../components';
 import {useAppStore} from '../../store';
-import {getChatRooms} from '../../store/userSlice/userApiServices';
-import RoomCard from '../../components/MessengerCard';
 import {useHeader} from '../../hooks/useHeader';
-import {COLORS} from '../../theme';
+import {GiftedChat} from 'react-native-gifted-chat';
 
 const ChatScreen = () => {
   /*
    * Hooks
    */
-  const chatRooms = useAppStore(state => state.chatRooms);
   const userData = useAppStore(state => state.userData);
-  const setChatRooms = useAppStore(state => state.setChatRooms);
   /*
    ** States
    */
   const [loading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState([]);
   /*
    ** Lifecycle methods
    */
-  useEffect(() => {
-    // Fetch chat rooms
-    const fetchChatRooms = async () => {
-      try {
-        setLoading(true);
-        await getChatRooms(userData?._id as string);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.log('🚀 ~ fetchChatRooms ~ error:', error);
-      }
-    };
-    fetchChatRooms();
+  // useEffect(() => {
+  //   // Fetch chat rooms
+  //   const fetchChatRooms = async () => {
+  //     try {
+  //       setLoading(true);
+  //       await getChatRooms(userData?._id as string);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       console.log('🚀 ~ fetchChatRooms ~ error:', error);
+  //     }
+  //   };
+  //   fetchChatRooms();
 
-    // Clean up function
-    return () => {
-      // Clear chat rooms on unmount
-      setChatRooms([]);
-    };
-  }, [setChatRooms, userData?._id]);
+  //   // Clean up function
+  //   return () => {
+  //     // Clear chat rooms on unmount
+  //     setChatRooms([]);
+  //   };
+  // }, [setChatRooms, userData?._id]);
+  const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+  }, []);
   /*
    ** Rendeing header componenet
    */
@@ -55,17 +54,13 @@ const ChatScreen = () => {
 
   return (
     <AppScreen>
-      <FlatList
-        data={chatRooms}
-        keyExtractor={(_, index) => `index-${index}`}
-        ListEmptyComponent={<AppText transText={'notFound'} presetStyle={'default'} />}
-        ListHeaderComponent={loading ? <Loading fullScreen /> : <></>}
-        horizontal={false}
-        // extraData={extraDataForMessageList}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item: chatItem}) => <RoomCard item={chatItem} onLongPress={data => console.log(data)} />}
+      <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: 1,
+        }}
       />
-      <FloatingButton fillColor={COLORS.buttonTextSeconday} />
     </AppScreen>
   );
 };

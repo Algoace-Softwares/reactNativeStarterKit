@@ -23,7 +23,6 @@ export default function BackButton(props: backBtnType): JSX.Element {
   return (
     <TouchableOpacity style={[styles.mainViewStyle, viewStyle]} onPress={() => navigation.goBack()}>
       <SVG.BackIcon fill={fillColor || colors.background} />
-      {/* <AppIcon icon={'BackIcon'} color={colors.background} /> */}
     </TouchableOpacity>
   );
 }
