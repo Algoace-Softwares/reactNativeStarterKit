@@ -43,7 +43,7 @@ export type chatRoomMember = {
 };
 
 export interface chatRoomType {
-  readonly _id?: string;
+  readonly _id: string;
   readonly createdBy: string;
   admins: string[];
   members: chatRoomMember[];

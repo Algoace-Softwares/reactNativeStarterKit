@@ -1,7 +1,7 @@
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {CompositeNavigationProp, NavigatorScreenParams} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {chatRoomMember} from '../@types';
+import {chatRoomMember, chatRoomType} from '../@types';
 /*
  ** Bottom tab screen list
  */
@@ -35,7 +35,7 @@ export type AuthStackParamList = {
 };
 export type HomeStackParamList = {
   BottomTab: NavigatorScreenParams<BottomTabNavigatorParamList>;
-  ChatScreen: {roomId: string; user: chatRoomMember};
+  ChatScreen: {room?: chatRoomType; member?: chatRoomMember; roomName: string; roomImage: string};
   ChatRoomsScreen: undefined;
   SettingScreen: undefined;
   UserSearchScreen: undefined;

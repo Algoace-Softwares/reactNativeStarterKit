@@ -54,7 +54,7 @@ const UserSearchScreen = () => {
       if (searchedUsers && pageNum === 1) {
         console.log('2');
 
-        setUsers(response.data.data.items);
+        setUsers(searchedUsers);
       } else if (searchedUsers && pageNum > 1) {
         console.log('3');
 
@@ -90,7 +90,14 @@ const UserSearchScreen = () => {
         horizontal={false}
         showsVerticalScrollIndicator={false}
         renderItem={({item: user}) => {
-          return <UserCard item={user} onPressCard={data => navigation.navigate('ChatScreen')} />;
+          return (
+            <UserCard
+              item={user}
+              onPressCard={() =>
+                navigation.navigate('ChatScreen', {member: user, roomName: user.name, roomImage: user.profileImage})
+              }
+            />
+          );
         }}
       />
     </AppScreen>

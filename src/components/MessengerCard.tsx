@@ -52,7 +52,9 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
     <TouchableOpacity
       style={styles.mainViewStyle}
       onLongPress={() => onLongPress(item)}
-      onPress={() => navigation.navigate('ChatScreen', {roomId: item?._id})}>
+      onPress={() =>
+        navigation.navigate('ChatScreen', {room: item, roomName: item.roomName, roomImage: item.profileImage || ''})
+      }>
       <View style={styles.containerStyle}>
         {item.profileImage ? (
           <AppImage source={{uri: item.profileImage}} style={styles.userProfilePic} maxHeight={60} maxWidth={60} />
