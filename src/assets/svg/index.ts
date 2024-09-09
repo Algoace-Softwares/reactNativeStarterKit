@@ -13,4 +13,8 @@ export const SVG = {
   DropUpIcon: require('./dropUp.svg').default,
   UserIcon: require('./user.svg').default,
   PlusIcon: require('./plus.svg').default,
+  imageIcon: require('./image.svg').default,
+  videoIcon: require('./video.svg').default,
+  fileIcon: require('./file.svg').default,
+  audioIcon: require('./audio.svg').default,
 };

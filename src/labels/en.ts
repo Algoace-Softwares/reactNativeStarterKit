@@ -13,6 +13,7 @@ const en = {
   findUser: 'Find user',
   noResultFound: 'No result found',
   Country: 'Country',
+  noRoomFound: 'No room found',
   home: 'Home',
   profile: 'Profile',
   login: 'Login',

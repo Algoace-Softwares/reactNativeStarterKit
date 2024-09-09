@@ -1,4 +1,4 @@
-import {API, AUTH_API} from '../../api';
+import {API, LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
@@ -20,14 +20,16 @@ export const changePassword = async (userId: string, oldPassword: string, newPas
  */
 export const getChatRooms = async (userId: string) => {
   try {
-    const chatRoomsData = await AUTH_API.get(`/chat/${userId}`);
+    const chatRoomsData = await LOCAL_HOST.get(`/chat/${userId}`);
     // Handle success
     console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
-    if (chatRoomsData?.data) {
+    const rooms = chatRoomsData?.data?.data?.items;
+    const page = chatRoomsData?.data?.data?.page;
+    if (rooms && page === 1) {
       /*
        ** updating user chat rooms
        */
-      useAppStore.getState().setChatRooms(chatRoomsData?.data);
+      useAppStore.getState().setChatRooms(rooms);
     }
   } catch (error: any) {
     console.log('🚀 ~ getChatRooms ~ error:', error);

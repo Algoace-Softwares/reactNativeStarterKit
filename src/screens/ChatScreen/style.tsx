@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: 150,
   },
+  mainContainer: {
+    flex: 1,
+  },
   mainView: {
     alignItems: 'center',
     flex: 1,

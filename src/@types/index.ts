@@ -41,6 +41,11 @@ export type chatRoomMember = {
   nickName: string;
   profileImage: string;
 };
+export type messageType = 'TEXT' | 'IMAGE' | 'VIDEO' | 'VOICE' | 'FILE';
+export type lastMessageType = {
+  message: string;
+  messageType: messageType;
+};
 
 export interface chatRoomType {
   readonly _id: string;
@@ -48,7 +53,7 @@ export interface chatRoomType {
   admins: string[];
   members: chatRoomMember[];
   isGroupChat: boolean;
-  lastMessage?: string;
+  lastMessage?: lastMessageType;
   roomName: string;
   roomPrivacy: string;
   profileImage?: string;
@@ -61,7 +66,7 @@ export interface chatMessageType {
   readonly _id?: string;
   readonly chatRoom: string;
   sender: string;
-  messageType: 'TEXT' | 'IMAGE' | 'VIDEO' | 'VOICE' | 'FILE';
+  messageType: messageType;
   media?: string;
   message: string;
   createdAt?: Date;

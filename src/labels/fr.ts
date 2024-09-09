@@ -14,6 +14,7 @@ const fr: Translations = {
   state: 'État',
   findUser: 'trouver un utilisateur',
   noResultFound: 'Aucun résultat trouvé',
+  noRoomFound: 'Aucune chambre trouvée',
   Country: 'Pays',
   home: 'Accueil',
   profile: 'Profil',

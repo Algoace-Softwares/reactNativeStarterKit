@@ -1,6 +1,6 @@
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {chatRoomType} from '../@types';
+import {chatRoomType, lastMessageType} from '../@types';
 import {COLORS, Globaltypography, SPACING} from '../theme';
 import {SVG} from '../assets';
 import {useTheme} from '@react-navigation/native';
@@ -23,6 +23,9 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
   const navigation = useAppNavigation();
   /*
    ** Functions
+   */
+  /*
+   ** Formating dates as per requorement
    */
   const formatMessageDate = (itemDate = new Date().toISOString()): string => {
     const temp1 = new Date(itemDate).getTime();
@@ -47,6 +50,60 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
       return `${formatDateObj.format(temp1)}`;
     }
   };
+  /*
+   ** Rendering last message text or icon
+   */
+  const renderLastMessage = (lastMessage: lastMessageType | undefined) => {
+    if (lastMessage && lastMessage?.messageType === 'TEXT') {
+      return (
+        <AppText style={styles.nameStyle} numberOfLines={1}>
+          {lastMessage.message}
+        </AppText>
+      );
+    } else if (lastMessage && lastMessage?.messageType === 'IMAGE') {
+      return (
+        <View>
+          <SVG.imageIcon fill={colors.text} />
+          <AppText style={styles.nameStyle} numberOfLines={1}>
+            Image
+          </AppText>
+        </View>
+      );
+    } else if (lastMessage && lastMessage?.messageType === 'FILE') {
+      return (
+        <View>
+          <SVG.fileIcon fill={colors.text} />
+          <AppText style={styles.nameStyle} numberOfLines={1}>
+            File
+          </AppText>
+        </View>
+      );
+    } else if (lastMessage && lastMessage?.messageType === 'VIDEO') {
+      return (
+        <View>
+          <SVG.fileIcon fill={colors.text} />
+          <AppText style={styles.nameStyle} numberOfLines={1}>
+            Video
+          </AppText>
+        </View>
+      );
+    } else if (lastMessage && lastMessage?.messageType === 'VOICE') {
+      return (
+        <View>
+          <SVG.audioIcon fill={colors.text} />
+          <AppText style={styles.nameStyle} numberOfLines={1}>
+            Audio
+          </AppText>
+        </View>
+      );
+    } else {
+      return (
+        <AppText style={styles.nameStyle} numberOfLines={1}>
+          App message
+        </AppText>
+      );
+    }
+  };
   // Rerendering
   return (
     <TouchableOpacity
@@ -65,11 +122,9 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
           <AppText style={styles.nameStyle} numberOfLines={1}>
             {item?.roomName}
           </AppText>
-          <AppText style={styles.nameStyle} numberOfLines={1}>
-            {item?.lastMessage}
-          </AppText>
+          {renderLastMessage(item.lastMessage)}
         </View>
-        <AppText style={{}} numberOfLines={1}>
+        <AppText style={styles.timeLableStyle} numberOfLines={1}>
           {formatMessageDate(new Date(item?.updatedAt)?.toISOString())}
         </AppText>
       </View>
@@ -82,8 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     height: 70,
-    // backgroundColor: 'red',
-    // justifyContent: 'space-between',
     paddingHorizontal: SPACING.sm,
   },
   lableTextstyle: {
@@ -91,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginLeft: SPACING.sm,
     paddingVertical: SPACING.xs,
-    width: '70%',
+    width: '65%',
   },
   mainViewStyle: {
     borderRadius: 10,
@@ -101,7 +154,10 @@ const styles = StyleSheet.create({
     color: COLORS.buttonTextSeconday,
     ...Globaltypography.button,
   },
-
+  timeLableStyle: {
+    alignSelf: 'baseline',
+    marginTop: SPACING.xs,
+  },
   userProfilePic: {
     borderRadius: 100,
     height: 50,

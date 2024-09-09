@@ -15,6 +15,9 @@ export const API = axios.create({
 export const AUTH_API = axios.create({
   baseURL: API_KEY,
 });
+export const LOCAL_HOST = axios.create({
+  baseURL: 'http://localhost:8000/api/v1',
+});
 
 /*
  ** Before every api request following be taken
