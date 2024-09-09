@@ -2,16 +2,17 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {BackButton} from '../../components';
 import {useAppStore} from '../../store';
 import {useHeader} from '../../hooks/useHeader';
-import {GiftedChat} from 'react-native-gifted-chat';
 import {HomeStackParamList} from '../../routes/types.navigation';
 import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styles from './style';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
+import {GiftedChat, IMessage, Send, SendProps} from 'react-native-gifted-chat';
+import {renderBubble, renderLeftSideBtn, renderMessageContainer, renderSend, renderToolBar} from './giftedChatFunc';
 
 const ChatScreen = () => {
   /*
@@ -101,6 +102,7 @@ const ChatScreen = () => {
       Toast.show('Unable to load previous message', Toast.LONG);
     }
   };
+
   /*
    ** Rendeing header componenet
    */
@@ -134,7 +136,15 @@ const ChatScreen = () => {
         }}
         isTyping={isTyping}
         infiniteScroll={true}
-        inverted={true}
+        inverted={false}
+        alignTop={true}
+        renderInputToolbar={renderToolBar}
+        renderActions={props => renderLeftSideBtn(props, () => uploadFile())}
+        renderMessageImage={renderMessageContainer}
+        renderAvatar={null}
+        renderSend={renderSend}
+        isCustomViewBottom
+        renderBubble={(props: any) => renderBubble(props, userData?._id, '')}
         // listViewProps={{
         //   showsVerticalScrollIndicator: false,
         //   style: {
