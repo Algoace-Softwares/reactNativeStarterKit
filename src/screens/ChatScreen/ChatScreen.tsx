@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackButton} from '../../components';
 import {useAppStore} from '../../store';
 import {useHeader} from '../../hooks/useHeader';
@@ -8,11 +8,12 @@ import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styles from './style';
-import {Alert, View} from 'react-native';
+import {View} from 'react-native';
 import {userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
-import {GiftedChat, IMessage, Send, SendProps} from 'react-native-gifted-chat';
-import {renderBubble, renderLeftSideBtn, renderMessageContainer, renderSend, renderToolBar} from './giftedChatFunc';
+import {GiftedChat} from 'react-native-gifted-chat';
+import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from './giftedChatFunc';
+import {IMessage} from './types';
 
 const ChatScreen = () => {
   /*
@@ -71,9 +72,20 @@ const ChatScreen = () => {
   /*
    ** On sending message
    */
-  const onSend = useCallback((content: any[]) => {
+  const onSend = async (content: IMessage[]) => {
     console.log('🚀 ~ messages:', content);
-  }, []);
+    try {
+      setLoading(true);
+      const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
+        memberId: content[0].user?._id,
+        message: content[0].text,
+      });
+      console.log('on send', response);
+    } catch (error) {
+      console.log('🚀 ~ onSend ~ error:', error);
+      Toast.show('Unable to send message', Toast.LONG);
+    }
+  };
   /*
    ** On loading earlier
    */
@@ -123,13 +135,13 @@ const ChatScreen = () => {
         user={{
           _id: userData?._id?.toLowerCase(),
           name: `${userData?.nickName}`,
+          avatar: userData?.profileImage,
         }}
         loadEarlier={true}
         isLoadingEarlier={isLoadingEarlier}
         alwaysShowSend={true}
         onLoadEarlier={loadEarlier}
         scrollToBottom={true}
-        keyboardShouldPersistTaps='never'
         timeTextStyle={{
           left: {color: 'red'},
           right: {color: 'yellow'},
@@ -139,20 +151,23 @@ const ChatScreen = () => {
         inverted={false}
         alignTop={true}
         renderInputToolbar={renderToolBar}
-        renderActions={props => renderLeftSideBtn(props, () => uploadFile())}
-        renderMessageImage={renderMessageContainer}
+        renderActions={renderActions}
+        // renderMessageImage={renderMessageContainer}
         renderAvatar={null}
         renderSend={renderSend}
-        isCustomViewBottom
-        renderBubble={(props: any) => renderBubble(props, userData?._id, '')}
-        // listViewProps={{
-        //   showsVerticalScrollIndicator: false,
-        //   style: {
-        //     marginBottom: insets.bottom / 4 + 10,
-        //     // paddingTop: 200,
-        //     flex: 1,
-        //   },
-        // }}
+        renderComposer={renderComposer}
+        // renderMessage={renderMessage}
+        // renderMessageText={renderMessageText}
+        // isCustomViewBottom
+        renderBubble={renderBubble}
+        listViewProps={{
+          showsVerticalScrollIndicator: false,
+          style: {
+            // marginBottom: insets.bottom / 4 + 10,
+            // paddingTop: 200,
+            flex: 1,
+          },
+        }}
       />
     </View>
   );

@@ -17,4 +17,6 @@ export const SVG = {
   videoIcon: require('./video.svg').default,
   fileIcon: require('./file.svg').default,
   audioIcon: require('./audio.svg').default,
+  sendIcon: require('./send.svg').default,
+  uploadIcon: require('./upload.svg').default,
 };

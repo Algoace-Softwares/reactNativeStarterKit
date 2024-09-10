@@ -1,145 +1,156 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {Send, InputToolbar, Actions, LoadEarlier, Bubble, MessageImage} from 'react-native-gifted-chat';
-import {COLORS, ICONS} from '../../assets';
-import styles from './styles';
-import {LABELS} from '../../labels';
-import {downloadFile} from '../../utils';
+import {
+  Send,
+  InputToolbar,
+  Bubble,
+  SendProps,
+  IMessage,
+  InputToolbarProps,
+  Composer,
+  MessageText,
+  Message,
+  BubbleProps,
+  MessageProps,
+  MessageTextProps,
+  ComposerProps,
+  Actions,
+  ActionsProps,
+} from 'react-native-gifted-chat';
+import {SVG} from '../../assets';
+import {COLORS} from '../../theme';
+import {Text} from 'react-native';
+import styles from './style';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 /*
  ** renderSend btn on gifter chat customize Send btn
  */
-export const renderSend = props => {
+export const renderSend = (props: SendProps<IMessage>) => {
   return (
-    <Send {...props} containerStyle={styles.sendBtnStyle}>
-      <ICONS.SendMessageIcon />
+    <Send {...props} disabled={!props.text} containerStyle={styles.sendBtnStyle}>
+      <SVG.sendIcon fill={COLORS.background} />
     </Send>
   );
 };
 /*
  ** render tool bar at bottom
  */
-export const renderToolBar = props => {
-  return <InputToolbar {...props} containerStyle={styles.inputToolBarStyle} />;
+export const renderToolBar = (props: InputToolbarProps<IMessage>) => {
+  return <InputToolbar {...props} containerStyle={[styles.inputToolBarStyle, {}]} />;
 };
+/*
+ ** render composer in tool bar bottom
+ */
+export const renderComposer = (props: ComposerProps) => (
+  <Composer {...props} textInputStyle={styles.composerStyle} composerHeight={45} />
+);
 /*
  ** render tool bar at bottom
- */
-export const renderLeftSideBtn = (props, callbck) => {
-  return (
-    <Actions
-      {...props}
-      icon={() => <ICONS.FileUploadIcon />}
-      options={{
-        'Choose File From Library': () => callbck(),
-        Cancel: () => console.log('document picker cancel'),
-      }}
-      optionTintColor={'#222B45'}
-    />
-  );
-};
-/*
- ** custom loading earlir componenet
- */
-export const customLoadEarlierBtn = ({props}: {props: object}) => {
-  return (
-    <View style={styles.loadEarlierMainView}>
-      <View style={styles.encryptedMsgView}>
-        <Text style={styles.encryptedMsgTextStyle}>{LABELS.encryptionMsg}</Text>
-      </View>
-      <LoadEarlier {...props} />
-    </View>
-  );
-};
+//  */
+export const renderActions = (props: ActionsProps) => (
+  <Actions
+    {...props}
+    containerStyle={styles.actionsStyle}
+    icon={() => <SVG.uploadIcon width={30} height={30} />}
+    options={{
+      'Choose From Library': () => {
+        console.log('Choose From Library');
+      },
+      Cancel: () => {
+        console.log('Cancel');
+      },
+    }}
+    optionTintColor='#222B45'
+  />
+);
 /*
  ** Render message container
  */
-export const renderMessageContainer = (props: any) => {
+// export const renderMessageContainer = (props: any) => {
+//   return (
+//     <MessageImage
+//       {...props}
+//       lightboxProps={{
+//         disabled: true,
+//       }}
+//     />
+//   );
+// };
+
+// render bubble component
+export const renderBubble = (props: BubbleProps<IMessage>) => {
+  console.log('🚀 ~ renderBubble ~ props:', props);
   return (
-    <MessageImage
+    <Bubble
       {...props}
-      lightboxProps={{
-        disabled: true,
+      renderMessageText={() => {
+        return <Text style={{color: 'green'}}>hello wolrd</Text>;
+      }}
+      // renderTime={() => <Text>Time</Text>}
+      // renderTicks={() => <Text>Ticks</Text>}
+      containerStyle={{
+        left: {borderColor: 'teal', borderWidth: 8},
+        right: {},
+      }}
+      wrapperStyle={{
+        left: {borderColor: 'tomato', borderWidth: 4},
+        right: {},
+      }}
+      bottomContainerStyle={{
+        left: {borderColor: 'purple', borderWidth: 4},
+        right: {},
+      }}
+      tickStyle={{}}
+      usernameStyle={{color: 'tomato', fontWeight: '100'}}
+      containerToNextStyle={{
+        left: {borderColor: 'navy', borderWidth: 4},
+        right: {},
+      }}
+      containerToPreviousStyle={{
+        left: {borderColor: 'mediumorchid', borderWidth: 4},
+        right: {},
       }}
     />
   );
 };
 
-interface renderBubbleType {
-  props: any;
-  convId: string;
-  userId: string;
-  callBck: (option: number) => void;
-}
+export const renderMessageText = (props: MessageTextProps<IMessage>) => {
+  console.log('🚀 ~ renderMessageText ~ props:', props);
+  const {currentMessage} = props;
 
-// render bubble component
-export const renderBubble = (props, userId, convId) => {
-  const currentMessage = props?.currentMessage;
-  if (currentMessage?.msgType === 'audioCallMessage') {
-    return (
-      <Bubble
-        {...props}
-        onLongPress={() => <></>}
-        onPress={() => <></>}
-        renderCustomView={() => {
-          return (
-            <View style={styles.customViewStyle}>
-              <ICONS.AudioCallIcon color={COLORS.white} width={80} height={80} />
-              {currentMessage?.user?._id === userId?.toLowerCase() ? (
-                <Text style={{color: COLORS.white}}>{'You made a voice call'}</Text>
-              ) : (
-                <Text
-                  style={{
-                    color: COLORS.white,
-                  }}>{`${currentMessage?.user?.name}\n  called you`}</Text>
-              )}
-            </View>
-          );
-        }}
-        wrapperStyle={{
-          left: styles.bubbleLeftStyle,
-          right: styles.bubbleRightStyle,
-        }}
-      />
-    );
-  } else if (currentMessage?.msgType === 'file') {
-    return (
-      <Bubble
-        {...props}
-        onLongPress={() => <></>}
-        onPress={() => <></>}
-        renderCustomView={() => {
-          return (
-            <TouchableOpacity
-              style={styles.customViewStyle}
-              onPress={() => {
-                downloadFile(currentMessage?.remoteUrl as string, currentMessage.fileName);
-              }}>
-              <ICONS.FileIcon color={COLORS.white} width={66} height={70} />
-              <View style={styles.downloadIconStyle(convId, currentMessage.user._id)}>
-                <ICONS.DownloadIcon color={currentMessage.user._id === convId ? COLORS.grey5 : COLORS.darkGrey} />
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-        wrapperStyle={{
-          left: styles.bubbleLeftStyle,
-          right: styles.bubbleRightStyle,
-        }}
-      />
-    );
-  } else {
-    return (
-      <Bubble
-        {...props}
-        textStyle={{
-          left: styles.bubbleTextStyle,
-          right: styles.bubbleTextStyle,
-        }}
-        wrapperStyle={{
-          left: styles.bubbleLeftStyle,
-          right: styles.bubbleRightStyle,
-        }}
-      />
-    );
-  }
+  // Destructure currentMessage and add a new property
+  const modifiedMessage = {
+    ...currentMessage,
+    text: 'ABC',
+  };
+  return (
+    <MessageText
+      {...props}
+      currentMessage={modifiedMessage}
+      containerStyle={{
+        left: {backgroundColor: 'yellow'},
+        right: {backgroundColor: 'purple'},
+      }}
+      textStyle={{
+        left: {color: 'red'},
+        right: {color: 'green'},
+      }}
+      linkStyle={{
+        left: {color: 'orange'},
+        right: {color: 'orange'},
+      }}
+      customTextStyle={{fontSize: 24, lineHeight: 24}}
+    />
+  );
 };
+
+export const renderMessage = (props: MessageProps<IMessage>) => (
+  <Message
+    {...props}
+    // renderDay={() => <Text>Date</Text>}
+
+    containerStyle={{
+      left: {backgroundColor: 'lime'},
+      right: {backgroundColor: 'gold'},
+    }}
+  />
+);
