@@ -20,7 +20,6 @@ import {SVG} from '../../assets';
 import {COLORS} from '../../theme';
 import {Text} from 'react-native';
 import styles from './style';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 /*
  ** renderSend btn on gifter chat customize Send btn
  */
@@ -79,12 +78,21 @@ export const renderActions = (props: ActionsProps) => (
 // render bubble component
 export const renderBubble = (props: BubbleProps<IMessage>) => {
   console.log('🚀 ~ renderBubble ~ props:', props);
+  const {currentMessage} = props;
+  console.log('🚀 ~ renderBubble ~ currentMessage:', currentMessage);
+  // Destructure currentMessage and add a new property
+  const modifiedMessage = {
+    ...currentMessage,
+    text: currentMessage?.message as unknown as string,
+    user: currentMessage?.sender as unknown as string,
+  };
   return (
     <Bubble
       {...props}
-      renderMessageText={() => {
-        return <Text style={{color: 'green'}}>hello wolrd</Text>;
-      }}
+      currentMessage={modifiedMessage}
+      // renderMessageText={() => {
+      //   return <Text style={{color: 'green'}}>hello wolrd</Text>;
+      // }}
       // renderTime={() => <Text>Time</Text>}
       // renderTicks={() => <Text>Ticks</Text>}
       containerStyle={{
