@@ -78,7 +78,7 @@ const ChatScreen = () => {
       setLoading(true);
       const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
         memberId: content[0].user?._id,
-        message: content[0].text,
+        text: content[0].text,
       });
       console.log('on send', response);
     } catch (error) {
@@ -142,10 +142,6 @@ const ChatScreen = () => {
         alwaysShowSend={true}
         onLoadEarlier={loadEarlier}
         scrollToBottom={true}
-        timeTextStyle={{
-          left: {color: 'red'},
-          right: {color: 'yellow'},
-        }}
         isTyping={isTyping}
         infiniteScroll={true}
         inverted={false}

@@ -57,7 +57,7 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
     if (lastMessage && lastMessage?.messageType === 'TEXT') {
       return (
         <AppText style={styles.nameStyle} numberOfLines={1}>
-          {lastMessage.message}
+          {lastMessage.text}
         </AppText>
       );
     } else if (lastMessage && lastMessage?.messageType === 'IMAGE') {
@@ -99,7 +99,7 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
     } else {
       return (
         <AppText style={styles.nameStyle} numberOfLines={1}>
-          App message
+          {' '}
         </AppText>
       );
     }

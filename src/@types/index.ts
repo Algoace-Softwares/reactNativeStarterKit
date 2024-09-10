@@ -43,7 +43,7 @@ export type chatRoomMember = {
 };
 export type messageType = 'TEXT' | 'IMAGE' | 'VIDEO' | 'VOICE' | 'FILE';
 export type lastMessageType = {
-  message: string;
+  text: string;
   messageType: messageType;
 };
 

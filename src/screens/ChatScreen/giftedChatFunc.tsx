@@ -72,46 +72,36 @@ export const renderActions = (props: ActionsProps) => (
 
 // render bubble component
 export const renderBubble = (props: BubbleProps<IMessage>) => {
-  console.log('🚀 ~ renderBubble ~ props:', props);
-  const {currentMessage} = props;
-  console.log('🚀 ~ renderBubble ~ currentMessage:', currentMessage);
-  // Destructure currentMessage and add a new property
-  const modifiedMessage = {
-    ...currentMessage,
-    text: currentMessage?.message as unknown as string,
-    user: currentMessage?.sender as unknown as string,
-  };
   return (
     <Bubble
       {...props}
-      currentMessage={modifiedMessage}
       // renderMessageText={() => {
       //   return <Text style={{color: 'green'}}>hello wolrd</Text>;
       // }}
       // renderTime={() => <Text>Time</Text>}
       // renderTicks={() => <Text>Ticks</Text>}
-      containerStyle={{
-        left: {borderColor: 'teal', borderWidth: 8},
-        right: {},
-      }}
+      // containerStyle={{
+      //   left: {},
+      //   right: {},
+      // }}
       wrapperStyle={{
-        left: {borderColor: 'tomato', borderWidth: 4},
-        right: {},
+        left: {marginVertical: 5},
+        right: {marginVertical: 5},
       }}
-      bottomContainerStyle={{
-        left: {borderColor: 'purple', borderWidth: 4},
-        right: {},
-      }}
-      tickStyle={{}}
-      usernameStyle={{color: 'tomato', fontWeight: '100'}}
-      containerToNextStyle={{
-        left: {borderColor: 'navy', borderWidth: 4},
-        right: {},
-      }}
-      containerToPreviousStyle={{
-        left: {borderColor: 'mediumorchid', borderWidth: 4},
-        right: {},
-      }}
+      // bottomContainerStyle={{
+      //   left: {borderColor: 'purple', borderWidth: 4},
+      //   right: {},
+      // }}
+      // tickStyle={{}}
+      // usernameStyle={{color: 'tomato', fontWeight: '100'}}
+      // containerToNextStyle={{
+      //   left: {borderColor: 'navy', borderWidth: 4},
+      //   right: {},
+      // }}
+      // containerToPreviousStyle={{
+      //   left: {borderColor: 'mediumorchid', borderWidth: 4},
+      //   right: {},
+      // }}
     />
   );
 };
