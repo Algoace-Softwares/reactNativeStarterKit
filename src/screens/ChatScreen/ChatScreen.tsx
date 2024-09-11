@@ -10,9 +10,8 @@ import styles from './style';
 import {View} from 'react-native';
 import {userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from '../../components/giftedChatComp';
-import {IMessage} from './types';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const ChatScreen = () => {
@@ -21,7 +20,6 @@ const ChatScreen = () => {
    */
   const route = useRoute<RouteProp<HomeStackParamList, 'ChatScreen'>>();
   const {room, member, roomImage, roomName} = route.params;
-  console.log('🚀 ~ ChatScreen ~ params:', route.params);
   /*
    * Hooks
    */
@@ -34,7 +32,7 @@ const ChatScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [contentLoading, setContentLoading] = useState<boolean>(false);
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [pageNum, setPageNum] = useState(1);
   const [isTyping, setIsTyping] = useState(false);
   /*
@@ -118,7 +116,12 @@ const ChatScreen = () => {
           createdBy: userData?._id,
           text: content[0].text,
         });
-        console.log('on send', response);
+        console.log('on send', response?.data?.data);
+        if (response?.data.data) {
+          const newMessage: IMessage = response.data.data;
+          console.log('changing arrya');
+          setMessages(prevMessages => [...prevMessages, newMessage]);
+        }
       }
       setContentLoading(false);
     } catch (error) {
