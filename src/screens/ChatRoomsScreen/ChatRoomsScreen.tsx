@@ -150,7 +150,7 @@ const ChatRoomsScreen = () => {
    */
   useHeader(
     {
-      titleMode: 'center',
+      // titleMode: 'center',
       transTitle: 'chatRoomsScreen',
       LeftActionComponent: <BackButton />,
     },

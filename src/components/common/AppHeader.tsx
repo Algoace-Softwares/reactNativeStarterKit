@@ -2,7 +2,7 @@ import React, {ReactElement} from 'react';
 import {ImageStyle, StyleProp, StyleSheet, TextStyle, TouchableOpacityProps, View, ViewStyle} from 'react-native';
 import {TxKeyPath} from '../../i18n/types';
 import {IconTypes} from '../../assets/icons';
-import {CustomTheme, HEIGHT, SPACING} from '../../theme';
+import {COLORS, CustomTheme, HEIGHT, SPACING} from '../../theme';
 import {useTheme} from '@react-navigation/native';
 import AppText from './AppText';
 import AppIcon from './AppIcon';
@@ -179,7 +179,7 @@ export default function AppHeader(props: HeaderProps) {
   const bgColor = backgroundColor || colors?.background;
 
   return (
-    <View style={[$container(bgColor), containerStyle]}>
+    <View style={[$container(bgColor), containerStyle, styles.mainContainer]}>
       <View style={[styles.contentContainerStyle, style]}>
         <HeaderAction
           icon={leftIcon}
@@ -279,6 +279,18 @@ const styles = StyleSheet.create({
     height: HEIGHT * 0.1,
     maxHeight: HEIGHT * 0.1,
   },
+  mainContainer: {
+    // backgroundColor: 'red',
+    elevation: 5,
+    paddingVertical: 5,
+    shadowColor: COLORS.palette.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
   titleCenter: {
     height: '100%',
     justifyContent: 'flex-end',
@@ -295,6 +307,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     textAlign: 'center',
   },
+
   userProfilePic: {
     borderRadius: 100,
     height: 50,

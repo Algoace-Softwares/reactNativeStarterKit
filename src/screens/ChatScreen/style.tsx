@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  // headerStyle: {
+  //   borderBottomWidth: 0.5,
+  //   paddingVertical: 5,
+  //   borderColor: colors.border,
+  // },
 });
 
 export default styles;

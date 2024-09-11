@@ -13,18 +13,20 @@ import {CustomTheme} from '../../theme';
 import {GiftedChat} from 'react-native-gifted-chat';
 import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from '../../components/giftedChatComp';
 import {IMessage} from './types';
+import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const ChatScreen = () => {
   /*
    ** Routing params
    */
   const route = useRoute<RouteProp<HomeStackParamList, 'ChatScreen'>>();
-  const {room, member, roomImage, roomName, newChat = false} = route.params;
+  const {room, member, roomImage, roomName} = route.params;
   console.log('🚀 ~ ChatScreen ~ params:', route.params);
   /*
    * Hooks
    */
   const userData = useAppStore(state => state.userData) as userDataType;
+  const navigation = useAppNavigation();
   const {colors} = useTheme() as CustomTheme;
   /*
    ** States
@@ -61,8 +63,34 @@ const ChatScreen = () => {
         Toast.show('Unable to fetch data', Toast.LONG);
       }
     };
-    if (!newChat) {
+    // Fetch chat room
+    const fetchRoom = async () => {
+      try {
+        setLoading(true);
+        // fecthing data
+        const response = await LOCAL_HOST.get(`/chat`, {
+          params: {
+            firstUser: userData?._id,
+            secondUser: member?._id,
+          },
+        });
+        console.log('🚀 ~ fetchRoom ~ params:', response);
+        if (response.data.data) {
+          // room = response.data.data;
+          navigation.setParams({room: response.data.data});
+          fetchMessages();
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log('🚀 ~ fetchMessages ~ error:', error);
+        setLoading(false);
+        Toast.show('Unable to fetch data', Toast.LONG);
+      }
+    };
+    if (room?._id) {
       fetchMessages();
+    } else {
+      fetchRoom();
     }
 
     // Clean up function
@@ -70,7 +98,7 @@ const ChatScreen = () => {
       // Clear chat rooms on unmount
       setMessages([]);
     };
-  }, [userData?._id, room?._id, newChat]);
+  }, [userData?._id, room?._id, member?._id, navigation]);
   /*
    ** On sending message
    */
@@ -78,16 +106,16 @@ const ChatScreen = () => {
     console.log('🚀 ~ messages:', content);
     try {
       setContentLoading(true);
-      if (newChat) {
-        const response = await LOCAL_HOST.post(`/chat`, {
-          member: member?._id,
-          createdBy: userData?._id,
+      if (room) {
+        const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
+          memberId: content[0].user?._id,
           text: content[0].text,
         });
         console.log('on send', response);
       } else {
-        const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
-          memberId: content[0].user?._id,
+        const response = await LOCAL_HOST.post(`/chat`, {
+          member: member?._id,
+          createdBy: userData?._id,
           text: content[0].text,
         });
         console.log('on send', response);

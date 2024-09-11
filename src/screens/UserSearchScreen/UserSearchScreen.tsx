@@ -14,6 +14,7 @@ const UserSearchScreen = () => {
    * Hooks
    */
   const userData = useAppStore(state => state.userData);
+  const chatRooms = useAppStore(state => state.chatRooms);
   const navigation = useAppNavigation();
   console.log('🚀 ~ UserSearchScreen ~ userData:', userData);
   /*
@@ -41,6 +42,9 @@ const UserSearchScreen = () => {
   /*
    ** Functions
    */
+  /*
+   ** Calling functioon when text is changes
+   */
   const onChangeText = async (text: string) => {
     console.log('🚀 ~ onChangeText ~ text:', text);
     setLoading(true);
@@ -67,6 +71,39 @@ const UserSearchScreen = () => {
       Toast.show('Unable to fetch users', Toast.LONG);
     }
   };
+  /*
+   ** When card is pressed
+   */
+  const onCardPress = (user: userDataType) => {
+    const sender = userData?._id as string;
+    const receiver = user?._id as string;
+    // checking if room exits in local data or not
+    const roomData = chatRooms.find(room => {
+      // Ensure the room is not a group chat and has exactly two members
+      if (!room.isGroupChat && room.members.length === 2) {
+        // making key value pair for member array
+        const memberIdMap = room.members.reduce(
+          (acc, member) => {
+            acc[member._id] = true;
+            return acc;
+          },
+          {} as Record<string, boolean>,
+        );
+
+        // Check if both sender and receiver IDs are present in the map
+        return memberIdMap[sender] && memberIdMap[receiver];
+      }
+      return false;
+    });
+    console.log('🚀 ~ roomData ~ roomData:', roomData);
+
+    navigation.navigate('ChatScreen', {
+      room: roomData || undefined,
+      member: user,
+      roomName: user.name,
+      roomImage: user.profileImage,
+    });
+  };
   return (
     <AppScreen>
       <InputTextLabel
@@ -90,19 +127,7 @@ const UserSearchScreen = () => {
         horizontal={false}
         showsVerticalScrollIndicator={false}
         renderItem={({item: user}) => {
-          return (
-            <UserCard
-              item={user}
-              onPressCard={() =>
-                navigation.navigate('ChatScreen', {
-                  member: user,
-                  roomName: user.name,
-                  roomImage: user.profileImage,
-                  newChat: true,
-                })
-              }
-            />
-          );
+          return <UserCard item={user} onPressCard={onCardPress} />;
         }}
       />
     </AppScreen>
