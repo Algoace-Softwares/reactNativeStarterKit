@@ -120,7 +120,7 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
         )}
         <View style={styles.lableTextstyle}>
           <AppText style={styles.nameStyle} numberOfLines={1}>
-            {item?.roomName}
+            {item?.roomName || 'App user'}
           </AppText>
           {renderLastMessage(item.lastMessage)}
         </View>

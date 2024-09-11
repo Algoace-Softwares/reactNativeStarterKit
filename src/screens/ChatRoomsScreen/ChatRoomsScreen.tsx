@@ -38,7 +38,7 @@ const ChatRoomsScreen = () => {
     const fetchChatRooms = async () => {
       try {
         setLoading(true);
-        await getChatRooms(userData?._id as string);
+        await getChatRooms(userData?._id as string, 1);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -56,11 +56,17 @@ const ChatRoomsScreen = () => {
   /*
    ** Deleting chat room
    */
-  const deleteChatRooms = async (room: chatRoomType) => {
+  const deleteChatRooms = async (roomId: string) => {
+    console.log('🚀 ~ deleteChatRooms ~ roomId:', roomId);
     try {
-      const response = await LOCAL_HOST.delete(`/chat/${room?._id}/${userData?._id}`);
+      setLoading(true);
+      const response = await LOCAL_HOST.delete(`/chat/${roomId}/${userData?._id}`);
       console.log('response: deletechatRoom:', response);
+      // Remove the chat room from the state using its ID
+      setChatRooms(chatRooms.filter(chatRoom => chatRoom._id !== roomId));
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log('🚀 ~ deleteChatRooms ~ error:', error);
       Toast.show('Unable to delete chat room', Toast.LONG);
     }
@@ -81,7 +87,7 @@ const ChatRoomsScreen = () => {
         ' ' +
         reportedUser[0]?._id;
       // reciever address
-      const reciever = 'info@knecthub.live';
+      const reciever = 'info@loci.live';
       await appUtils.sendEmail(subject, body, reciever);
     } catch (error) {
       console.log('🚀 ~ deleteChatRooms ~ error:', error);
@@ -101,6 +107,45 @@ const ChatRoomsScreen = () => {
     }
   };
   /*
+   ** Rendeering item list
+   */
+  const renderItem = (chatItem: chatRoomType) => {
+    // feltering the data when room is not chat room so the profileimage and room name would be another user name and its profile
+    if (!chatItem.isGroupChat) {
+      // filtering the data
+      const secondMember = chatItem.members.filter(member => member._id !== userData?._id);
+      // injecting second member data as profileImage and roomName
+      if (secondMember && secondMember.length > 0) {
+        chatItem.roomName = secondMember[0].name;
+        chatItem.profileImage = secondMember[0].profileImage;
+      }
+    }
+    // redering message card
+    return (
+      <MessengerCard
+        item={chatItem}
+        onLongPress={() => {
+          Alert.alert('Chat Rooms actions', '', [
+            {
+              text: 'Delete chat room',
+              onPress: () => deleteChatRooms(chatItem?._id),
+            },
+            {
+              text: 'Report chat room',
+              onPress: () => reportCharRoom(chatItem),
+            },
+            {text: 'Mark as read', onPress: () => markConversationAsRead(chatItem)},
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+          ]);
+        }}
+      />
+    );
+  };
+  /*
    ** Rendeing header componenet
    */
   useHeader(
@@ -117,61 +162,17 @@ const ChatRoomsScreen = () => {
       <FlatList
         data={chatRooms}
         keyExtractor={(_, index) => `index-${index}`}
-        ListEmptyComponent={
-          <AppText transText={'noRoomFound'} presetStyle={'default'} style={styles.notFoundLableStyling} />
-        }
+        ListEmptyComponent={loading ? null : <AppText transText={'noRoomFound'} style={styles.notFoundLableStyling} />}
         ListHeaderComponent={loading ? <Loading fullScreen /> : <></>}
         style={styles.flatListContStyle}
         horizontal={false}
-        // extraData={extraDataForMessageList}
         showsVerticalScrollIndicator={false}
-        renderItem={({item: chatItem}) => {
-          // feltering the data when room is not chat room so the profileimage and room name would be another user name and its profile
-          if (!chatItem.isGroupChat) {
-            // filtering the data
-            const secondMember = chatItem.members.filter(member => member._id !== userData?._id);
-            // injecting second member data as profileImage and roomName
-            if (secondMember && secondMember.length > 0) {
-              chatItem.roomName = secondMember[0].name;
-              chatItem.profileImage = secondMember[0].profileImage;
-            }
-          }
-          return (
-            <MessengerCard
-              item={chatItem}
-              onLongPress={() => {
-                Alert.alert('Chat Rooms actions', '', [
-                  {
-                    text: 'Delete chat room',
-                    onPress: () => deleteChatRooms(chatItem),
-                  },
-                  {
-                    text: 'Report chat room',
-                    onPress: () => reportCharRoom(chatItem),
-                  },
-                  {text: 'Mark as read', onPress: () => markConversationAsRead(chatItem)},
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                ]);
-              }}
-            />
-          );
-        }}
+        renderItem={({item}) => renderItem(item)}
       />
       <FloatingButton
         fillColor={COLORS.buttonTextSeconday}
         onPressBtn={() => navigation.navigate('UserSearchScreen')}
       />
-      {/* report and delete modal */}
-      {/* <ReportDeleteChatModal
-        convId={selectedConvData.roomId}
-        visible={deleteConvModal}
-        setVisible={setDeleteConvModal}
-        indexNumber={selectedConvData.indexNumber}
-      /> */}
     </AppScreen>
   );
 };

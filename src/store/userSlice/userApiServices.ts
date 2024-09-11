@@ -18,13 +18,17 @@ export const changePassword = async (userId: string, oldPassword: string, newPas
 /*
  ** Getting user all chat rooms
  */
-export const getChatRooms = async (userId: string) => {
+export const getChatRooms = async (userId: string, page: number) => {
   try {
-    const chatRoomsData = await LOCAL_HOST.get(`/chat/${userId}`);
+    const chatRoomsData = await LOCAL_HOST.get(`/chat/${userId}`, {
+      params: {
+        page,
+        limit: 20,
+      },
+    });
     // Handle success
     console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
     const rooms = chatRoomsData?.data?.data?.items;
-    const page = chatRoomsData?.data?.data?.page;
     if (rooms && page === 1) {
       /*
        ** updating user chat rooms
