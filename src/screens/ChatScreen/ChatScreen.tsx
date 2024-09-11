@@ -12,7 +12,7 @@ import {View} from 'react-native';
 import {userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
 import {GiftedChat} from 'react-native-gifted-chat';
-import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from './giftedChatFunc';
+import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from '../../components/giftedChatComp';
 import {IMessage} from './types';
 
 const ChatScreen = () => {

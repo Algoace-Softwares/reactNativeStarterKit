@@ -1,4 +1,4 @@
-import {FlatList} from 'react-native';
+import {Alert, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppScreen, AppText, BackButton, FloatingButton, Loading, MessengerCard} from '../../components';
 import {useAppStore} from '../../store';
@@ -7,6 +7,10 @@ import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {chatRoomType} from '../../@types';
+import Toast from 'react-native-simple-toast';
+import {LOCAL_HOST} from '../../api';
+import {appUtils} from '../../utils';
 
 const ChatRoomsScreen = () => {
   /*
@@ -21,6 +25,11 @@ const ChatRoomsScreen = () => {
    ** States
    */
   const [loading, setLoading] = useState<boolean>(false);
+  // const [deleteConvModal, setDeleteConvModal] = useState(false);
+  // const [selectedConvData, setSelectedConvData] = useState({
+  //   roomId: '',
+  //   indexNumber: 0,
+  // });
   /*
    ** Lifecycle methods
    */
@@ -44,6 +53,53 @@ const ChatRoomsScreen = () => {
       setChatRooms([]);
     };
   }, [setChatRooms, userData?._id]);
+  /*
+   ** Deleting chat room
+   */
+  const deleteChatRooms = async (room: chatRoomType) => {
+    try {
+      const response = await LOCAL_HOST.delete(`/chat/${room?._id}/${userData?._id}`);
+      console.log('response: deletechatRoom:', response);
+    } catch (error) {
+      console.log('🚀 ~ deleteChatRooms ~ error:', error);
+      Toast.show('Unable to delete chat room', Toast.LONG);
+    }
+  };
+  /*
+   ** report chat room
+   */
+  const reportCharRoom = async (room: chatRoomType) => {
+    try {
+      const subject = 'Report conversation';
+      const reportedUser = room?.members?.filter(member => userData?._id !== member?._id);
+      // message body
+      const body =
+        'I would like to report conversation with id = ' +
+        room?._id +
+        ' against this user' +
+        reportedUser[0]?.email +
+        ' ' +
+        reportedUser[0]?._id;
+      // reciever address
+      const reciever = 'info@knecthub.live';
+      await appUtils.sendEmail(subject, body, reciever);
+    } catch (error) {
+      console.log('🚀 ~ deleteChatRooms ~ error:', error);
+      Toast.show('Unable to send email. Invalid email configuration', Toast.LONG);
+    }
+  };
+  /*
+   ** Marking converstaion as read
+   */
+  const markConversationAsRead = async (room: chatRoomType) => {
+    try {
+      const response = await LOCAL_HOST.patch(`/chat/count/${room?._id}/${userData?._id}`);
+      console.log('response: markConversationAsRead:', response);
+    } catch (error) {
+      console.log('🚀 ~ markConversationAsRead ~ error:', error);
+      Toast.show('Unable take action', Toast.LONG);
+    }
+  };
   /*
    ** Rendeing header componenet
    */
@@ -80,13 +136,42 @@ const ChatRoomsScreen = () => {
               chatItem.profileImage = secondMember[0].profileImage;
             }
           }
-          return <MessengerCard item={chatItem} onLongPress={data => console.log(data)} />;
+          return (
+            <MessengerCard
+              item={chatItem}
+              onLongPress={() => {
+                Alert.alert('Chat Rooms actions', '', [
+                  {
+                    text: 'Delete chat room',
+                    onPress: () => deleteChatRooms(chatItem),
+                  },
+                  {
+                    text: 'Report chat room',
+                    onPress: () => reportCharRoom(chatItem),
+                  },
+                  {text: 'Mark as read', onPress: () => markConversationAsRead(chatItem)},
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                ]);
+              }}
+            />
+          );
         }}
       />
       <FloatingButton
         fillColor={COLORS.buttonTextSeconday}
         onPressBtn={() => navigation.navigate('UserSearchScreen')}
       />
+      {/* report and delete modal */}
+      {/* <ReportDeleteChatModal
+        convId={selectedConvData.roomId}
+        visible={deleteConvModal}
+        setVisible={setDeleteConvModal}
+        indexNumber={selectedConvData.indexNumber}
+      /> */}
     </AppScreen>
   );
 };

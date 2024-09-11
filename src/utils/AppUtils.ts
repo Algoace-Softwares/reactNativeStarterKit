@@ -75,6 +75,28 @@ export class CommonUtils {
     temp = temp / (totalReviewerUsers + 1);
     return temp.toPrecision(2);
   };
+
+  /*
+   ** Send email
+   */
+  sendEmail = async (subject: string, body: string, recipientEmail: string) => {
+    try {
+      // Construct the mailto URL
+      const url = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+
+      // Check if the device can open the URL
+      const canOpen = await Linking.canOpenURL(url);
+      if (!canOpen) {
+        throw new Error('Unable to open email client. Please check your email configuration.');
+      }
+
+      // Open the email client with the constructed URL
+      await Linking.openURL(url);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      throw error;
+    }
+  };
 }
 
 // you need to install rnfetch blob in order to make these funnction working

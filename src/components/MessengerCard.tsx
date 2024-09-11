@@ -9,7 +9,7 @@ import AppText from './common/AppText';
 import {useAppNavigation} from '../hooks/useAppNavigation';
 
 interface roomCardType {
-  onLongPress: (item: chatRoomType) => void;
+  onLongPress: () => void;
   item: chatRoomType;
 }
 
@@ -108,7 +108,7 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
   return (
     <TouchableOpacity
       style={styles.mainViewStyle}
-      onLongPress={() => onLongPress(item)}
+      onLongPress={onLongPress}
       onPress={() =>
         navigation.navigate('ChatScreen', {room: item, roomName: item.roomName, roomImage: item.profileImage || ''})
       }>

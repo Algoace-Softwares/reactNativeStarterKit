@@ -12,9 +12,10 @@ import {
   Actions,
   ActionsProps,
 } from 'react-native-gifted-chat';
-import {SVG} from '../../assets';
-import {COLORS} from '../../theme';
-import styles from './style';
+import {SVG} from '../assets';
+import {COLORS, HEIGHT, SPACING} from '../theme';
+import {StyleSheet} from 'react-native';
+
 /*
  ** renderSend btn on gifter chat customize Send btn
  */
@@ -105,3 +106,36 @@ export const renderBubble = (props: BubbleProps<IMessage>) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  actionsStyle: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginLeft: SPACING.sm,
+    marginTop: SPACING.xs,
+  },
+
+  composerStyle: {
+    backgroundColor: COLORS.header,
+    borderColor: COLORS.border,
+    borderRadius: 6,
+    borderWidth: 0.5,
+    paddingHorizontal: 12,
+  },
+  inputToolBarStyle: {
+    height: HEIGHT * 0.1,
+    maxHeight: 100,
+  },
+
+  sendBtnStyle: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: COLORS.primary,
+    borderRadius: 6,
+    height: 45,
+    justifyContent: 'center',
+    marginHorizontal: SPACING.xs,
+    width: 44,
+  },
+});
