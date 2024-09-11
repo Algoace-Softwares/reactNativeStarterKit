@@ -7,6 +7,7 @@ import {useTheme} from '@react-navigation/native';
 import AppText from './AppText';
 import AppIcon from './AppIcon';
 import AppImage from './AppImage';
+import {SVG} from '../../assets';
 
 export interface HeaderProps {
   /**
@@ -174,7 +175,7 @@ export default function AppHeader(props: HeaderProps) {
    */
   const titleContent = title || transTitle;
   /*
-   **Checking if we are recieving background color
+   ** Checking if we are recieving background color
    */
   const bgColor = backgroundColor || colors?.background;
 
@@ -189,50 +190,38 @@ export default function AppHeader(props: HeaderProps) {
           ActionComponent={LeftActionComponent}
         />
 
-        {titleContent && (
+        {titleContent && titleMode !== 'avatar' ? (
           <View
             style={[
               titleMode === 'center' && styles.titleCenter,
               titleMode === 'flex' && styles.titleFlex,
-              titleMode === 'avatar' && styles.avatar,
               titleContainerStyle,
             ]}
             pointerEvents='none'>
-            {avatarUrl && (
+            <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
+              {title}
+            </AppText>
+          </View>
+        ) : null}
+        {titleMode === 'avatar' && (
+          <View style={[styles.avatar, titleContainerStyle]} pointerEvents='none'>
+            {avatarUrl ? (
               <AppImage
                 source={{uri: avatarUrl}}
                 style={[styles.userProfilePic, avatarStyle]}
                 maxHeight={maxHeight}
                 maxWidth={maxWidth}
               />
+            ) : (
+              <View style={styles.userProfileIcon}>
+                <SVG.UserIcon fill={colors.text} width={40} height={40} />
+              </View>
             )}
             <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
               {title}
             </AppText>
           </View>
         )}
-        {/* {avatarUrl && (
-          <View
-            style={[
-              titleMode === 'center' && styles.titleCenter,
-              titleMode === 'flex' && styles.titleFlex,
-              titleMode === 'avatar' && styles.avatar,
-              titleContainerStyle,
-            ]}
-            pointerEvents='none'>
-            {avatarUrl && (
-              <AppImage
-                source={{uri: avatarUrl}}
-                style={[styles.userProfilePic, avatarStyle]}
-                maxHeight={maxHeight}
-                maxWidth={maxWidth}
-              />
-            )}
-            <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
-              {title}
-            </AppText>
-          </View>
-        )} */}
 
         <HeaderAction
           icon={rightIcon}
@@ -307,11 +296,13 @@ const styles = StyleSheet.create({
   titleStyle: {
     textAlign: 'center',
   },
-
+  userProfileIcon: {
+    marginHorizontal: 20,
+  },
   userProfilePic: {
     borderRadius: 100,
-    height: 50,
+    height: 40,
     marginHorizontal: 20,
-    width: 50,
+    width: 40,
   },
 });

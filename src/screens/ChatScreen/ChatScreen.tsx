@@ -198,14 +198,6 @@ const ChatScreen = () => {
         // renderMessageText={renderMessageText}
         // isCustomViewBottom
         renderBubble={renderBubble}
-        listViewProps={{
-          showsVerticalScrollIndicator: false,
-          style: {
-            // marginBottom: insets.bottom / 4 + 10,
-            // paddingTop: 200,
-            flex: 1,
-          },
-        }}
       />
     </View>
   );
