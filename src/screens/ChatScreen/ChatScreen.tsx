@@ -6,7 +6,6 @@ import {HomeStackParamList} from '../../routes/types.navigation';
 import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styles from './style';
 import {View} from 'react-native';
 import {userDataType} from '../../@types';
@@ -20,17 +19,18 @@ const ChatScreen = () => {
    ** Routing params
    */
   const route = useRoute<RouteProp<HomeStackParamList, 'ChatScreen'>>();
-  const {room, member, roomImage, roomName} = route.params;
+  const {room, member, roomImage, roomName, newChat = false} = route.params;
+  console.log('🚀 ~ ChatScreen ~ params:', route.params);
   /*
    * Hooks
    */
   const userData = useAppStore(state => state.userData) as userDataType;
-  const insets = useSafeAreaInsets();
   const {colors} = useTheme() as CustomTheme;
   /*
    ** States
    */
   const [loading, setLoading] = useState<boolean>(false);
+  const [contentLoading, setContentLoading] = useState<boolean>(false);
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
   const [messages, setMessages] = useState([]);
   const [pageNum, setPageNum] = useState(1);
@@ -58,30 +58,43 @@ const ChatScreen = () => {
       } catch (error) {
         console.log('🚀 ~ fetchMessages ~ error:', error);
         setLoading(false);
-        Toast.show('Unable to fetch messages', Toast.LONG);
+        Toast.show('Unable to fetch data', Toast.LONG);
       }
     };
-    fetchMessages();
+    if (!newChat) {
+      fetchMessages();
+    }
 
     // Clean up function
     return () => {
       // Clear chat rooms on unmount
       setMessages([]);
     };
-  }, [userData?._id, room?._id]);
+  }, [userData?._id, room?._id, newChat]);
   /*
    ** On sending message
    */
   const onSend = async (content: IMessage[]) => {
     console.log('🚀 ~ messages:', content);
     try {
-      setLoading(true);
-      const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
-        memberId: content[0].user?._id,
-        text: content[0].text,
-      });
-      console.log('on send', response);
+      setContentLoading(true);
+      if (newChat) {
+        const response = await LOCAL_HOST.post(`/chat`, {
+          member: member?._id,
+          createdBy: userData?._id,
+          text: content[0].text,
+        });
+        console.log('on send', response);
+      } else {
+        const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
+          memberId: content[0].user?._id,
+          text: content[0].text,
+        });
+        console.log('on send', response);
+      }
+      setContentLoading(false);
     } catch (error) {
+      setContentLoading(false);
       console.log('🚀 ~ onSend ~ error:', error);
       Toast.show('Unable to send message', Toast.LONG);
     }
@@ -120,9 +133,10 @@ const ChatScreen = () => {
    */
   useHeader(
     {
-      titleMode: 'center',
+      titleMode: 'avatar',
       title: roomName || 'Loci user',
       LeftActionComponent: <BackButton />,
+      avatarUrl: roomImage,
     },
     [],
   );
@@ -150,7 +164,7 @@ const ChatScreen = () => {
         renderActions={renderActions}
         // renderMessageImage={renderMessageContainer}
         renderAvatar={null}
-        renderSend={renderSend}
+        renderSend={props => renderSend(props, contentLoading)}
         renderComposer={renderComposer}
         // renderMessage={renderMessage}
         // renderMessageText={renderMessageText}

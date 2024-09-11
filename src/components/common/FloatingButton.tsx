@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
-    top: HEIGHT - 160,
+    top: HEIGHT - 190,
     width: 60,
   },
 });

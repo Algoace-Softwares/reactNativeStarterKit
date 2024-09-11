@@ -1,19 +1,21 @@
 import React, {ReactElement} from 'react';
-import {StyleProp, StyleSheet, TextStyle, TouchableOpacityProps, View, ViewStyle} from 'react-native';
+import {ImageStyle, StyleProp, StyleSheet, TextStyle, TouchableOpacityProps, View, ViewStyle} from 'react-native';
 import {TxKeyPath} from '../../i18n/types';
 import {IconTypes} from '../../assets/icons';
 import {CustomTheme, HEIGHT, SPACING} from '../../theme';
 import {useTheme} from '@react-navigation/native';
 import AppText from './AppText';
 import AppIcon from './AppIcon';
+import AppImage from './AppImage';
 
 export interface HeaderProps {
   /**
    * The layout of the title relative to the action components.
    * - `center` will force the title to always be centered relative to the header. If the title or the action buttons are too long, the title will be cut off.
    * - `flex` will attempt to center the title relative to the action buttons. If the action buttons are different widths, the title will be off-center relative to the header.
+   * - `avatar` will attempt to center the avaratar as well as text
    */
-  titleMode?: 'center' | 'flex';
+  titleMode?: 'center' | 'flex' | 'avatar';
   /**
    * Optional title style override.
    */
@@ -76,9 +78,25 @@ export interface HeaderProps {
    */
   RightActionComponent?: ReactElement;
   /**
+   * user profile image url
+   */
+  avatarUrl?: string;
+  /**
    * What happens when you press the right icon or text action.
    */
   onRightPress?: TouchableOpacityProps['onPress'];
+  /**
+   * How wide should the profile image be?
+   */
+  maxWidth?: number;
+  /**
+   * How tall should the profile image be?
+   */
+  maxHeight?: number;
+  /*
+   ** profile image style
+   */
+  avatarStyle?: StyleProp<ImageStyle>;
 }
 
 interface HeaderActionProps {
@@ -142,6 +160,10 @@ export default function AppHeader(props: HeaderProps) {
     titleStyle,
     containerStyle,
     transTitle,
+    avatarUrl,
+    maxWidth = 60,
+    maxHeight = 60,
+    avatarStyle,
   } = props;
   /*
    ** Hooks
@@ -172,14 +194,45 @@ export default function AppHeader(props: HeaderProps) {
             style={[
               titleMode === 'center' && styles.titleCenter,
               titleMode === 'flex' && styles.titleFlex,
+              titleMode === 'avatar' && styles.avatar,
               titleContainerStyle,
             ]}
             pointerEvents='none'>
+            {avatarUrl && (
+              <AppImage
+                source={{uri: avatarUrl}}
+                style={[styles.userProfilePic, avatarStyle]}
+                maxHeight={maxHeight}
+                maxWidth={maxWidth}
+              />
+            )}
             <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
               {title}
             </AppText>
           </View>
         )}
+        {/* {avatarUrl && (
+          <View
+            style={[
+              titleMode === 'center' && styles.titleCenter,
+              titleMode === 'flex' && styles.titleFlex,
+              titleMode === 'avatar' && styles.avatar,
+              titleContainerStyle,
+            ]}
+            pointerEvents='none'>
+            {avatarUrl && (
+              <AppImage
+                source={{uri: avatarUrl}}
+                style={[styles.userProfilePic, avatarStyle]}
+                maxHeight={maxHeight}
+                maxWidth={maxWidth}
+              />
+            )}
+            <AppText transText={transTitle} presetStyle={'subHeading'} style={[styles.titleStyle, titleStyle]}>
+              {title}
+            </AppText>
+          </View>
+        )} */}
 
         <HeaderAction
           icon={rightIcon}
@@ -215,18 +268,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     zIndex: 2,
   },
-
+  avatar: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexGrow: 1,
+  },
   contentContainerStyle: {
     alignItems: 'flex-end',
-    // backgroundColor: 'red',
     flexDirection: 'row',
     height: HEIGHT * 0.1,
-    // justifyContent: 'flex-end',
     maxHeight: HEIGHT * 0.1,
-    // paddingHorizontal: 10,
   },
   titleCenter: {
-    // alignItems: 'center',
     height: '100%',
     justifyContent: 'flex-end',
     paddingHorizontal: SPACING.xxl,
@@ -238,7 +291,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
   },
+
   titleStyle: {
     textAlign: 'center',
+  },
+  userProfilePic: {
+    borderRadius: 100,
+    height: 50,
+    marginHorizontal: 20,
+    width: 50,
   },
 });

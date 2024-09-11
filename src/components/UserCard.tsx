@@ -25,7 +25,7 @@ export default function UserCard(props: userCardType): JSX.Element {
 
   // Rerendering
   return (
-    <TouchableOpacity style={styles.mainViewStyle} onLongPress={() => onPressCard(item)}>
+    <TouchableOpacity style={styles.mainViewStyle} onPress={() => onPressCard(item)}>
       <View style={styles.containerStyle}>
         {item.profileImage ? (
           <AppImage source={{uri: item.profileImage}} style={styles.userProfilePic} maxHeight={60} maxWidth={60} />

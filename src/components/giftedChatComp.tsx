@@ -14,15 +14,19 @@ import {
 } from 'react-native-gifted-chat';
 import {SVG} from '../assets';
 import {COLORS, HEIGHT, SPACING} from '../theme';
-import {StyleSheet} from 'react-native';
+import {ActivityIndicator, StyleSheet} from 'react-native';
 
 /*
  ** renderSend btn on gifter chat customize Send btn
  */
-export const renderSend = (props: SendProps<IMessage>) => {
+export const renderSend = (props: SendProps<IMessage>, loading: boolean) => {
   return (
     <Send {...props} disabled={!props.text} containerStyle={styles.sendBtnStyle}>
-      <SVG.sendIcon fill={COLORS.background} />
+      {loading ? (
+        <ActivityIndicator size='small' color={COLORS.palette.black} />
+      ) : (
+        <SVG.sendIcon fill={COLORS.background} />
+      )}
     </Send>
   );
 };

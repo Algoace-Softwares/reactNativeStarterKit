@@ -94,7 +94,12 @@ const UserSearchScreen = () => {
             <UserCard
               item={user}
               onPressCard={() =>
-                navigation.navigate('ChatScreen', {member: user, roomName: user.name, roomImage: user.profileImage})
+                navigation.navigate('ChatScreen', {
+                  member: user,
+                  roomName: user.name,
+                  roomImage: user.profileImage,
+                  newChat: true,
+                })
               }
             />
           );
