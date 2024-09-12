@@ -8,7 +8,7 @@ import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
-import {userDataType} from '../../@types';
+import {chatRoomType, userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {
@@ -47,28 +47,6 @@ const ChatScreen = () => {
    ** Lifecycle methods
    */
   useEffect(() => {
-    // Fetch chat messages
-    const fetchMessages = async () => {
-      try {
-        setLoading(true);
-        // fecthing data
-        const response = await LOCAL_HOST.get(`/chat/messages/${room?._id}/${userData?._id}`, {
-          params: {
-            page: 1,
-            limit: 20,
-          },
-        });
-        console.log('🚀 ~ fetchMessages ~ response:', response);
-        if (response.data.data.items) {
-          setMessages(response.data.data.items);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.log('🚀 ~ fetchMessages ~ error:', error);
-        setLoading(false);
-        Toast.show('Unable to fetch data', Toast.LONG);
-      }
-    };
     // Fetch chat room
     const fetchRoom = async () => {
       try {
@@ -82,9 +60,9 @@ const ChatScreen = () => {
         });
         console.log('🚀 ~ fetchRoom ~ params:', response);
         if (response.data.data) {
-          // room = response.data.data;
-          navigation.setParams({room: response.data.data});
-          fetchMessages();
+          const roomData = response.data.data as chatRoomType;
+          navigation.setParams({room: roomData});
+          fetchMessages(roomData?._id);
         }
         setLoading(false);
       } catch (error) {
@@ -94,7 +72,7 @@ const ChatScreen = () => {
       }
     };
     if (room?._id) {
-      fetchMessages();
+      fetchMessages(room?._id);
     } else {
       fetchRoom();
     }
@@ -105,6 +83,30 @@ const ChatScreen = () => {
       setMessages([]);
     };
   }, [userData?._id, room?._id, member?._id, navigation]);
+  /*
+   ** Fetch chat messages
+   */
+  const fetchMessages = async (roomId: string) => {
+    try {
+      setLoading(true);
+      // fecthing data
+      const response = await LOCAL_HOST.get(`/chat/messages/${roomId}/${userData?._id}`, {
+        params: {
+          page: 1,
+          limit: 20,
+        },
+      });
+      console.log('🚀 ~ fetchMessages ~ response:', response);
+      if (response.data.data.items) {
+        setMessages(response.data.data.items);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log('🚀 ~ fetchMessages ~ error:', error);
+      setLoading(false);
+      Toast.show('Unable to fetch data', Toast.LONG);
+    }
+  };
   /*
    ** On sending message
    */
@@ -137,20 +139,11 @@ const ChatScreen = () => {
           createdBy: userData?._id,
           text: content[0].text,
         });
-        console.log('rsponse:creating chat room', response);
-        // if (response?.data.data) {
-        //   const newMessage: IMessage = response.data.data;
-        //   console.log('messages', messages);
-        //   console.log('changing arry', newMessage);
-        //   // formating the message
-        //   newMessage.user = {
-        //     _id: userData?._id,
-        //     name: userData?.name,
-        //     avatar: userData?.profileImage,
-        //   };
-
-        //   setMessages(prevMessages => [newMessage, ...prevMessages]);
-        // }
+        const roomData = response?.data?.data as chatRoomType;
+        if (roomData) {
+          fetchMessages(roomData?._id);
+        }
+        console.log('response:creating chat room', response);
       }
       setContentLoading(false);
     } catch (error) {
