@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import {BackButton} from '../../components';
 import {useAppStore} from '../../store';
 import {useHeader} from '../../hooks/useHeader';
@@ -7,11 +8,18 @@ import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
-import {View} from 'react-native';
 import {userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
-import {renderBubble, renderComposer, renderSend, renderToolBar, renderActions} from '../../components/giftedChatComp';
+import {
+  renderBubble,
+  renderComposer,
+  renderSend,
+  renderToolBar,
+  renderActions,
+  renderAvatar,
+  renderChatFooter,
+} from '../../components/giftedChatComp';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 
 const ChatScreen = () => {
@@ -34,7 +42,7 @@ const ChatScreen = () => {
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [pageNum, setPageNum] = useState(1);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping] = useState(false);
   /*
    ** Lifecycle methods
    */
@@ -109,19 +117,40 @@ const ChatScreen = () => {
           memberId: content[0].user?._id,
           text: content[0].text,
         });
-        console.log('on send', response);
+        console.log('on send', response?.data?.data);
+        if (response?.data.data) {
+          const newMessage: IMessage = response.data.data;
+          console.log('messages', messages);
+          console.log('changing arry', newMessage);
+          // formating the message
+          newMessage.user = {
+            _id: userData?._id,
+            name: userData?.name,
+            avatar: userData?.profileImage,
+          };
+
+          setMessages(prevMessages => [newMessage, ...prevMessages]);
+        }
       } else {
         const response = await LOCAL_HOST.post(`/chat`, {
           member: member?._id,
           createdBy: userData?._id,
           text: content[0].text,
         });
-        console.log('on send', response?.data?.data);
-        if (response?.data.data) {
-          const newMessage: IMessage = response.data.data;
-          console.log('changing arrya');
-          setMessages(prevMessages => [...prevMessages, newMessage]);
-        }
+        console.log('rsponse:creating chat room', response);
+        // if (response?.data.data) {
+        //   const newMessage: IMessage = response.data.data;
+        //   console.log('messages', messages);
+        //   console.log('changing arry', newMessage);
+        //   // formating the message
+        //   newMessage.user = {
+        //     _id: userData?._id,
+        //     name: userData?.name,
+        //     avatar: userData?.profileImage,
+        //   };
+
+        //   setMessages(prevMessages => [newMessage, ...prevMessages]);
+        // }
       }
       setContentLoading(false);
     } catch (error) {
@@ -171,7 +200,7 @@ const ChatScreen = () => {
     },
     [],
   );
-
+  // TODO: handle case when new room is created with message
   return (
     <View style={[styles.mainContainer, {backgroundColor: colors.header}]}>
       <GiftedChat
@@ -188,18 +217,16 @@ const ChatScreen = () => {
         onLoadEarlier={loadEarlier}
         scrollToBottom={true}
         isTyping={isTyping}
-        infiniteScroll={true}
-        inverted={false}
+        inverted={true}
         alignTop={true}
         renderInputToolbar={renderToolBar}
         renderActions={renderActions}
-        // renderMessageImage={renderMessageContainer}
-        renderAvatar={null}
+        listViewProps={{showsVerticalScrollIndicator: false}}
+        renderUsernameOnMessage={true}
+        renderChatFooter={() => renderChatFooter(loading, colors.primary)}
+        renderAvatar={renderAvatar}
         renderSend={props => renderSend(props, contentLoading)}
         renderComposer={renderComposer}
-        // renderMessage={renderMessage}
-        // renderMessageText={renderMessageText}
-        // isCustomViewBottom
         renderBubble={renderBubble}
       />
     </View>
