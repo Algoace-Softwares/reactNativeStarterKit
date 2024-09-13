@@ -8,7 +8,7 @@ import {RouteProp, useRoute, useTheme} from '@react-navigation/native';
 import {LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import styles from './style';
-import {chatRoomType, userDataType} from '../../@types';
+import {ChatEventEnum, chatRoomType, userDataType} from '../../@types';
 import {CustomTheme} from '../../theme';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import {
@@ -21,6 +21,7 @@ import {
   renderChatFooter,
 } from '../../components/giftedChatComp';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {markConvRead} from '../../store/chatSlice/chatApiServices';
 
 const ChatScreen = () => {
   /*
@@ -32,6 +33,7 @@ const ChatScreen = () => {
    * Hooks
    */
   const userData = useAppStore(state => state.userData) as userDataType;
+  const socket = useAppStore(state => state.socket);
   const navigation = useAppNavigation();
   const {colors} = useTheme() as CustomTheme;
   /*
@@ -42,6 +44,8 @@ const ChatScreen = () => {
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [pageNum, setPageNum] = useState(1);
+  // // Define state variables and their initial values using 'useState'
+  // const [isConnected, setIsConnected] = useState(false);
   const [isTyping] = useState(false);
   /*
    ** Lifecycle methods
@@ -81,8 +85,63 @@ const ChatScreen = () => {
     return () => {
       // Clear chat rooms on unmount
       setMessages([]);
+      // marking conv as read
+      markConvRead(userData?._id, room?._id);
     };
   }, [userData?._id, room?._id, member?._id, navigation]);
+  // const onConnect = () => {
+  //   setIsConnected(true);
+  // };
+
+  // const onDisconnect = () => {
+  //   setIsConnected(false);
+  // };
+  // // This useEffect handles the setting up and tearing down of socket event listeners.
+  // useEffect(() => {
+  //   // If the socket isn't initialized, we don't set up listeners.
+  //   if (!socket) return;
+
+  //   // Set up event listeners for various socket events:
+  //   // Listener for when the socket connects.
+  //   socket.on(ChatEventEnum.CONNECTED_EVENT, onConnect);
+  //   // Listener for when the socket disconnects.
+  //   socket.on(DISCONNECT_EVENT, onDisconnect);
+  //   // Listener for when a user is typing.
+  //   socket.on(TYPING_EVENT, handleOnSocketTyping);
+  //   // Listener for when a user stops typing.
+  //   socket.on(STOP_TYPING_EVENT, handleOnSocketStopTyping);
+  //   // Listener for when a new message is received.
+  //   socket.on(MESSAGE_RECEIVED_EVENT, onMessageReceived);
+  //   // Listener for the initiation of a new chat.
+  //   socket.on(NEW_CHAT_EVENT, onNewChat);
+  //   // Listener for when a user leaves a chat.
+  //   socket.on(LEAVE_CHAT_EVENT, onChatLeave);
+  //   // Listener for when a group's name is updated.
+  //   socket.on(UPDATE_GROUP_NAME_EVENT, onGroupNameChange);
+  //   //Listener for when a message is deleted
+  //   socket.on(MESSAGE_DELETE_EVENT, onMessageDelete);
+  //   // When the component using this hook unmounts or if `socket` or `chats` change:
+  //   return () => {
+  //     // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
+  //     socket.off(CONNECTED_EVENT, onConnect);
+  //     socket.off(DISCONNECT_EVENT, onDisconnect);
+  //     socket.off(TYPING_EVENT, handleOnSocketTyping);
+  //     socket.off(STOP_TYPING_EVENT, handleOnSocketStopTyping);
+  //     socket.off(MESSAGE_RECEIVED_EVENT, onMessageReceived);
+  //     socket.off(NEW_CHAT_EVENT, onNewChat);
+  //     socket.off(LEAVE_CHAT_EVENT, onChatLeave);
+  //     socket.off(UPDATE_GROUP_NAME_EVENT, onGroupNameChange);
+  //     socket.off(MESSAGE_DELETE_EVENT, onMessageDelete);
+  //   };
+
+  //   // Note:
+  //   // The `chats` array is used in the `onMessageReceived` function.
+  //   // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
+  //   // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
+  //   // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
+  //   // So, even if some socket callbacks are updating the `chats` state, it's not
+  //   // updating on each `useEffect` call but on each socket call.
+  // }, [socket, chats]);
   /*
    ** Fetch chat messages
    */
@@ -137,7 +196,6 @@ const ChatScreen = () => {
         const response = await LOCAL_HOST.post(`/chat`, {
           member: member?._id,
           createdBy: userData?._id,
-          text: content[0].text,
         });
         const roomData = response?.data?.data as chatRoomType;
         if (roomData) {
@@ -193,7 +251,6 @@ const ChatScreen = () => {
     },
     [],
   );
-  // TODO: handle case when new room is created with message
   return (
     <View style={[styles.mainContainer, {backgroundColor: colors.header}]}>
       <GiftedChat

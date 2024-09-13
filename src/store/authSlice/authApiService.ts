@@ -148,21 +148,15 @@ export const deleteUser = async (userId: string) => {
 export const fetchUserDataLocal = async () => {
   try {
     let user = loadStorage(ASYNC_USER_DATA_KEY) as userDataType;
-    console.log('🚀 ~ fetchUserDataLocal ~ user:', user);
     const userToken = loadStorage(ASYNC_TOKEN_KEY) as tokenType;
-    console.log('🚀 ~ fetchUserDataLocal ~ userToken:', userToken);
 
     if (user && '_id' in user) {
-      console.log('User is logged in');
-
       useAppStore.setState({userData: user, tokens: userToken});
       const response = await AUTH_API.get(`/user`, {params: {email: user.email}});
-      console.log('🚀 ~ fetchUserDataLocal: ~ response:', response);
       user = response?.data?.data;
       useAppStore.getState().updateUserData(user);
     }
   } catch (error: any) {
-    console.log('🚀 ~ fetchUserDataLocal: ~ error:', error);
     handleAuthContextError('fetchUserDataLocal', error);
   }
 };

@@ -2,15 +2,15 @@ import {Alert, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppScreen, AppText, BackButton, FloatingButton, Loading, MessengerCard} from '../../components';
 import {useAppStore} from '../../store';
-import {getChatRooms} from '../../store/userSlice/userApiServices';
 import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-import {chatRoomType} from '../../@types';
+import {ChatEventEnum, chatRoomType, userDataType} from '../../@types';
 import Toast from 'react-native-simple-toast';
 import {LOCAL_HOST} from '../../api';
 import {appUtils} from '../../utils';
+import {getChatRooms, markConvRead} from '../../store/chatSlice/chatApiServices';
 
 const ChatRoomsScreen = () => {
   /*
@@ -18,18 +18,15 @@ const ChatRoomsScreen = () => {
    */
   const chatRooms = useAppStore(state => state.chatRooms);
   console.log('🚀 ~ ChatRoomsScreen ~ chatRooms:', chatRooms);
-  const userData = useAppStore(state => state.userData);
+  const userData = useAppStore(state => state.userData) as userDataType;
   const setChatRooms = useAppStore(state => state.setChatRooms);
+  const socket = useAppStore(state => state.socket);
+  console.log('🚀 ~ HomeScreen ~ socket:', socket);
   const navigation = useAppNavigation();
   /*
    ** States
    */
   const [loading, setLoading] = useState<boolean>(false);
-  // const [deleteConvModal, setDeleteConvModal] = useState(false);
-  // const [selectedConvData, setSelectedConvData] = useState({
-  //   roomId: '',
-  //   indexNumber: 0,
-  // });
   /*
    ** Lifecycle methods
    */
@@ -53,6 +50,51 @@ const ChatRoomsScreen = () => {
       setChatRooms([]);
     };
   }, [setChatRooms, userData?._id]);
+  // This useEffect handles the setting up and tearing down of socket event listeners.
+  useEffect(() => {
+    // If the socket isn't initialized, we don't set up listeners.
+    if (!socket) return;
+
+    // Set up event listeners for various socket events:
+    // Listener for when the socket connects.
+    socket.on(ChatEventEnum.CONNECTED_EVENT, () => {
+      console.log('onConnect');
+    });
+    // Listener for when the socket disconnects.
+    socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
+      console.log('onDisconnect');
+    });
+    // Listener for when a new message is received.
+    socket.on(ChatEventEnum.MESSAGE, () => {
+      console.log('message received');
+    });
+    // Listener for the initiation of a new chat.
+    socket.on(ChatEventEnum.NEW_CHAT_EVENT, () => {
+      console.log('new chat');
+    });
+    // Listener for when a group's name is updated.
+    socket.on(ChatEventEnum.UPDATE_GROUP_NAME_EVENT, () => {
+      console.log('group name changes');
+    });
+    // When the component using this hook unmounts or if `socket` or `chats` change:
+    return () => {
+      // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
+      socket.off(ChatEventEnum.CONNECTED_EVENT);
+      socket.off(ChatEventEnum.DISCONNECT_EVENT);
+      socket.off(ChatEventEnum.MESSAGE);
+      socket.off(ChatEventEnum.NEW_CHAT_EVENT);
+      socket.off(ChatEventEnum.UPDATE_GROUP_NAME_EVENT);
+      socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+    };
+
+    // Note:
+    // The `chats` array is used in the `onMessageReceived` function.
+    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
+    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
+    // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
+    // So, even if some socket callbacks are updating the `chats` state, it's not
+    // updating on each `useEffect` call but on each socket call.
+  }, [socket]);
   /*
    ** Deleting chat room
    */
@@ -74,7 +116,7 @@ const ChatRoomsScreen = () => {
   /*
    ** report chat room
    */
-  const reportCharRoom = async (room: chatRoomType) => {
+  const reportChatRoom = async (room: chatRoomType) => {
     try {
       const subject = 'Report conversation';
       const reportedUser = room?.members?.filter(member => userData?._id !== member?._id);
@@ -92,18 +134,6 @@ const ChatRoomsScreen = () => {
     } catch (error) {
       console.log('🚀 ~ deleteChatRooms ~ error:', error);
       Toast.show('Unable to send email. Invalid email configuration', Toast.LONG);
-    }
-  };
-  /*
-   ** Marking converstaion as read
-   */
-  const markConversationAsRead = async (room: chatRoomType) => {
-    try {
-      const response = await LOCAL_HOST.patch(`/chat/count/${room?._id}/${userData?._id}`);
-      console.log('response: markConversationAsRead:', response);
-    } catch (error) {
-      console.log('🚀 ~ markConversationAsRead ~ error:', error);
-      Toast.show('Unable take action', Toast.LONG);
     }
   };
   /*
@@ -132,9 +162,9 @@ const ChatRoomsScreen = () => {
             },
             {
               text: 'Report chat room',
-              onPress: () => reportCharRoom(chatItem),
+              onPress: () => reportChatRoom(chatItem),
             },
-            {text: 'Mark as read', onPress: () => markConversationAsRead(chatItem)},
+            {text: 'Mark as read', onPress: () => markConvRead(userData?._id, chatItem?._id)},
             {
               text: 'Cancel',
               onPress: () => console.log('Cancel Pressed'),
@@ -150,7 +180,7 @@ const ChatRoomsScreen = () => {
    */
   useHeader(
     {
-      // titleMode: 'center',
+      titleMode: 'center',
       transTitle: 'chatRoomsScreen',
       LeftActionComponent: <BackButton />,
     },

@@ -9,6 +9,7 @@ const HomeScreen = () => {
    * Hooks
    */
   const navigation = useAppNavigation();
+
   /*
    ** Lifecycle methods
    */

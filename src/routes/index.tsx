@@ -9,6 +9,8 @@ import {useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 import {useAppStore} from '../store';
 import {fetchUserDataLocal} from '../store/authSlice/authApiService';
+import socketio from 'socket.io-client';
+import {ChatEventEnum} from '../@types';
 /**
  * This is a list of all the route names that will exit the app if the back button
  * is pressed while in that screen. Only affects Android.
@@ -39,6 +41,48 @@ const AuthStackScreens = (): JSX.Element => {
  */
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const HomeStackScreens = (): JSX.Element => {
+  /*
+   **  Hooks
+   */
+  const userData = useAppStore(state => state.userData);
+  const setSocket = useAppStore(state => state.setSocket);
+  useEffect(() => {
+    /*
+     ** initializing socket instance
+     */
+    const socketInstance = socketio('ws://localhost:8000', {
+      transports: ['websocket'],
+    });
+    console.log('socketInstance:', socketInstance);
+
+    // setting up on state variable
+    setSocket(socketInstance);
+
+    console.log('emitting socket');
+
+    // emitting event to know the server this user is connected and ready for emitting or listeining events
+    socketInstance?.emit(ChatEventEnum.CONNECTED_EVENT, {
+      userId: userData?._id,
+    });
+    // socketInstance.io.on('reconnect_attempt', () => {
+    //   console.log('reconnect attempt');
+    // });
+
+    // socketInstance.io.on('reconnect', () => {
+    //   console.log('reconnect');
+    // });
+    // socketInstance.on('disconnect', (reason, details) => {
+    //   console.log('diconnect:', reason, details);
+    // });
+    // socketInstance.on('connect', () => {
+    //   console.log('user connected');
+    // });
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [userData?._id, setSocket]);
+
   return (
     <HomeStack.Navigator>
       {homeScreens.map(item => {
@@ -64,7 +108,6 @@ const RootNavigator = (): JSX.Element => {
    */
 
   const userData = useAppStore(state => state.userData);
-  console.log('🚀 ~ RootNavigator ~ userData:', userData);
 
   /*
    ** check is user signed in or not
