@@ -81,7 +81,7 @@ export interface chatMessageType {
  */
 export const ChatEventEnum = Object.freeze({
   // ? once user is ready to go
-  CONNECTION_EVENT: 'connection',
+  CONNECTION_EVENT: 'connect',
   // ? once user is ready to go
   CONNECTED_EVENT: 'connected',
   // ? when user gets disconnected

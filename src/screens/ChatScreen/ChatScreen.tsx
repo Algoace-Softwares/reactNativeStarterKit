@@ -89,59 +89,51 @@ const ChatScreen = () => {
       markConvRead(userData?._id, room?._id);
     };
   }, [userData?._id, room?._id, member?._id, navigation]);
-  // const onConnect = () => {
-  //   setIsConnected(true);
-  // };
 
-  // const onDisconnect = () => {
-  //   setIsConnected(false);
-  // };
-  // // This useEffect handles the setting up and tearing down of socket event listeners.
-  // useEffect(() => {
-  //   // If the socket isn't initialized, we don't set up listeners.
-  //   if (!socket) return;
+  // This useEffect handles the setting up and tearing down of socket event listeners.
+  useEffect(() => {
+    // If the socket isn't initialized, we don't set up listeners.
+    if (!socket) return;
 
-  //   // Set up event listeners for various socket events:
-  //   // Listener for when the socket connects.
-  //   socket.on(ChatEventEnum.CONNECTED_EVENT, onConnect);
-  //   // Listener for when the socket disconnects.
-  //   socket.on(DISCONNECT_EVENT, onDisconnect);
-  //   // Listener for when a user is typing.
-  //   socket.on(TYPING_EVENT, handleOnSocketTyping);
-  //   // Listener for when a user stops typing.
-  //   socket.on(STOP_TYPING_EVENT, handleOnSocketStopTyping);
-  //   // Listener for when a new message is received.
-  //   socket.on(MESSAGE_RECEIVED_EVENT, onMessageReceived);
-  //   // Listener for the initiation of a new chat.
-  //   socket.on(NEW_CHAT_EVENT, onNewChat);
-  //   // Listener for when a user leaves a chat.
-  //   socket.on(LEAVE_CHAT_EVENT, onChatLeave);
-  //   // Listener for when a group's name is updated.
-  //   socket.on(UPDATE_GROUP_NAME_EVENT, onGroupNameChange);
-  //   //Listener for when a message is deleted
-  //   socket.on(MESSAGE_DELETE_EVENT, onMessageDelete);
-  //   // When the component using this hook unmounts or if `socket` or `chats` change:
-  //   return () => {
-  //     // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
-  //     socket.off(CONNECTED_EVENT, onConnect);
-  //     socket.off(DISCONNECT_EVENT, onDisconnect);
-  //     socket.off(TYPING_EVENT, handleOnSocketTyping);
-  //     socket.off(STOP_TYPING_EVENT, handleOnSocketStopTyping);
-  //     socket.off(MESSAGE_RECEIVED_EVENT, onMessageReceived);
-  //     socket.off(NEW_CHAT_EVENT, onNewChat);
-  //     socket.off(LEAVE_CHAT_EVENT, onChatLeave);
-  //     socket.off(UPDATE_GROUP_NAME_EVENT, onGroupNameChange);
-  //     socket.off(MESSAGE_DELETE_EVENT, onMessageDelete);
-  //   };
+    // Set up event listeners for various socket events:
+    // Listener for when a user is typing.
+    socket.on(ChatEventEnum.START_TYPING_EVENT, data => {
+      console.log('user is typing....', data);
+    });
+    // Listener for when a user stops typing.
+    socket.on(ChatEventEnum.STOP_TYPING_EVENT, data => {
+      console.log('user stop typing...', data);
+    });
+    // Listener for when a new message is received.
+    socket.on(ChatEventEnum.MESSAGE, data => {
+      console.log('message received', data);
+    });
+    // Listener for when a user leaves a chat.
+    socket.on(ChatEventEnum.LEAVE_CHAT_EVENT, data => {
+      console.log('user leave chat...', data);
+    });
+    // Listener for when a message is deleted
+    socket.on(ChatEventEnum.MESSAGE_DELETE_EVENT, data => {
+      console.log('message deleted', data);
+    });
+    // When the component using this hook unmounts or if `socket` or `chats` change:
+    return () => {
+      // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
+      socket.off(ChatEventEnum.START_TYPING_EVENT);
+      socket.off(ChatEventEnum.STOP_TYPING_EVENT);
+      socket.off(ChatEventEnum.MESSAGE);
+      socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
+      socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+    };
 
-  //   // Note:
-  //   // The `chats` array is used in the `onMessageReceived` function.
-  //   // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
-  //   // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
-  //   // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
-  //   // So, even if some socket callbacks are updating the `chats` state, it's not
-  //   // updating on each `useEffect` call but on each socket call.
-  // }, [socket, chats]);
+    // Note:
+    // The `chats` array is used in the `onMessageReceived` function.
+    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
+    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
+    // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
+    // So, even if some socket callbacks are updating the `chats` state, it's not
+    // updating on each `useEffect` call but on each socket call.
+  }, [socket]);
   /*
    ** Fetch chat messages
    */

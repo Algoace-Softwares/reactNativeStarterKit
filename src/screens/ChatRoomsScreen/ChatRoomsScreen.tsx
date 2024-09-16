@@ -11,17 +11,15 @@ import Toast from 'react-native-simple-toast';
 import {LOCAL_HOST} from '../../api';
 import {appUtils} from '../../utils';
 import {getChatRooms, markConvRead} from '../../store/chatSlice/chatApiServices';
-
+// TODO: logic for when recieve a message update the chat room and bring it to the top
 const ChatRoomsScreen = () => {
   /*
    * Hooks
    */
   const chatRooms = useAppStore(state => state.chatRooms);
-  console.log('🚀 ~ ChatRoomsScreen ~ chatRooms:', chatRooms);
   const userData = useAppStore(state => state.userData) as userDataType;
   const setChatRooms = useAppStore(state => state.setChatRooms);
   const socket = useAppStore(state => state.socket);
-  console.log('🚀 ~ HomeScreen ~ socket:', socket);
   const navigation = useAppNavigation();
   /*
    ** States
@@ -56,35 +54,25 @@ const ChatRoomsScreen = () => {
     if (!socket) return;
 
     // Set up event listeners for various socket events:
-    // Listener for when the socket connects.
-    socket.on(ChatEventEnum.CONNECTED_EVENT, () => {
-      console.log('onConnect');
-    });
-    // Listener for when the socket disconnects.
-    socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
-      console.log('onDisconnect');
-    });
-    // Listener for when a new message is received.
-    socket.on(ChatEventEnum.MESSAGE, () => {
-      console.log('message received');
-    });
+
     // Listener for the initiation of a new chat.
-    socket.on(ChatEventEnum.NEW_CHAT_EVENT, () => {
-      console.log('new chat');
+    socket.on(ChatEventEnum.NEW_CHAT_EVENT, data => {
+      console.log('new chat', data);
     });
     // Listener for when a group's name is updated.
-    socket.on(ChatEventEnum.UPDATE_GROUP_NAME_EVENT, () => {
-      console.log('group name changes');
+    socket.on(ChatEventEnum.UPDATE_GROUP_NAME_EVENT, data => {
+      console.log('group name changes', data);
+    });
+    // Listener for when a new message is received.
+    socket.on(ChatEventEnum.MESSAGE, data => {
+      console.log('message received', data);
     });
     // When the component using this hook unmounts or if `socket` or `chats` change:
     return () => {
       // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
-      socket.off(ChatEventEnum.CONNECTED_EVENT);
-      socket.off(ChatEventEnum.DISCONNECT_EVENT);
-      socket.off(ChatEventEnum.MESSAGE);
       socket.off(ChatEventEnum.NEW_CHAT_EVENT);
       socket.off(ChatEventEnum.UPDATE_GROUP_NAME_EVENT);
-      socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+      socket.off(ChatEventEnum.MESSAGE);
     };
 
     // Note:

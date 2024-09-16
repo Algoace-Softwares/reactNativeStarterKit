@@ -71,15 +71,17 @@ const HomeStackScreens = (): JSX.Element => {
     // socketInstance.io.on('reconnect', () => {
     //   console.log('reconnect');
     // });
-    // socketInstance.on('disconnect', (reason, details) => {
-    //   console.log('diconnect:', reason, details);
-    // });
-    // socketInstance.on('connect', () => {
-    //   console.log('user connected');
-    // });
+    socketInstance.on(ChatEventEnum.DISCONNECT_EVENT, (reason, details) => {
+      console.log('diconnect:', reason, details);
+    });
+    socketInstance.on(ChatEventEnum.CONNECTION_EVENT, () => {
+      console.log('user connected');
+    });
 
     return () => {
       socketInstance.disconnect();
+      socketInstance.off(ChatEventEnum.CONNECTION_EVENT);
+      socketInstance.off(ChatEventEnum.DISCONNECT_EVENT);
     };
   }, [userData?._id, setSocket]);
 
