@@ -18,6 +18,7 @@ const ChatRoomsScreen = () => {
    */
   const chatRooms = useAppStore(state => state.chatRooms);
   const userData = useAppStore(state => state.userData) as userDataType;
+  console.log('🚀 ~ ChatRoomsScreen ~ userData:', userData);
   const setChatRooms = useAppStore(state => state.setChatRooms);
   const socket = useAppStore(state => state.socket);
   const navigation = useAppNavigation();
@@ -65,7 +66,7 @@ const ChatRoomsScreen = () => {
     });
     // Listener for when a new message is received.
     socket.on(ChatEventEnum.MESSAGE, data => {
-      console.log('message received', data);
+      console.log('message received : chatroom', data);
     });
     // When the component using this hook unmounts or if `socket` or `chats` change:
     return () => {

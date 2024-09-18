@@ -43,12 +43,6 @@ export const renderToolBar = (props: InputToolbarProps<IMessage>) => {
 export const renderComposer = (props: ComposerProps) => (
   <Composer {...props} textInputStyle={styles.composerStyle} composerHeight={45} />
 );
-/*
- ** Custom component to render below the MessageContainer (separate from the ListView)
- */
-export const renderChatFooter = (loading: boolean, color: string) => {
-  return loading ? <ActivityIndicator size='small' color={color} /> : null;
-};
 
 /*
  ** render tool bar at bottom

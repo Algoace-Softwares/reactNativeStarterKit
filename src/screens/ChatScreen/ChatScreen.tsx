@@ -18,7 +18,6 @@ import {
   renderToolBar,
   renderActions,
   renderAvatar,
-  renderChatFooter,
 } from '../../components/giftedChatComp';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {markConvRead} from '../../store/chatSlice/chatApiServices';
@@ -26,36 +25,39 @@ import {markConvRead} from '../../store/chatSlice/chatApiServices';
 const ChatScreen = () => {
   /*
    ** Routing params
+   ** Extract chat room and member details from route parameters
    */
   const route = useRoute<RouteProp<HomeStackParamList, 'ChatScreen'>>();
   const {room, member, roomImage, roomName} = route.params;
+
   /*
    * Hooks
+   ** Access application state, navigation, and theme
    */
   const userData = useAppStore(state => state.userData) as userDataType;
   const socket = useAppStore(state => state.socket);
   const navigation = useAppNavigation();
   const {colors} = useTheme() as CustomTheme;
+
   /*
    ** States
+   ** Manage local state for loading indicators, messages, and pagination
    */
-  const [loading, setLoading] = useState<boolean>(false);
   const [contentLoading, setContentLoading] = useState<boolean>(false);
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [pageNum, setPageNum] = useState(1);
-  // // Define state variables and their initial values using 'useState'
-  // const [isConnected, setIsConnected] = useState(false);
   const [isTyping] = useState(false);
+
   /*
    ** Lifecycle methods
+   ** Fetch chat room and messages on mount; clean up on unmount
    */
   useEffect(() => {
-    // Fetch chat room
+    // Function to fetch chat room details
     const fetchRoom = async () => {
       try {
-        setLoading(true);
-        // fecthing data
+        setIsLoadingEarlier(true);
         const response = await LOCAL_HOST.get(`/chat`, {
           params: {
             firstUser: userData?._id,
@@ -66,173 +68,146 @@ const ChatScreen = () => {
         if (response.data.data) {
           const roomData = response.data.data as chatRoomType;
           navigation.setParams({room: roomData});
-          fetchMessages(roomData?._id);
+          fetchMessages(roomData?._id, 1);
         }
-        setLoading(false);
+        setIsLoadingEarlier(false);
       } catch (error) {
         console.log('🚀 ~ fetchMessages ~ error:', error);
-        setLoading(false);
+        setIsLoadingEarlier(false);
         Toast.show('Unable to fetch data', Toast.LONG);
       }
     };
+
+    // Fetch messages if room ID is available; otherwise, fetch room details
     if (room?._id) {
-      fetchMessages(room?._id);
+      fetchMessages(room?._id, 1);
     } else {
       fetchRoom();
     }
 
-    // Clean up function
+    // Clean up function: reset messages and mark conversation as read
     return () => {
-      // Clear chat rooms on unmount
       setMessages([]);
-      // marking conv as read
       markConvRead(userData?._id, room?._id);
     };
   }, [userData?._id, room?._id, member?._id, navigation]);
 
-  // This useEffect handles the setting up and tearing down of socket event listeners.
+  /*
+   ** Socket Event Listeners
+   ** Set up and tear down event listeners for socket events
+   */
   useEffect(() => {
-    // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
 
-    // Set up event listeners for various socket events:
-    // Listener for when a user is typing.
     socket.on(ChatEventEnum.START_TYPING_EVENT, data => {
-      console.log('user is typing....', data);
+      console.log('User is typing...', data);
     });
-    // Listener for when a user stops typing.
     socket.on(ChatEventEnum.STOP_TYPING_EVENT, data => {
-      console.log('user stop typing...', data);
+      console.log('User stopped typing...', data);
     });
-    // Listener for when a new message is received.
-    socket.on(ChatEventEnum.MESSAGE, data => {
-      console.log('message received', data);
+    socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage) => {
+      if (newMessage?.chatRoom === room?._id) {
+        setMessages(prevMessages => [newMessage, ...prevMessages]);
+      }
     });
-    // Listener for when a user leaves a chat.
     socket.on(ChatEventEnum.LEAVE_CHAT_EVENT, data => {
-      console.log('user leave chat...', data);
+      console.log('User left chat...', data);
     });
-    // Listener for when a message is deleted
     socket.on(ChatEventEnum.MESSAGE_DELETE_EVENT, data => {
-      console.log('message deleted', data);
+      console.log('Message deleted', data);
     });
-    // When the component using this hook unmounts or if `socket` or `chats` change:
+
+    // Clean up socket event listeners on component unmount or when socket changes
     return () => {
-      // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
       socket.off(ChatEventEnum.START_TYPING_EVENT);
       socket.off(ChatEventEnum.STOP_TYPING_EVENT);
       socket.off(ChatEventEnum.MESSAGE);
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
     };
+  }, [socket, room]);
 
-    // Note:
-    // The `chats` array is used in the `onMessageReceived` function.
-    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
-    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
-    // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
-    // So, even if some socket callbacks are updating the `chats` state, it's not
-    // updating on each `useEffect` call but on each socket call.
-  }, [socket]);
   /*
-   ** Fetch chat messages
+   ** Fetch Messages
+   ** Retrieve chat messages for a specific room
    */
-  const fetchMessages = async (roomId: string) => {
+  const fetchMessages = async (roomId: string, page: number) => {
     try {
-      setLoading(true);
-      // fecthing data
+      setIsLoadingEarlier(true);
+      // Make an async request to fetch chat messages for the current chat
       const response = await LOCAL_HOST.get(`/chat/messages/${roomId}/${userData?._id}`, {
         params: {
-          page: 1,
+          page,
           limit: 20,
         },
       });
       console.log('🚀 ~ fetchMessages ~ response:', response);
-      if (response.data.data.items) {
-        setMessages(response.data.data.items);
+      // refactoring data
+      const chatMessages = response.data.data.items as IMessage[];
+      const currentPage = response.data.data.page as number;
+      // if page is 1 then is first time api calling save data same on state varaiable
+      if (chatMessages && chatMessages?.length >= 1 && page === 1) {
+        setMessages(chatMessages);
+      } else if (chatMessages && chatMessages?.length >= 1 && currentPage > 1) {
+        setMessages([...messages, ...chatMessages]);
+        setPageNum(currentPage);
       }
-      setLoading(false);
+      setIsLoadingEarlier(false);
     } catch (error) {
       console.log('🚀 ~ fetchMessages ~ error:', error);
-      setLoading(false);
+      setIsLoadingEarlier(false);
+      // showing toast
       Toast.show('Unable to fetch data', Toast.LONG);
     }
   };
+
   /*
-   ** On sending message
+   ** Send Message
+   ** Handle sending a new chat message
    */
   const onSend = async (content: IMessage[]) => {
     console.log('🚀 ~ messages:', content);
     try {
       setContentLoading(true);
+      // checking if there is a room then send message if not then create room first then send message
       if (room) {
+        // Emit a STOP_TYPING_EVENT to inform other users/participants that typing has stopped
+        socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
+        // making an apii call for sendinig chat message
         const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
           memberId: content[0].user?._id,
           text: content[0].text,
         });
-        console.log('on send', response?.data?.data);
+        console.log('On send', response?.data?.data);
         if (response?.data.data) {
+          // saving the messsage to statte variable
           const newMessage: IMessage = response.data.data;
-          console.log('messages', messages);
-          console.log('changing arry', newMessage);
-          // formating the message
-          newMessage.user = {
-            _id: userData?._id,
-            name: userData?.name,
-            avatar: userData?.profileImage,
-          };
-
           setMessages(prevMessages => [newMessage, ...prevMessages]);
         }
       } else {
+        // making and api call to create room
         const response = await LOCAL_HOST.post(`/chat`, {
           member: member?._id,
           createdBy: userData?._id,
         });
         const roomData = response?.data?.data as chatRoomType;
         if (roomData) {
-          fetchMessages(roomData?._id);
+          fetchMessages(roomData?._id, 1);
         }
-        console.log('response:creating chat room', response);
+        console.log('Response: Creating chat room', response);
       }
       setContentLoading(false);
     } catch (error) {
       setContentLoading(false);
       console.log('🚀 ~ onSend ~ error:', error);
+      // showing toast
       Toast.show('Unable to send message', Toast.LONG);
-    }
-  };
-  /*
-   ** On loading earlier
-   */
-  const loadEarlier = async () => {
-    try {
-      setIsLoadingEarlier(true);
-      // fecthing  old messages
-      const response = await LOCAL_HOST.get(`/chat/messages/${room?._id}/${userData?._id}`, {
-        params: {
-          page: pageNum + 1,
-          limit: 20,
-        },
-      });
-      console.log('🚀 ~ fetchMessages ~ response:', response);
-      const chatMessages = response.data.data.items as never[];
-      const page = response.data.data.page as number;
-      if (chatMessages && chatMessages.length > 0 && page > 1) {
-        // appending the messages
-        setMessages([...messages, ...(chatMessages as never)]);
-        setPageNum(pageNum + 1);
-      }
-      setIsLoadingEarlier(false);
-    } catch (error) {
-      setIsLoadingEarlier(false);
-      console.log('🚀 ~ loadEarlier ~ error:', error);
-      Toast.show('Unable to load previous message', Toast.LONG);
     }
   };
 
   /*
-   ** Rendeing header componenet
+   ** Header Component
+   ** Configure and render header with title, back button, and avatar
    */
   useHeader(
     {
@@ -256,7 +231,7 @@ const ChatScreen = () => {
         loadEarlier={true}
         isLoadingEarlier={isLoadingEarlier}
         alwaysShowSend={true}
-        onLoadEarlier={loadEarlier}
+        onLoadEarlier={() => room?._id && fetchMessages(room?._id, pageNum + 1)}
         scrollToBottom={true}
         isTyping={isTyping}
         inverted={true}
@@ -265,7 +240,6 @@ const ChatScreen = () => {
         renderActions={renderActions}
         listViewProps={{showsVerticalScrollIndicator: false}}
         renderUsernameOnMessage={true}
-        renderChatFooter={() => renderChatFooter(loading, colors.primary)}
         renderAvatar={renderAvatar}
         renderSend={props => renderSend(props, contentLoading)}
         renderComposer={renderComposer}
