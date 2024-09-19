@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {BackButton} from '../../components';
 import {useAppStore} from '../../store';
@@ -47,7 +47,12 @@ const ChatScreen = () => {
   const [isLoadingEarlier, setIsLoadingEarlier] = useState<boolean>(false);
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [pageNum, setPageNum] = useState(1);
-  const [isTyping] = useState(false);
+  // To track if someone is currently typing
+  const [isTyping, setIsTyping] = useState(false);
+  // To keep track of the setTimeout function
+  const typingTimeoutRef = useRef<number | null>(null);
+  // To track if the current user is typing
+  const [selfTyping, setSelfTyping] = useState(false);
 
   /*
    ** Lifecycle methods
@@ -58,6 +63,7 @@ const ChatScreen = () => {
     const fetchRoom = async () => {
       try {
         setIsLoadingEarlier(true);
+        // api call
         const response = await LOCAL_HOST.get(`/chat`, {
           params: {
             firstUser: userData?._id,
@@ -67,7 +73,9 @@ const ChatScreen = () => {
         console.log('🚀 ~ fetchRoom ~ params:', response);
         if (response.data.data) {
           const roomData = response.data.data as chatRoomType;
+          // setting navigation params
           navigation.setParams({room: roomData});
+          // now fetching messages of that room
           fetchMessages(roomData?._id, 1);
         }
         setIsLoadingEarlier(false);
@@ -97,22 +105,34 @@ const ChatScreen = () => {
    ** Set up and tear down event listeners for socket events
    */
   useEffect(() => {
+    // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
+    /**
+     * Handles the "typing" event on the socket.
+     */
+    const handleSocketTyping = (chatId: string, typingValue: boolean) => {
+      console.log('User is start/stop typing...', chatId, typingValue);
+      // Check if the stop typing event is for the currently active chat.
+      if (chatId !== room?._id) return;
+      // Set the typing state to false for the current chat.
+      setIsTyping(typingValue);
+    };
 
-    socket.on(ChatEventEnum.START_TYPING_EVENT, data => {
-      console.log('User is typing...', data);
-    });
-    socket.on(ChatEventEnum.STOP_TYPING_EVENT, data => {
-      console.log('User stopped typing...', data);
-    });
-    socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage) => {
+    // Listener for when a user is typing.
+    socket.on(ChatEventEnum.START_TYPING_EVENT, (chatId: string) => handleSocketTyping(chatId, true));
+    // Listener for when a user stops typing.
+    socket.on(ChatEventEnum.STOP_TYPING_EVENT, (chatId: string) => handleSocketTyping(chatId, false));
+    // Listener for when a new message is received.
+    socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage & {chatRoom: string}) => {
       if (newMessage?.chatRoom === room?._id) {
         setMessages(prevMessages => [newMessage, ...prevMessages]);
       }
     });
+    // Listener for when a user leaves a chat.
     socket.on(ChatEventEnum.LEAVE_CHAT_EVENT, data => {
       console.log('User left chat...', data);
     });
+    // Listener for when a message is deleted
     socket.on(ChatEventEnum.MESSAGE_DELETE_EVENT, data => {
       console.log('Message deleted', data);
     });
@@ -172,7 +192,8 @@ const ChatScreen = () => {
       // checking if there is a room then send message if not then create room first then send message
       if (room) {
         // Emit a STOP_TYPING_EVENT to inform other users/participants that typing has stopped
-        socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
+
+        socket && socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
         // making an apii call for sendinig chat message
         const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
           memberId: content[0].user?._id,
@@ -203,6 +224,34 @@ const ChatScreen = () => {
       // showing toast
       Toast.show('Unable to send message', Toast.LONG);
     }
+  };
+  /*
+   ** Handling text input for typing indicator
+   */
+  const handleOnMessageChange = (text: string) => {
+    console.log('🚀 ~ handleOnMessageChange ~ text:', text);
+    // If socket doesn't exist or isn't connected, exit the function
+    if (!socket) return;
+
+    // Check if the user isn't already set as typing
+    if (!selfTyping) {
+      // Set the user as typing
+      setSelfTyping(true);
+
+      // Emit a typing event to the server for the current chat
+      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
+    }
+    // Clear the previous timeout (if exists) to avoid multiple setTimeouts from running
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    // Set a timeout to stop the typing indication after the timerLength has passed the time lenght is 2 seconds
+    typingTimeoutRef.current = setTimeout(() => {
+      // Emit a stop typing event to the server for the current chat
+      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
+      // Reset the user's typing state
+      setSelfTyping(false);
+    }, 2000);
   };
 
   /*
@@ -242,6 +291,7 @@ const ChatScreen = () => {
         renderUsernameOnMessage={true}
         renderAvatar={renderAvatar}
         renderSend={props => renderSend(props, contentLoading)}
+        onInputTextChanged={handleOnMessageChange}
         renderComposer={renderComposer}
         renderBubble={renderBubble}
       />

@@ -67,7 +67,7 @@ export const renderActions = (props: ActionsProps) => (
  ** Render avatar for user
  */
 export const renderAvatar = (props: AvatarProps<IMessage>) => {
-  const {currentMessage} = props;
+  const {currentMessage} = props as {currentMessage: IMessage & {user: {profileImage: string}}};
   if (currentMessage?.user?.profileImage) {
     return <AppImage source={{uri: currentMessage?.user?.profileImage}} style={styles.avatarStyle} />;
   } else {

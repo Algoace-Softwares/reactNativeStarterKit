@@ -4171,9 +4171,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001646":
-  version: 1.0.30001660
-  resolution: "caniuse-lite@npm:1.0.30001660"
-  checksum: 8b2c5de2f5facd31980426afbba68238270984acfe8c1ae925b8b6480448eea2fae292f815674617e9170c730c8a238d7cc0db919f184dc0e3cd9bec18f5e5ad
+  version: 1.0.30001662
+  resolution: "caniuse-lite@npm:1.0.30001662"
+  checksum: 7a6a0c0d9f7c4a1c51de02838eb47f41f36fff57a77b846c8faed35ba9afba17b9399bc00bd637e5c1663cbc132534085d91151de48edca2ad8932a5d87e23af
   languageName: node
   linkType: hard
 
@@ -9209,12 +9209,12 @@ __metadata:
   linkType: hard
 
 "react-native-lightbox-v2@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "react-native-lightbox-v2@npm:0.9.0"
+  version: 0.9.2
+  resolution: "react-native-lightbox-v2@npm:0.9.2"
   peerDependencies:
     react: ">=16.8.0"
     react-native: ">=0.61.0"
-  checksum: ffedc7e58348ca28ea3a20baa7fa7d4b6cb493473e5f36a701aca22dc59c47606d64d667bb64ac7a1c2c1af686fcd99cd2883bd713797664517f0ed98ad03929
+  checksum: b55783a0c629010dead4f9b9d449207853d31f2c577fc11f5db1527fddbd5fdd8a8e6122abfba79e12c619cf00fd0c4072b72a2b840425fdbf81ae419d4e9580
   languageName: node
   linkType: hard
 
