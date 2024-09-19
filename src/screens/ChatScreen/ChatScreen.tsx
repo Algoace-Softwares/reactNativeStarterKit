@@ -225,21 +225,23 @@ const ChatScreen = () => {
       Toast.show('Unable to send message', Toast.LONG);
     }
   };
+  // TODO: check handling for typing indicator also check for when user join or leave chat
   /*
    ** Handling text input for typing indicator
    */
   const handleOnMessageChange = (text: string) => {
     console.log('🚀 ~ handleOnMessageChange ~ text:', text);
     // If socket doesn't exist or isn't connected, exit the function
-    if (!socket) return;
-
+    if (!socket || !room) return;
+    // filtering the data
+    const secondMember = room.members.filter(user => user._id !== userData?._id);
     // Check if the user isn't already set as typing
     if (!selfTyping) {
       // Set the user as typing
       setSelfTyping(true);
 
       // Emit a typing event to the server for the current chat
-      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
+      socket.emit(ChatEventEnum.START_TYPING_EVENT, secondMember[0]._id);
     }
     // Clear the previous timeout (if exists) to avoid multiple setTimeouts from running
     if (typingTimeoutRef.current) {
@@ -248,7 +250,7 @@ const ChatScreen = () => {
     // Set a timeout to stop the typing indication after the timerLength has passed the time lenght is 2 seconds
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
-      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
+      socket.emit(ChatEventEnum.STOP_TYPING_EVENT, secondMember[0]._id);
       // Reset the user's typing state
       setSelfTyping(false);
     }, 2000);
