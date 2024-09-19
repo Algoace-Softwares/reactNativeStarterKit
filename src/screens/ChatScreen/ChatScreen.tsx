@@ -50,7 +50,7 @@ const ChatScreen = () => {
   // To track if someone is currently typing
   const [isTyping, setIsTyping] = useState(false);
   // To keep track of the setTimeout function
-  const typingTimeoutRef = useRef<number | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // To track if the current user is typing
   const [selfTyping, setSelfTyping] = useState(false);
 
@@ -106,7 +106,9 @@ const ChatScreen = () => {
    */
   useEffect(() => {
     // If the socket isn't initialized, we don't set up listeners.
-    if (!socket) return;
+    if (!socket || !room) return;
+    // Emit an event to join the current chat
+    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, room?._id);
     /**
      * Handles the "typing" event on the socket.
      */
@@ -144,6 +146,8 @@ const ChatScreen = () => {
       socket.off(ChatEventEnum.MESSAGE);
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+      // Emit an event to join the current chat
+      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, room?._id);
     };
   }, [socket, room]);
 
