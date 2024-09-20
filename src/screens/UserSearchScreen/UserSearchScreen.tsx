@@ -3,17 +3,18 @@ import {AppScreen, AppText, BackButton, InputTextLabel, Loading, UserCard} from 
 import {useAppStore} from '../../store';
 import {useHeader} from '../../hooks/useHeader';
 import {userDataType} from '../../@types';
-import {AUTH_API} from '../../api';
+import {AUTH_API, LOCAL_HOST} from '../../api';
 import Toast from 'react-native-simple-toast';
 import {FlatList} from 'react-native';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
+import {appUtils} from '../../utils';
 
 const UserSearchScreen = () => {
   /*
    * Hooks
    */
-  const userData = useAppStore(state => state.userData);
+  const userData = useAppStore(state => state.userData) as userDataType;
   const chatRooms = useAppStore(state => state.chatRooms);
   const navigation = useAppNavigation();
   console.log('🚀 ~ UserSearchScreen ~ userData:', userData);
@@ -56,12 +57,8 @@ const UserSearchScreen = () => {
       console.log('🚀 ~ onChangeText ~ searchedUsers:', searchedUsers);
       console.log('🚀 ~ onChangeText ~ pageNum:', pageNum);
       if (searchedUsers && pageNum === 1) {
-        console.log('2');
-
         setUsers(searchedUsers);
       } else if (searchedUsers && pageNum > 1) {
-        console.log('3');
-
         setUsers([...users, ...searchedUsers]);
       }
       setLoading(false);
@@ -71,38 +68,43 @@ const UserSearchScreen = () => {
       Toast.show('Unable to fetch users', Toast.LONG);
     }
   };
+
   /*
    ** When card is pressed
    */
-  const onCardPress = (user: userDataType) => {
-    const sender = userData?._id as string;
-    const receiver = user?._id as string;
-    // checking if room exits in local data or not
-    const roomData = chatRooms.find(room => {
-      // Ensure the room is not a group chat and has exactly two members
-      if (!room.isGroupChat && room.members.length === 2) {
-        // making key value pair for member array
-        const memberIdMap = room.members.reduce(
-          (acc, member) => {
-            acc[member._id] = true;
-            return acc;
+  const onCardPress = async (user: userDataType) => {
+    try {
+      setLoading(true);
+      // checking if room exits locally in chat rooms
+      let roomData = appUtils.checkDualMemberChat(chatRooms, userData._id, user._id);
+      console.log('🚀 ~ onCardPress ~ roomData:', roomData);
+      if (!roomData) {
+        // api call to check if room exits or not
+        // we are chcking room on server bacause our chatRoom return data in paginated format suppose we have extract 20 room
+        // and user want to initiate a chat which is not currently available on state varibale this mean we need to check
+        // if this users chat exits or not
+
+        const response = await LOCAL_HOST.get(`/chat`, {
+          params: {
+            firstUser: userData._id,
+            secondUser: user._id,
           },
-          {} as Record<string, boolean>,
-        );
-
-        // Check if both sender and receiver IDs are present in the map
-        return memberIdMap[sender] && memberIdMap[receiver];
+        });
+        console.log('🚀 ~ fetchRoom ~ params:', response);
+        roomData = response.data.data;
       }
-      return false;
-    });
-    console.log('🚀 ~ roomData ~ roomData:', roomData);
-
-    navigation.navigate('ChatScreen', {
-      room: roomData || undefined,
-      member: user,
-      roomName: user.name,
-      roomImage: user.profileImage,
-    });
+      navigation.navigate('ChatScreen', {
+        room: roomData,
+        member: user,
+        roomName: user.name,
+        roomImage: user.profileImage,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('��� ~ onCardPress ~ error:', error);
+      Toast.show('Unable to start chat', Toast.LONG);
+    }
   };
   return (
     <AppScreen>

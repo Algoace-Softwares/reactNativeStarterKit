@@ -59,38 +59,9 @@ const ChatScreen = () => {
    ** Fetch chat room and messages on mount; clean up on unmount
    */
   useEffect(() => {
-    // Function to fetch chat room details
-    const fetchRoom = async () => {
-      try {
-        setIsLoadingEarlier(true);
-        // api call
-        const response = await LOCAL_HOST.get(`/chat`, {
-          params: {
-            firstUser: userData?._id,
-            secondUser: member?._id,
-          },
-        });
-        console.log('🚀 ~ fetchRoom ~ params:', response);
-        if (response.data.data) {
-          const roomData = response.data.data as chatRoomType;
-          // setting navigation params
-          navigation.setParams({room: roomData});
-          // now fetching messages of that room
-          fetchMessages(roomData?._id, 1);
-        }
-        setIsLoadingEarlier(false);
-      } catch (error) {
-        console.log('🚀 ~ fetchMessages ~ error:', error);
-        setIsLoadingEarlier(false);
-        Toast.show('Unable to fetch data', Toast.LONG);
-      }
-    };
-
-    // Fetch messages if room ID is available; otherwise, fetch room details
+    // Fetch messages if room ID is available;
     if (room?._id) {
       fetchMessages(room?._id, 1);
-    } else {
-      fetchRoom();
     }
 
     // Clean up function: reset messages and mark conversation as read
@@ -108,7 +79,7 @@ const ChatScreen = () => {
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket || !room) return;
     // Emit an event to join the current chat
-    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, room?._id);
+    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, room?._id, userData?._id);
     /**
      * Handles the "typing" event on the socket.
      */
@@ -147,7 +118,7 @@ const ChatScreen = () => {
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
       // Emit an event to join the current chat
-      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, room?._id);
+      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, room?._id, userData?._id);
     };
   }, [socket, room]);
 
@@ -198,7 +169,7 @@ const ChatScreen = () => {
         // Emit a STOP_TYPING_EVENT to inform other users/participants that typing has stopped
 
         socket && socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
-        // making an apii call for sendinig chat message
+        // making an api call for sendinig chat message
         const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
           memberId: content[0].user?._id,
           text: content[0].text,
@@ -214,6 +185,7 @@ const ChatScreen = () => {
         const response = await LOCAL_HOST.post(`/chat`, {
           member: member?._id,
           createdBy: userData?._id,
+          text: content[0].text,
         });
         const roomData = response?.data?.data as chatRoomType;
         if (roomData) {
@@ -237,15 +209,14 @@ const ChatScreen = () => {
     console.log('🚀 ~ handleOnMessageChange ~ text:', text);
     // If socket doesn't exist or isn't connected, exit the function
     if (!socket || !room) return;
-    // filtering the data
-    const secondMember = room.members.filter(user => user._id !== userData?._id);
+
     // Check if the user isn't already set as typing
     if (!selfTyping) {
       // Set the user as typing
       setSelfTyping(true);
 
       // Emit a typing event to the server for the current chat
-      socket.emit(ChatEventEnum.START_TYPING_EVENT, secondMember[0]._id);
+      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
     }
     // Clear the previous timeout (if exists) to avoid multiple setTimeouts from running
     if (typingTimeoutRef.current) {
@@ -254,7 +225,7 @@ const ChatScreen = () => {
     // Set a timeout to stop the typing indication after the timerLength has passed the time lenght is 2 seconds
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
-      socket.emit(ChatEventEnum.STOP_TYPING_EVENT, secondMember[0]._id);
+      socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
       // Reset the user's typing state
       setSelfTyping(false);
     }, 2000);

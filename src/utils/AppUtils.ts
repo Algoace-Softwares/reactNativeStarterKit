@@ -1,6 +1,6 @@
 import {Linking} from 'react-native';
 import {ErrorType, crashLogType} from './types';
-import {IMessage} from 'react-native-gifted-chat';
+import {chatRoomType} from '../@types';
 
 /**
  * If you're using Crashlytics: https://rnfirebase.io/crashlytics/usage
@@ -98,138 +98,29 @@ export class CommonUtils {
       throw error;
     }
   };
-  // format message to save into local state variable
+  /*
+   ** checking if two memeber have chat or not
+   */
 
-  formatIncomingMessage = (message: IMessage, convName = ''): IMessage => {
-    if (message.body.type === 'txt') {
-      return {
-        createdAt: new Date(),
-        msgType: 'text',
-        text: message?.body?.content,
-        conversationId: message.conversationId,
-        user: {
-          _id: message?.from,
-          name: convName,
-        },
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'img') {
-      return {
-        createdAt: new Date(message.serverTime),
-        text: '',
-        msgType: 'image',
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        image: message.body.remotePath,
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'custom' && message.body.event === 'USER_TEXT_MESSAGE') {
-      return {
-        createdAt: new Date(message.body.params.createdAt),
-        msgType: 'txt',
-        text: message?.body?.params?.message,
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'custom' && message.body.event === 'BLOCK_USER') {
-      return {
-        createdAt: new Date(message.body.params.createdAt),
-        msgType: 'blockEvent',
-        text: message?.body?.params?.message,
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'custom' && message.body.event === 'UNBLOCK_USER') {
-      return {
-        createdAt: new Date(message.body.params.createdAt),
-        msgType: 'unBlockEvent',
-        text: message?.body?.params?.message,
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'custom' && message.body.event === 'USER_AUDIO_CALL_EVENT') {
-      return {
-        createdAt: new Date(message.body.params.createdAt),
-        msgType: 'audioCallMessage',
-        text: '',
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'custom' && message.body.event === 'USER_VIDEO_CALL_EVENT') {
-      return {
-        createdAt: new Date(message.body.params.createdAt),
-        msgType: 'videoCallMessage',
-        text: '',
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'file') {
-      return {
-        createdAt: new Date(message.serverTime),
-        text: '',
-        msgType: 'file',
-        fileName: message.body.displayName,
-        remoteUrl: message.body.remotePath,
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        image: '',
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else if (message.body.type === 'video') {
-      return {
-        createdAt: new Date(message.serverTime),
-        text: '',
-        msgType: 'video',
-        fileName: message?.body?.displayName,
-        remoteUrl: message?.body?.remotePath,
-        user: {
-          _id: message?.from?.toLowerCase(),
-          name: convName,
-        },
-        video: message?.body?.remotePath,
-        videoThumbnail: message?.body?.thumbnailRemotePath,
-        conversationId: message.conversationId,
-        _id: message?.msgId,
-      };
-    } else {
-      return {
-        createdAt: new Date(message.serverTime),
-        text: message?.body?.content,
-        msgType: 'text',
-        user: {
-          _id: message?.from,
-          name: convName,
-        },
-        _id: message?.msgId,
-        conversationId: message.conversationId,
-      };
-    }
+  checkDualMemberChat = (chatRooms: chatRoomType[], firstUser: string, secondUser: string) => {
+    const roomData = chatRooms.find(room => {
+      // Ensure the room is not a group chat and has exactly two members
+      if (!room.isGroupChat && room.members.length === 2) {
+        // making key value pair for member array
+        const memberIdMap = room.members.reduce(
+          (acc, member) => {
+            acc[member._id] = true;
+            return acc;
+          },
+          {} as Record<string, boolean>,
+        );
+
+        // Check if both sender and receiver IDs are present in the map
+        return memberIdMap[firstUser] && memberIdMap[secondUser];
+      }
+      return false;
+    });
+    return roomData;
   };
 }
 
