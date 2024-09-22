@@ -80,7 +80,7 @@ const ChatScreen = () => {
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket || !room) return;
     // Emit an event to join the current chat
-    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, {chatId: room?._id, userId: userData?._id});
+    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, {chatId: room?._id});
     /**
      * Handles the "typing" event on the socket.
      */
@@ -123,7 +123,7 @@ const ChatScreen = () => {
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
       // Emit an event to join the current chat
-      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id, userId: userData?._id});
+      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id});
     };
   }, [socket, room]);
 

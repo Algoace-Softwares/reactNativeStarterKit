@@ -1,4 +1,4 @@
-import {Alert, FlatList} from 'react-native';
+import {Alert, FlatList, RefreshControl} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppScreen, AppText, BackButton, FloatingButton, Loading, MessengerCard} from '../../components';
 import {useAppStore} from '../../store';
@@ -6,7 +6,7 @@ import {useHeader} from '../../hooks/useHeader';
 import {COLORS} from '../../theme';
 import styles from './style';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
-import {ChatEventEnum, chatRoomType, userDataType} from '../../@types';
+import {ChatEventEnum, chatMessageType, chatRoomType, userDataType} from '../../@types';
 import Toast from 'react-native-simple-toast';
 import {LOCAL_HOST} from '../../api';
 import {appUtils} from '../../utils';
@@ -20,24 +20,22 @@ const ChatRoomsScreen = () => {
   const userData = useAppStore(state => state.userData) as userDataType;
   const setChatRooms = useAppStore(state => state.setChatRooms);
   const pushChatRooms = useAppStore(state => state.pushChatRooms);
+  const concatChatRooms = useAppStore(state => state.concatChatRooms);
   const socket = useAppStore(state => state.socket);
   const navigation = useAppNavigation();
   /*
    ** States
    */
   const [loading, setLoading] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   /*
    ** Lifecycle methods
    */
   useEffect(() => {
-    fetchChatRooms(userData?._id, 1);
-
-    // Clean up function
-    return () => {
-      // Clear chat rooms on unmount
-      setChatRooms([]);
-    };
-  }, [setChatRooms, userData?._id]);
+    fetchChatRooms(1);
+  }, []);
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
@@ -49,7 +47,7 @@ const ChatRoomsScreen = () => {
     // Listener for the initiation of a new chat.
     socket.on(ChatEventEnum.NEW_CHAT_EVENT, (chatRoom: chatRoomType) => {
       console.log('🚀 ~ NEW_CHAT_EVENT', chatRoom);
-      pushChatRooms(chatRoom);
+      pushChatRooms(chatRoom, true);
     });
 
     // Listener for when a group's name is updated.
@@ -58,9 +56,7 @@ const ChatRoomsScreen = () => {
     });
 
     // Listener for when a new message is received.
-    socket.on(ChatEventEnum.MESSAGE, data => {
-      console.log('message received : chatroom', data);
-    });
+    socket.on(ChatEventEnum.MESSAGE, (message: chatMessageType) => updateChatRoomOnMessage(message));
     // When the component using this hook unmounts or if `socket` or `chats` change:
     return () => {
       // Remove all the event listeners we set up to avoid memory leaks and unintended behaviors.
@@ -75,11 +71,11 @@ const ChatRoomsScreen = () => {
   /*
    ** Fetch chat rooms
    */
-  const fetchChatRooms = async (userId: string, page: number) => {
+  const fetchChatRooms = async (page: number) => {
     try {
       setLoading(true);
       // api call
-      const chatRoomsData = await LOCAL_HOST.get(`/chat/${userId}`, {
+      const chatRoomsData = await LOCAL_HOST.get(`/chat/${userData?._id}`, {
         params: {
           page,
           limit: 20,
@@ -88,10 +84,17 @@ const ChatRoomsScreen = () => {
       // Handle success
       console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
       const rooms = chatRoomsData?.data?.data?.items;
+      const currentPage = chatRoomsData.data.data.page as number;
+      const totalPages = chatRoomsData.data.data.totalPages as number;
       // if rooms and page value is 1 meaning first page then save directly
-      if (rooms && page === 1) {
+      if (rooms && currentPage === 1) {
         setChatRooms(rooms);
+      } else if (rooms && rooms?.length >= 1 && currentPage > 1) {
+        concatChatRooms(rooms);
       }
+      // saving pages and  toal pages very time when api has been called
+      setPageNum(currentPage);
+      setTotalPage(totalPages);
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -103,7 +106,7 @@ const ChatRoomsScreen = () => {
   /*
    ** Deleting chat room
    */
-  const deleteChatRooms = async (roomId: string) => {
+  const deleteChatRoom = async (roomId: string) => {
     console.log('🚀 ~ deleteChatRooms ~ roomId:', roomId);
     try {
       setLoading(true);
@@ -164,7 +167,7 @@ const ChatRoomsScreen = () => {
           Alert.alert('Chat Rooms actions', '', [
             {
               text: 'Delete chat room',
-              onPress: () => deleteChatRooms(chatItem?._id),
+              onPress: () => deleteChatRoom(chatItem?._id),
             },
             {
               text: 'Report chat room',
@@ -180,6 +183,39 @@ const ChatRoomsScreen = () => {
         }}
       />
     );
+  };
+  /*
+   ** when messages is recieved
+   */
+  const updateChatRoomOnMessage = async (roomId: string) => {
+    const chatRoomExists = chatRooms.find(chatRoom => chatRoom._id === roomId);
+
+    if (chatRoomExists) {
+      // Move the existing chat room to the top of the list
+      const updatedChatRooms = chatRooms.filter(chatRoom => chatRoom._id !== roomId);
+      setChatRooms([chatRoomExists, ...updatedChatRooms]);
+    } else {
+      try {
+        // Fetch the chat room if it's not in the current list
+        const chatRoomData = await LOCAL_HOST.get(`/chatRoom/${roomId}`);
+        const newChatRoom = chatRoomData?.data?.data;
+
+        if (newChatRoom) {
+          // Push the new chat room to the top
+          pushChatRooms(newChatRoom, true);
+        }
+      } catch (error) {
+        console.error('Error fetching chat room:', error);
+        Toast.show('Unable to get chat room details', Toast.LONG);
+      }
+    }
+  };
+  /*
+   ** Pull to refresh the screen
+   */
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setRefreshing(false);
   };
   /*
    ** Rendeing header componenet
@@ -203,6 +239,10 @@ const ChatRoomsScreen = () => {
         style={styles.flatListContStyle}
         horizontal={false}
         showsVerticalScrollIndicator={false}
+        // TODO: TEST THIS
+        onEndReached={() => pageNum < totalPage && fetchChatRooms(pageNum + 1)}
+        onEndReachedThreshold={2}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({item}) => renderItem(item)}
       />
       <FloatingButton

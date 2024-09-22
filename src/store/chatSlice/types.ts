@@ -12,5 +12,6 @@ export interface chatState {
 export interface chatSlice extends chatState {
   setChatRooms: (chatRooms: chatRoomType[]) => void;
   setSocket: (socket: ReturnType<typeof socketio>) => void;
-  pushChatRooms: (chatRoom: chatRoomType) => void;
+  pushChatRooms: (chatRoom: chatRoomType, isNew: boolean) => void;
+  concatChatRooms: (chatRoom: chatRoomType[]) => void;
 }
