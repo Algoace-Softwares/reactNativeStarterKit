@@ -21,6 +21,7 @@ import {
 } from '../../components/giftedChatComp';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {markConvRead} from '../../store/chatSlice/chatApiServices';
+import {TypingEventType} from './types';
 
 const ChatScreen = () => {
   /*
@@ -49,6 +50,7 @@ const ChatScreen = () => {
   const [pageNum, setPageNum] = useState(1);
   // To track if someone is currently typing
   const [isTyping, setIsTyping] = useState(false);
+  console.log('🚀 ~ ChatScreen ~ isTyping:', isTyping);
   // To keep track of the setTimeout function
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // To track if the current user is typing
@@ -79,22 +81,26 @@ const ChatScreen = () => {
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket || !room) return;
     // Emit an event to join the current chat
-    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, room?._id, userData?._id);
+    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, {chatId: room?._id, userId: userData?._id});
     /**
      * Handles the "typing" event on the socket.
      */
-    const handleSocketTyping = (chatId: string, typingValue: boolean) => {
-      console.log('User is start/stop typing...', chatId, typingValue);
+    const handleSocketTyping = (typingEvent: TypingEventType, typingValue: boolean) => {
+      console.log('User is start/stop typing...', typingEvent, typingValue, room?._id);
       // Check if the stop typing event is for the currently active chat.
-      if (chatId !== room?._id) return;
+      if (typingEvent?.chatId !== room?._id) return;
       // Set the typing state to false for the current chat.
       setIsTyping(typingValue);
     };
 
     // Listener for when a user is typing.
-    socket.on(ChatEventEnum.START_TYPING_EVENT, (chatId: string) => handleSocketTyping(chatId, true));
+    socket.on(ChatEventEnum.START_TYPING_EVENT, (typingEvent: TypingEventType) =>
+      handleSocketTyping(typingEvent, true),
+    );
     // Listener for when a user stops typing.
-    socket.on(ChatEventEnum.STOP_TYPING_EVENT, (chatId: string) => handleSocketTyping(chatId, false));
+    socket.on(ChatEventEnum.STOP_TYPING_EVENT, (typingEvent: TypingEventType) =>
+      handleSocketTyping(typingEvent, false),
+    );
     // Listener for when a new message is received.
     socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage & {chatRoom: string}) => {
       if (newMessage?.chatRoom === room?._id) {
@@ -118,7 +124,7 @@ const ChatScreen = () => {
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
       // Emit an event to join the current chat
-      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, room?._id, userData?._id);
+      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id, userId: userData?._id});
     };
   }, [socket, room]);
 
@@ -133,7 +139,7 @@ const ChatScreen = () => {
       const response = await LOCAL_HOST.get(`/chat/messages/${roomId}/${userData?._id}`, {
         params: {
           page,
-          limit: 20,
+          limit: 10,
         },
       });
       console.log('🚀 ~ fetchMessages ~ response:', response);
@@ -168,7 +174,7 @@ const ChatScreen = () => {
       if (room) {
         // Emit a STOP_TYPING_EVENT to inform other users/participants that typing has stopped
 
-        socket && socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
+        socket && socket.emit(ChatEventEnum.STOP_TYPING_EVENT, {chatId: room?._id});
         // making an api call for sendinig chat message
         const response = await LOCAL_HOST.post(`/chat/message/${room?._id}`, {
           memberId: content[0].user?._id,
@@ -216,7 +222,7 @@ const ChatScreen = () => {
       setSelfTyping(true);
 
       // Emit a typing event to the server for the current chat
-      socket.emit(ChatEventEnum.START_TYPING_EVENT, room?._id);
+      socket.emit(ChatEventEnum.START_TYPING_EVENT, {chatId: room?._id});
     }
     // Clear the previous timeout (if exists) to avoid multiple setTimeouts from running
     if (typingTimeoutRef.current) {
@@ -225,7 +231,7 @@ const ChatScreen = () => {
     // Set a timeout to stop the typing indication after the timerLength has passed the time lenght is 2 seconds
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
-      socket.emit(ChatEventEnum.STOP_TYPING_EVENT, room?._id);
+      socket.emit(ChatEventEnum.STOP_TYPING_EVENT, {chatId: room?._id});
       // Reset the user's typing state
       setSelfTyping(false);
     }, 2000);

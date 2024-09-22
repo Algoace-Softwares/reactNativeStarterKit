@@ -63,27 +63,26 @@ const HomeStackScreens = (): JSX.Element => {
     // emitting event to know the server this user is connected and ready for emitting or listeining events
     socketInstance?.emit(ChatEventEnum.CONNECTED_EVENT, {
       userId: userData?._id,
+      name: userData?.name,
+      nickName: userData?.nickName,
     });
-    // socketInstance.io.on('reconnect_attempt', () => {
-    //   console.log('reconnect attempt');
-    // });
-
-    // socketInstance.io.on('reconnect', () => {
-    //   console.log('reconnect');
-    // });
     socketInstance.on(ChatEventEnum.DISCONNECT_EVENT, (reason, details) => {
       console.log('diconnect:', reason, details);
     });
     socketInstance.on(ChatEventEnum.CONNECTION_EVENT, () => {
       console.log('user connected');
     });
+    socketInstance.on(ChatEventEnum.SERVER_MESSAGE, (message: string) => {
+      console.log('server message:', message);
+    });
 
     return () => {
       socketInstance.disconnect();
       socketInstance.off(ChatEventEnum.CONNECTION_EVENT);
       socketInstance.off(ChatEventEnum.DISCONNECT_EVENT);
+      socketInstance.off(ChatEventEnum.SERVER_MESSAGE);
     };
-  }, [userData?._id, setSocket]);
+  }, [userData, setSocket]);
 
   return (
     <HomeStack.Navigator>

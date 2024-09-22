@@ -25,3 +25,8 @@ interface QuickReplies {
   values: Reply[];
   keepIt?: boolean;
 }
+export interface TypingEventType {
+  chatId: string;
+  userId: string;
+  userName?: string;
+}
