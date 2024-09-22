@@ -26,6 +26,19 @@ const getChatRooms = async (userId: string, page: number) => {
   }
 };
 /*
+ ** Get user chat room
+ */
+const getChatRoom = async chatId => {
+  try {
+    const chatRoomsData = await LOCAL_HOST.get(`/chat/${chatId}`);
+    // Handle success
+    console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
+    const rooms = chatRoomsData?.data?.data?.items;
+  } catch (error: any) {
+    console.log('🚀 ~ getChatRooms ~ error:', error);
+  }
+};
+/*
  ** marking conversation as read
  */
 const markConvRead = async (userId: string, roomId?: string) => {

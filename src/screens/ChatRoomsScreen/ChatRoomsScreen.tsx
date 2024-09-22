@@ -49,6 +49,22 @@ const ChatRoomsScreen = () => {
       setChatRooms([]);
     };
   }, [setChatRooms, userData?._id]);
+  /*
+   ** updating user chat list when getting new chat
+   */
+  const onNewChat = async (chatId: string) => {
+    try {
+      const chatRoom = await LOCAL_HOST.get(`/chat/${chatId}`);
+      // Handle success
+      console.log('🚀 ~ onNewChat ~ chatRoom:', chatRoom);
+      if (chatRoom?.data) {
+        const rooms = [chatRoom.data.data, ...chatRooms];
+        setChatRooms(rooms);
+      }
+    } catch (error: any) {
+      console.log('🚀 ~ getChatRooms ~ error:', error);
+    }
+  };
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
@@ -58,8 +74,9 @@ const ChatRoomsScreen = () => {
     // Set up event listeners for various socket events:
 
     // Listener for the initiation of a new chat.
-    socket.on(ChatEventEnum.NEW_CHAT_EVENT, data => {
-      console.log('new chat', data);
+    socket.on(ChatEventEnum.NEW_CHAT_EVENT, (chatRoom: chatRoomType) => {
+      const rooms = [chatRoom, ...chatRooms];
+      setChatRooms(rooms);
     });
 
     // Listener for when a group's name is updated.
