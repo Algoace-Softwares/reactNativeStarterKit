@@ -22,5 +22,11 @@ export const createChatSlice: StateCreator<chatSlice> = set => {
     setChatRooms: (chatRooms: chatRoomType[]) => {
       set({chatRooms});
     },
+    // New method to push a chat room to the top
+    pushChatRooms: (chatRoom: chatRoomType) => {
+      set(state => ({
+        chatRooms: [chatRoom, ...state.chatRooms],
+      }));
+    },
   };
 };

@@ -50,7 +50,6 @@ const ChatScreen = () => {
   const [pageNum, setPageNum] = useState(1);
   // To track if someone is currently typing
   const [isTyping, setIsTyping] = useState(false);
-  console.log('🚀 ~ ChatScreen ~ isTyping:', isTyping);
   // To keep track of the setTimeout function
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // To track if the current user is typing

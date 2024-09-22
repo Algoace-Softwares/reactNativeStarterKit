@@ -10,7 +10,7 @@ import {ChatEventEnum, chatRoomType, userDataType} from '../../@types';
 import Toast from 'react-native-simple-toast';
 import {LOCAL_HOST} from '../../api';
 import {appUtils} from '../../utils';
-import {getChatRooms, markConvRead} from '../../store/chatSlice/chatApiServices';
+import {markConvRead} from '../../store/chatSlice/chatApiServices';
 // TODO: logic for when recieve a message update the chat room and bring it to the top
 const ChatRoomsScreen = () => {
   /*
@@ -18,8 +18,8 @@ const ChatRoomsScreen = () => {
    */
   const chatRooms = useAppStore(state => state.chatRooms);
   const userData = useAppStore(state => state.userData) as userDataType;
-  console.log('🚀 ~ ChatRoomsScreen ~ userData:', userData);
   const setChatRooms = useAppStore(state => state.setChatRooms);
+  const pushChatRooms = useAppStore(state => state.pushChatRooms);
   const socket = useAppStore(state => state.socket);
   const navigation = useAppNavigation();
   /*
@@ -30,18 +30,7 @@ const ChatRoomsScreen = () => {
    ** Lifecycle methods
    */
   useEffect(() => {
-    // Fetch chat rooms
-    const fetchChatRooms = async () => {
-      try {
-        setLoading(true);
-        await getChatRooms(userData?._id as string, 1);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.log('🚀 ~ fetchChatRooms ~ error:', error);
-      }
-    };
-    fetchChatRooms();
+    fetchChatRooms(userData?._id, 1);
 
     // Clean up function
     return () => {
@@ -49,22 +38,6 @@ const ChatRoomsScreen = () => {
       setChatRooms([]);
     };
   }, [setChatRooms, userData?._id]);
-  /*
-   ** updating user chat list when getting new chat
-   */
-  const onNewChat = async (chatId: string) => {
-    try {
-      const chatRoom = await LOCAL_HOST.get(`/chat/${chatId}`);
-      // Handle success
-      console.log('🚀 ~ onNewChat ~ chatRoom:', chatRoom);
-      if (chatRoom?.data) {
-        const rooms = [chatRoom.data.data, ...chatRooms];
-        setChatRooms(rooms);
-      }
-    } catch (error: any) {
-      console.log('🚀 ~ getChatRooms ~ error:', error);
-    }
-  };
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
@@ -75,8 +48,8 @@ const ChatRoomsScreen = () => {
 
     // Listener for the initiation of a new chat.
     socket.on(ChatEventEnum.NEW_CHAT_EVENT, (chatRoom: chatRoomType) => {
-      const rooms = [chatRoom, ...chatRooms];
-      setChatRooms(rooms);
+      console.log('🚀 ~ NEW_CHAT_EVENT', chatRoom);
+      pushChatRooms(chatRoom);
     });
 
     // Listener for when a group's name is updated.
@@ -95,15 +68,38 @@ const ChatRoomsScreen = () => {
       socket.off(ChatEventEnum.UPDATE_GROUP_NAME_EVENT);
       socket.off(ChatEventEnum.MESSAGE);
     };
-
-    // Note:
-    // The `chats` array is used in the `onMessageReceived` function.
-    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
-    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
-    // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
-    // So, even if some socket callbacks are updating the `chats` state, it's not
-    // updating on each `useEffect` call but on each socket call.
-  }, [socket]);
+  }, [socket, pushChatRooms]);
+  /*
+   ** Functions
+   */
+  /*
+   ** Fetch chat rooms
+   */
+  const fetchChatRooms = async (userId: string, page: number) => {
+    try {
+      setLoading(true);
+      // api call
+      const chatRoomsData = await LOCAL_HOST.get(`/chat/${userId}`, {
+        params: {
+          page,
+          limit: 20,
+        },
+      });
+      // Handle success
+      console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
+      const rooms = chatRoomsData?.data?.data?.items;
+      // if rooms and page value is 1 meaning first page then save directly
+      if (rooms && page === 1) {
+        setChatRooms(rooms);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      console.log('🚀 ~ getChatRooms ~ error:', error);
+      // showing toast
+      Toast.show('Unable to get chat rooms', Toast.LONG);
+    }
+  };
   /*
    ** Deleting chat room
    */
@@ -111,6 +107,7 @@ const ChatRoomsScreen = () => {
     console.log('🚀 ~ deleteChatRooms ~ roomId:', roomId);
     try {
       setLoading(true);
+      // api call
       const response = await LOCAL_HOST.delete(`/chat/${roomId}/${userData?._id}`);
       console.log('response: deletechatRoom:', response);
       // Remove the chat room from the state using its ID
