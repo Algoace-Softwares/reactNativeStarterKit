@@ -207,7 +207,6 @@ const ChatScreen = () => {
       Toast.show('Unable to send message', Toast.LONG);
     }
   };
-  // TODO: check handling for typing indicator also check for when user join or leave chat
   /*
    ** Handling text input for typing indicator
    */

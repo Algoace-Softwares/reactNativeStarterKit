@@ -63,4 +63,7 @@ function App(): React.JSX.Element {
   );
 }
 
+// offline online status
+// read unread count
+
 export default App;

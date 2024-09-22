@@ -49,6 +49,7 @@ const ChatRoomsScreen = () => {
       setChatRooms([]);
     };
   }, [setChatRooms, userData?._id]);
+
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
     // If the socket isn't initialized, we don't set up listeners.
@@ -60,10 +61,12 @@ const ChatRoomsScreen = () => {
     socket.on(ChatEventEnum.NEW_CHAT_EVENT, data => {
       console.log('new chat', data);
     });
+
     // Listener for when a group's name is updated.
     socket.on(ChatEventEnum.UPDATE_GROUP_NAME_EVENT, data => {
       console.log('group name changes', data);
     });
+
     // Listener for when a new message is received.
     socket.on(ChatEventEnum.MESSAGE, data => {
       console.log('message received : chatroom', data);
