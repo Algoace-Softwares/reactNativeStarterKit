@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {BackButton} from '../../components';
 import {useAppStore} from '../../store';
@@ -19,7 +19,6 @@ import {
   renderActions,
   renderAvatar,
 } from '../../components/giftedChatComp';
-import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {markConvRead} from '../../store/chatSlice/chatApiServices';
 import {TypingEventType} from './types';
 
@@ -37,7 +36,6 @@ const ChatScreen = () => {
    */
   const userData = useAppStore(state => state.userData) as userDataType;
   const socket = useAppStore(state => state.socket);
-  const navigation = useAppNavigation();
   const {colors} = useTheme() as CustomTheme;
 
   /*
@@ -56,110 +54,44 @@ const ChatScreen = () => {
   const [selfTyping, setSelfTyping] = useState(false);
 
   /*
-   ** Lifecycle methods
-   ** Fetch chat room and messages on mount; clean up on unmount
-   */
-  useEffect(() => {
-    // Fetch messages if room ID is available;
-    if (room?._id) {
-      fetchMessages(room?._id, 1);
-    }
-
-    // Clean up function: reset messages and mark conversation as read
-    return () => {
-      setMessages([]);
-      markConvRead(userData?._id, room?._id);
-    };
-  }, [userData?._id, room?._id, member?._id, navigation]);
-
-  /*
-   ** Socket Event Listeners
-   ** Set up and tear down event listeners for socket events
-   */
-  useEffect(() => {
-    // If the socket isn't initialized, we don't set up listeners.
-    if (!socket || !room) return;
-    // Emit an event to join the current chat
-    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, {chatId: room?._id});
-    /**
-     * Handles the "typing" event on the socket.
-     */
-    const handleSocketTyping = (typingEvent: TypingEventType, typingValue: boolean) => {
-      console.log('User is start/stop typing...', typingEvent, typingValue, room?._id);
-      // Check if the stop typing event is for the currently active chat.
-      if (typingEvent?.chatId !== room?._id) return;
-      // Set the typing state to false for the current chat.
-      setIsTyping(typingValue);
-    };
-
-    // Listener for when a user is typing.
-    socket.on(ChatEventEnum.START_TYPING_EVENT, (typingEvent: TypingEventType) =>
-      handleSocketTyping(typingEvent, true),
-    );
-    // Listener for when a user stops typing.
-    socket.on(ChatEventEnum.STOP_TYPING_EVENT, (typingEvent: TypingEventType) =>
-      handleSocketTyping(typingEvent, false),
-    );
-    // Listener for when a new message is received.
-    socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage & {chatRoom: string}) => {
-      if (newMessage?.chatRoom === room?._id) {
-        setMessages(prevMessages => [newMessage, ...prevMessages]);
-      }
-    });
-    // Listener for when a user leaves a chat.
-    socket.on(ChatEventEnum.LEAVE_CHAT_EVENT, data => {
-      console.log('User left chat...', data);
-    });
-    // Listener for when a message is deleted
-    socket.on(ChatEventEnum.MESSAGE_DELETE_EVENT, data => {
-      console.log('Message deleted', data);
-    });
-
-    // Clean up socket event listeners on component unmount or when socket changes
-    return () => {
-      socket.off(ChatEventEnum.START_TYPING_EVENT);
-      socket.off(ChatEventEnum.STOP_TYPING_EVENT);
-      socket.off(ChatEventEnum.MESSAGE);
-      socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
-      socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
-      // Emit an event to join the current chat
-      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id});
-    };
-  }, [socket, room]);
-
-  /*
    ** Fetch Messages
    ** Retrieve chat messages for a specific room
    */
-  const fetchMessages = async (roomId: string, page: number) => {
-    try {
-      setIsLoadingEarlier(true);
-      // Make an async request to fetch chat messages for the current chat
-      const response = await LOCAL_HOST.get(`/chat/messages/${roomId}/${userData?._id}`, {
-        params: {
-          page,
-          limit: 10,
-        },
-      });
-      console.log('🚀 ~ fetchMessages ~ response:', response);
-      // refactoring data
-      const chatMessages = response.data.data.items as IMessage[];
-      const currentPage = response.data.data.page as number;
-      // if page is 1 then is first time api calling save data same on state varaiable
-      if (chatMessages && chatMessages?.length >= 1 && page === 1) {
-        setMessages(chatMessages);
-      } else if (chatMessages && chatMessages?.length >= 1 && currentPage > 1) {
-        setMessages([...messages, ...chatMessages]);
+  const fetchMessages = useCallback(
+    async (roomId: string, page: number) => {
+      try {
+        setIsLoadingEarlier(true);
+        // Make an async request to fetch chat messages for the current chat
+        const response = await LOCAL_HOST.get(`/chat/messages/${roomId}/${userData?._id}`, {
+          params: {
+            page,
+            limit: 10,
+          },
+        });
+        console.log('🚀 ~ fetchMessages ~ response:', response);
+
+        // Refactoring data
+        const chatMessages = response.data.data.items as IMessage[];
+        const currentPage = response.data.data.page as number;
+
+        // If page is 1, then it's the first time API calling; save data to state variable
+        if (chatMessages && chatMessages.length >= 1 && page === 1) {
+          setMessages(chatMessages);
+        } else if (chatMessages && chatMessages.length >= 1 && currentPage > 1) {
+          setMessages(prevMessages => [...prevMessages, ...chatMessages]);
+        }
+
         setPageNum(currentPage);
+        setIsLoadingEarlier(false);
+      } catch (error) {
+        console.log('🚀 ~ fetchMessages ~ error:', error);
+        setIsLoadingEarlier(false);
+        // Showing toast
+        Toast.show('Unable to fetch data', Toast.LONG);
       }
-      setIsLoadingEarlier(false);
-    } catch (error) {
-      console.log('🚀 ~ fetchMessages ~ error:', error);
-      setIsLoadingEarlier(false);
-      // showing toast
-      Toast.show('Unable to fetch data', Toast.LONG);
-    }
-  };
+    },
+    [userData],
+  );
 
   /*
    ** Send Message
@@ -234,6 +166,77 @@ const ChatScreen = () => {
       setSelfTyping(false);
     }, 2000);
   };
+  /*
+   ** Lifecycle methods
+   ** Fetch chat room and messages on mount; clean up on unmount
+   */
+  useEffect(() => {
+    // Fetch messages if room ID is available;
+    if (room?._id) {
+      fetchMessages(room?._id, 1);
+    }
+
+    // Clean up function: reset messages and mark conversation as read
+    return () => {
+      setMessages([]);
+      markConvRead(userData?._id, room?._id);
+    };
+  }, [userData?._id, room?._id, fetchMessages]);
+
+  /*
+   ** Socket Event Listeners
+   ** Set up and tear down event listeners for socket events
+   */
+  useEffect(() => {
+    // If the socket isn't initialized, we don't set up listeners.
+    if (!socket || !room) return;
+    // Emit an event to join the current chat
+    socket.emit(ChatEventEnum.JOIN_CHAT_EVENT, {chatId: room?._id});
+    /**
+     * Handles the "typing" event on the socket.
+     */
+    const handleSocketTyping = (typingEvent: TypingEventType, typingValue: boolean) => {
+      console.log('User is start/stop typing...', typingEvent, typingValue, room?._id);
+      // Check if the stop typing event is for the currently active chat.
+      if (typingEvent?.chatId !== room?._id) return;
+      // Set the typing state to false for the current chat.
+      setIsTyping(typingValue);
+    };
+
+    // Listener for when a user is typing.
+    socket.on(ChatEventEnum.START_TYPING_EVENT, (typingEvent: TypingEventType) =>
+      handleSocketTyping(typingEvent, true),
+    );
+    // Listener for when a user stops typing.
+    socket.on(ChatEventEnum.STOP_TYPING_EVENT, (typingEvent: TypingEventType) =>
+      handleSocketTyping(typingEvent, false),
+    );
+    // Listener for when a new message is received.
+    socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage & {chatRoom: string}) => {
+      if (newMessage?.chatRoom === room?._id) {
+        setMessages(prevMessages => [newMessage, ...prevMessages]);
+      }
+    });
+    // Listener for when a user leaves a chat.
+    socket.on(ChatEventEnum.LEAVE_CHAT_EVENT, data => {
+      console.log('User left chat...', data);
+    });
+    // Listener for when a message is deleted
+    socket.on(ChatEventEnum.MESSAGE_DELETE_EVENT, data => {
+      console.log('Message deleted', data);
+    });
+
+    // Clean up socket event listeners on component unmount or when socket changes
+    return () => {
+      socket.off(ChatEventEnum.START_TYPING_EVENT);
+      socket.off(ChatEventEnum.STOP_TYPING_EVENT);
+      socket.off(ChatEventEnum.MESSAGE);
+      socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
+      socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+      // Emit an event to join the current chat
+      socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id});
+    };
+  }, [socket, room]);
 
   /*
    ** Header Component
