@@ -1,5 +1,6 @@
+// /* eslint-disable react-hooks/exhaustive-deps */
 import {Alert, FlatList, RefreshControl} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {AppScreen, AppText, BackButton, FloatingButton, Loading, MessengerCard} from '../../components';
 import {useAppStore} from '../../store';
 import {useHeader} from '../../hooks/useHeader';
@@ -11,7 +12,6 @@ import Toast from 'react-native-simple-toast';
 import {LOCAL_HOST} from '../../api';
 import {appUtils} from '../../utils';
 import {markConvRead} from '../../store/chatSlice/chatApiServices';
-// TODO: logic for when recieve a message update the chat room and bring it to the top
 const ChatRoomsScreen = () => {
   /*
    * Hooks
@@ -35,38 +35,46 @@ const ChatRoomsScreen = () => {
   /*
    ** Fetch chat rooms
    */
-  const fetchChatRooms = async (page: number = 1) => {
-    try {
-      setLoading(true);
-      // api call
-      const chatRoomsData = await LOCAL_HOST.get(`/chat/${userData?._id}`, {
-        params: {
-          page,
-          limit: 20,
-        },
-      });
-      // Handle success
-      console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
-      const rooms = chatRoomsData?.data?.data?.items;
-      const currentPage = chatRoomsData.data.data.page as number;
-      const totalPages = chatRoomsData.data.data.totalPages as number;
-      // if rooms and page value is 1 meaning first page then save directly
-      if (rooms && currentPage === 1) {
-        setChatRooms(rooms);
-      } else if (rooms && rooms?.length >= 1 && currentPage > 1) {
-        updateChatRooms(rooms, 'CONCAT_CHAT');
+  const fetchChatRooms = useCallback(
+    async (page: number = 1) => {
+      try {
+        setLoading(true);
+
+        // API call
+        const chatRoomsData = await LOCAL_HOST.get(`/chat/${userData?._id}`, {
+          params: {
+            page,
+            limit: 20,
+          },
+        });
+
+        // Handle success
+        console.log('🚀 ~ getChatRooms ~ chatRoomsData:', chatRoomsData);
+        const rooms = chatRoomsData?.data?.data?.items;
+        const currentPage = chatRoomsData.data.data.page as number;
+        const totalPages = chatRoomsData.data.data.totalPages as number;
+
+        // If rooms and page value is 1, save directly
+        if (rooms && currentPage === 1) {
+          setChatRooms(rooms);
+        } else if (rooms && rooms.length >= 1 && currentPage > 1) {
+          updateChatRooms(rooms, 'CONCAT_CHAT');
+        }
+
+        // Save pages and total pages every time when API has been called
+        setPageNum(currentPage);
+        setTotalPage(totalPages);
+        setLoading(false);
+      } catch (error: any) {
+        setLoading(false);
+        console.log('🚀 ~ getChatRooms ~ error:', error);
+
+        // Showing toast
+        Toast.show('Unable to get chat rooms', Toast.LONG);
       }
-      // saving pages and  toal pages very time when api has been called
-      setPageNum(currentPage);
-      setTotalPage(totalPages);
-      setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      console.log('🚀 ~ getChatRooms ~ error:', error);
-      // showing toast
-      Toast.show('Unable to get chat rooms', Toast.LONG);
-    }
-  };
+    },
+    [userData?._id, setChatRooms, updateChatRooms],
+  );
   /*
    ** Deleting chat room
    */
@@ -161,37 +169,10 @@ const ChatRoomsScreen = () => {
    */
   useEffect(() => {
     fetchChatRooms();
-  }, []);
+  }, [fetchChatRooms]);
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
-    /*
-     ** when messages is recieved
-     */
-    const updateChatRoomOnMessage = async (roomId: string) => {
-      console.log('🚀 ~ updateChatRoomOnMessage ~ roomId:', roomId);
-      // finding wheather we are receiving messages frmo exiting chat or not
-      const chatRoomExists = chatRooms.find(chatRoom => chatRoom._id === roomId);
-      // if the chat exit push that chat to top other wise make a api call and get data and then push it on the top
-      if (chatRoomExists) {
-        // upating chat on top
-        updateChatRooms([chatRoomExists], 'PUSH_TOP_CHAT');
-      } else {
-        try {
-          // Fetch the chat room if it's not in the current list
-          const chatRoomData = await LOCAL_HOST.get(`/chatRoom/${roomId}`);
-          const newChatRoom = chatRoomData?.data?.data;
-
-          if (newChatRoom) {
-            // Push the new chat room to the top
-            updateChatRooms([newChatRoom], 'PUSH_CHAT');
-          }
-        } catch (error) {
-          console.error('Error fetching chat room:', error);
-          Toast.show('Unable to get chat room details', Toast.LONG);
-        }
-      }
-    };
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
 
@@ -211,7 +192,7 @@ const ChatRoomsScreen = () => {
     // Listener for when a new message is received.
     socket.on(ChatEventEnum.MESSAGE, (message: chatMessageType) => {
       console.log('🚀 ~incoming message : MESSAGE', message);
-      updateChatRoomOnMessage(message?.chatRoom);
+      updateChatRooms([message?.chatRoom], 'PUSH_TOP_CHAT');
     });
     // When the component using this hook unmounts or if `socket` or `chats` change:
     return () => {

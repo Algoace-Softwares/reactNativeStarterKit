@@ -64,7 +64,7 @@ export interface chatRoomType {
 
 export interface chatMessageType {
   readonly _id?: string;
-  readonly chatRoom: string;
+  readonly chatRoom: chatRoomType;
   sender: string;
   messageType: messageType;
   media?: string;

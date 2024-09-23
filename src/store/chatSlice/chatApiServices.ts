@@ -12,5 +12,17 @@ const markConvRead = async (userId: string, roomId?: string) => {
     console.log('🚀 ~ markConvRead ~ error:', error);
   }
 };
+/*
+ ** get single chat room
+ */
+const getChatRoom = async (roomId?: string) => {
+  try {
+    const chatRoomData = await LOCAL_HOST.get(`/chatRoom/${roomId}`);
+    console.log('🚀 ~ getChatRoom ~ reponse:', chatRoomData);
+    return chatRoomData?.data?.data;
+  } catch (error: any) {
+    console.log('🚀 ~ getChatRoom ~ error:', error);
+  }
+};
 
-export {markConvRead};
+export {markConvRead, getChatRoom};
