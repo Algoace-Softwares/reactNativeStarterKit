@@ -1,6 +1,6 @@
 import {StateCreator} from 'zustand';
 import {sliceResetFns} from '../utils';
-import {chatSlice, chatState} from './types';
+import {actionType, chatSlice, chatState} from './types';
 import {chatRoomType} from '../../@types';
 import socketio from 'socket.io-client';
 
@@ -14,6 +14,7 @@ const initialState: chatState = {
 
 export const createChatSlice: StateCreator<chatSlice> = set => {
   sliceResetFns.add(() => set(initialState));
+
   return {
     ...initialState,
     setSocket: (socket: ReturnType<typeof socketio>) => {
@@ -22,23 +23,35 @@ export const createChatSlice: StateCreator<chatSlice> = set => {
     setChatRooms: (chatRooms: chatRoomType[]) => {
       set({chatRooms});
     },
-    // New method to push a chat room to the top
-    pushChatRooms: (chatRoom: chatRoomType, isNew: boolean) => {
-      if (isNew) {
-        set(state => ({
-          chatRooms: [chatRoom, ...state.chatRooms],
-        }));
-      } else {
-        // Move the existing chat room to the top of the list
-        const updatedChatRooms = chatRooms.filter(chatRoom => chatRoom._id !== roomId);
-        setChatRooms([chatRoomExists, ...updatedChatRooms]);
-      }
+    removeChatRooms: () => {
+      set({chatRooms: []});
     },
-    // New method to concatenate an array of chat rooms into the current chat rooms
-    concatChatRooms: (newChatRooms: chatRoomType[]) => {
-      set(state => ({
-        chatRooms: [...state.chatRooms, ...newChatRooms],
-      }));
+    // Updated method to update chat list
+    updateChatRooms: (chatRooms: chatRoomType[], action: actionType) => {
+      set(state => {
+        let updatedChatRooms = [...state.chatRooms];
+
+        switch (action) {
+          case 'PUSH_CHAT':
+            updatedChatRooms = [...chatRooms, ...updatedChatRooms];
+            break;
+          case 'CONCAT_CHAT':
+            updatedChatRooms = [...updatedChatRooms, ...chatRooms];
+            break;
+          case 'REMOVE_CHAT':
+            updatedChatRooms = updatedChatRooms.filter(room => room._id !== chatRooms[0]._id);
+            break;
+          case 'PUSH_TOP_CHAT':
+            // Move existing chat room to the top of the list
+            updatedChatRooms = [...chatRooms, ...updatedChatRooms.filter(room => room._id !== chatRooms[0]._id)];
+
+            break;
+          default:
+            break;
+        }
+
+        return {chatRooms: updatedChatRooms};
+      });
     },
   };
 };

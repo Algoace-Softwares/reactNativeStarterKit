@@ -9,9 +9,12 @@ export interface chatState {
   chatRooms: chatRoomType[];
   socket: ReturnType<typeof socketio> | null;
 }
+
+export type actionType = 'PUSH_CHAT' | 'CONCAT_CHAT' | 'PUSH_TOP_CHAT' | 'REMOVE_CHAT';
 export interface chatSlice extends chatState {
   setChatRooms: (chatRooms: chatRoomType[]) => void;
+  removeChatRooms: () => void;
   setSocket: (socket: ReturnType<typeof socketio>) => void;
-  pushChatRooms: (chatRoom: chatRoomType, isNew: boolean) => void;
-  concatChatRooms: (chatRoom: chatRoomType[]) => void;
+  updateChatRooms: (chatRoom: chatRoomType[], action: actionType) => void;
+  // concatChatRooms: (chatRoom: chatRoomType[]) => void;
 }
