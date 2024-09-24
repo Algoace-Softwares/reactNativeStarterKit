@@ -52,6 +52,7 @@ export interface chatRoomType {
   readonly createdBy: string;
   admins: string[];
   members: chatRoomMember[];
+  unreadUserCount: {member: string; count: number}[];
   isGroupChat: boolean;
   lastMessage?: lastMessageType;
   roomName: string;

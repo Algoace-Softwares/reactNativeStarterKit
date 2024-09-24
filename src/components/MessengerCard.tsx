@@ -127,12 +127,32 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
         <AppText style={styles.timeLableStyle} numberOfLines={1}>
           {formatMessageDate(new Date(item?.updatedAt)?.toISOString())}
         </AppText>
+        {/* {item?.unreadUserCount && (
+          <View style={styles.badgeViewStyle}>
+            <AppText style={styles.badgeTextViewStyle}>{'3'}</AppText>
+          </View>
+        )} */}
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
+  // badgeTextViewStyle: {
+  //   color: COLORS.palette.white,
+  //   fontSize: 15,
+  // },
+  // badgeViewStyle: {
+  //   // padding: 5,
+  //   alignItems: 'center',
+  //   alignSelf: 'flex-end',
+  //   backgroundColor: COLORS.primary,
+  //   borderRadius: 100,
+  //   height: 20,
+  //   justifyContent: 'center',
+  //   width: 20,
+  // },
+
   containerStyle: {
     alignItems: 'center',
     flexDirection: 'row',
