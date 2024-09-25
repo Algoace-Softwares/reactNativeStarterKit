@@ -118,6 +118,32 @@ const ChatRoomsScreen = () => {
     }
   };
   /*
+   ** Refreshing chat rooms
+   */
+  const onMessageCardLongPress = (chatItem: chatRoomType) => {
+    Alert.alert('Chat Rooms actions', '', [
+      {
+        text: 'Delete chat room',
+        onPress: () => deleteChatRoom(chatItem),
+      },
+      {
+        text: 'Report chat room',
+        onPress: () => reportChatRoom(chatItem),
+      },
+      {
+        text: 'Mark as read',
+        onPress: () => {
+          markConvRead(userData?._id, chatItem?._id);
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+    ]);
+  };
+  /*
    ** Rendeering item list
    */
   const renderItem = (chatItem: chatRoomType) => {
@@ -125,35 +151,21 @@ const ChatRoomsScreen = () => {
     if (!chatItem.isGroupChat) {
       // filtering the data
       const secondMember = chatItem.members.filter(member => member._id !== userData?._id);
+
       // injecting second member data as profileImage and roomName
       if (secondMember && secondMember.length > 0) {
         chatItem.roomName = secondMember[0].name;
         chatItem.profileImage = secondMember[0].profileImage;
       }
     }
+    const unReadCountMember = chatItem.unreadUserCount.find(user => {
+      console.log('🚀 ~ unReadCountMember ~ user:', user);
+      return user.memberId?.toString() === userData?._id;
+    });
     // redering message card
+    console.log('rerenering');
     return (
-      <MessengerCard
-        item={chatItem}
-        onLongPress={() => {
-          Alert.alert('Chat Rooms actions', '', [
-            {
-              text: 'Delete chat room',
-              onPress: () => deleteChatRoom(chatItem),
-            },
-            {
-              text: 'Report chat room',
-              onPress: () => reportChatRoom(chatItem),
-            },
-            {text: 'Mark as read', onPress: () => markConvRead(userData?._id, chatItem?._id)},
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-          ]);
-        }}
-      />
+      <MessengerCard item={chatItem} unReadCount={unReadCountMember?.count || 0} onLongPress={onMessageCardLongPress} />
     );
   };
 
@@ -169,7 +181,10 @@ const ChatRoomsScreen = () => {
    */
   useEffect(() => {
     fetchChatRooms();
-  }, [fetchChatRooms]);
+    return () => {
+      setChatRooms([]);
+    };
+  }, [fetchChatRooms, setChatRooms]);
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {

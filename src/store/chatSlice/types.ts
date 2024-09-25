@@ -10,7 +10,7 @@ export interface chatState {
   socket: ReturnType<typeof socketio> | null;
 }
 
-export type actionType = 'PUSH_CHAT' | 'CONCAT_CHAT' | 'PUSH_TOP_CHAT' | 'REMOVE_CHAT';
+export type actionType = 'PUSH_CHAT' | 'CONCAT_CHAT' | 'PUSH_TOP_CHAT' | 'REMOVE_CHAT' | 'REPLACE_CHAT';
 export interface chatSlice extends chatState {
   setChatRooms: (chatRooms: chatRoomType[]) => void;
   removeChatRooms: () => void;

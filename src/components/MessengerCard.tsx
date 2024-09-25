@@ -9,13 +9,16 @@ import AppText from './common/AppText';
 import {useAppNavigation} from '../hooks/useAppNavigation';
 
 interface roomCardType {
-  onLongPress: () => void;
+  onLongPress: (item: chatRoomType) => void;
   item: chatRoomType;
+  unReadCount: number;
 }
 
 export default function MessengerCard(props: roomCardType): JSX.Element {
-  // destuctruing props
-  const {item, onLongPress} = props;
+  /*
+   ** Destuctruing props
+   */
+  const {item, onLongPress, unReadCount = 0} = props;
   /*
    ** Hooks
    */
@@ -108,7 +111,7 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
   return (
     <TouchableOpacity
       style={styles.mainViewStyle}
-      onLongPress={onLongPress}
+      onLongPress={() => onLongPress(item)}
       onPress={() =>
         navigation.navigate('ChatScreen', {room: item, roomName: item.roomName, roomImage: item.profileImage || ''})
       }>
@@ -124,34 +127,35 @@ export default function MessengerCard(props: roomCardType): JSX.Element {
           </AppText>
           {renderLastMessage(item.lastMessage)}
         </View>
-        <AppText style={styles.timeLableStyle} numberOfLines={1}>
-          {formatMessageDate(new Date(item?.updatedAt)?.toISOString())}
-        </AppText>
-        {/* {item?.unreadUserCount && (
-          <View style={styles.badgeViewStyle}>
-            <AppText style={styles.badgeTextViewStyle}>{'3'}</AppText>
-          </View>
-        )} */}
+
+        <View>
+          {unReadCount > 0 && (
+            <View style={styles.badgeViewStyle}>
+              <AppText style={styles.badgeTextViewStyle}>{unReadCount}</AppText>
+            </View>
+          )}
+          <AppText style={styles.timeLableStyle} numberOfLines={1}>
+            {formatMessageDate(new Date(item?.updatedAt)?.toISOString())}
+          </AppText>
+        </View>
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  // badgeTextViewStyle: {
-  //   color: COLORS.palette.white,
-  //   fontSize: 15,
-  // },
-  // badgeViewStyle: {
-  //   // padding: 5,
-  //   alignItems: 'center',
-  //   alignSelf: 'flex-end',
-  //   backgroundColor: COLORS.primary,
-  //   borderRadius: 100,
-  //   height: 20,
-  //   justifyContent: 'center',
-  //   width: 20,
-  // },
+  badgeTextViewStyle: {
+    color: COLORS.palette.white,
+  },
+  badgeViewStyle: {
+    alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    borderRadius: 100,
+    height: 20,
+    justifyContent: 'center',
+    marginBottom: 5,
+    width: 20,
+  },
 
   containerStyle: {
     alignItems: 'center',
@@ -176,7 +180,6 @@ const styles = StyleSheet.create({
   },
   timeLableStyle: {
     alignSelf: 'baseline',
-    marginTop: SPACING.xs,
   },
   userProfilePic: {
     borderRadius: 100,

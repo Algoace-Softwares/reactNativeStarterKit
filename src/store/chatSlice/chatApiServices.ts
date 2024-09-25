@@ -1,12 +1,19 @@
+import {useAppStore} from '..';
+import {chatRoomType} from '../../@types';
 import {LOCAL_HOST} from '../../api';
 
 /*
  ** marking conversation as read
  */
 const markConvRead = async (userId: string, roomId?: string) => {
+  const updateChatRooms = useAppStore.getState().updateChatRooms;
   try {
-    const reponse = await LOCAL_HOST.patch(`/chat/count/${roomId}/${userId}`);
-    console.log('🚀 ~ markConvRead ~ reponse:', reponse);
+    const response = await LOCAL_HOST.patch(`/chat/count/${roomId}/${userId}`);
+    console.log('🚀 ~ markConvRead ~ reponse:', response);
+    if (response.data?.data) {
+      const updatedRoom = response.data.data as chatRoomType;
+      updateChatRooms([updatedRoom], 'REPLACE_CHAT');
+    }
   } catch (error: any) {
     console.log('🚀 ~ markConvRead ~ error:', error);
   }

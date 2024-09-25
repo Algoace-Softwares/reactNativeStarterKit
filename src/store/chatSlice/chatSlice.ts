@@ -46,6 +46,10 @@ export const createChatSlice: StateCreator<chatSlice> = set => {
             updatedChatRooms = [...chatRooms, ...updatedChatRooms.filter(room => room._id !== chatRooms[0]._id)];
 
             break;
+          case 'REPLACE_CHAT':
+            // Replace the existing chat room with the updated one
+            updatedChatRooms = updatedChatRooms.map(room => (room._id === chatRooms[0]._id ? chatRooms[0] : room));
+            break;
           default:
             break;
         }
