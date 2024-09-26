@@ -103,6 +103,8 @@ export const ChatEventEnum = Object.freeze({
   STOP_TYPING_EVENT: 'stopTyping',
   // ? when participant starts typing
   START_TYPING_EVENT: 'startTyping',
+  // ? when participant get online
+  USER_ONLINE_STATUS_EVENT: 'userOnlineStatus',
   // ? when message is deleted
   MESSAGE_DELETE_EVENT: 'messageDeleted',
   // ? whensending server message to user

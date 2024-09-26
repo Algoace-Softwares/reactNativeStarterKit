@@ -20,7 +20,7 @@ import {
   renderAvatar,
 } from '../../components/giftedChatComp';
 import {markConvRead} from '../../store/chatSlice/chatApiServices';
-import {TypingEventType} from './types';
+import {onlineEventType, TypingEventType} from './types';
 
 const ChatScreen = () => {
   /*
@@ -52,6 +52,8 @@ const ChatScreen = () => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // To track if the current user is typing
   const [selfTyping, setSelfTyping] = useState(false);
+  // track other user onine status
+  const [onlineStatus, setOnlineStatus] = useState(false);
 
   /*
    ** Fetch Messages
@@ -211,6 +213,11 @@ const ChatScreen = () => {
     socket.on(ChatEventEnum.STOP_TYPING_EVENT, (typingEvent: TypingEventType) =>
       handleSocketTyping(typingEvent, false),
     );
+    // Listener for when a user stops typing.
+    socket.on(ChatEventEnum.USER_ONLINE_STATUS_EVENT, (onlineEvent: onlineEventType) =>
+      console.log('user online event', onlineEvent),
+    );
+
     // Listener for when a new message is received.
     socket.on(ChatEventEnum.MESSAGE, (newMessage: IMessage & {chatRoom: string}) => {
       if (newMessage?.chatRoom === room?._id) {
@@ -233,6 +240,7 @@ const ChatScreen = () => {
       socket.off(ChatEventEnum.MESSAGE);
       socket.off(ChatEventEnum.LEAVE_CHAT_EVENT);
       socket.off(ChatEventEnum.MESSAGE_DELETE_EVENT);
+      socket.off(ChatEventEnum.USER_ONLINE_STATUS_EVENT);
       // Emit an event to join the current chat
       socket.emit(ChatEventEnum.LEAVE_CHAT_EVENT, {chatId: room?._id});
     };
