@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {authScreens, homeScreens} from '../data';
 import {AuthStackParamList, HomeStackParamList, RootStackParamList} from './types.navigation';
 import {useBackButtonHandler, navigationRef} from './navigationUtilities';
 import BaseConfig from '../config';
 import {NavigationContainer} from '@react-navigation/native';
-import {useColorScheme} from 'react-native';
+import {AppState, useColorScheme} from 'react-native';
 import {DARK_COLORS, DEFAULT_COLORS} from '../theme';
 import {useAppStore} from '../store';
 import {fetchUserDataLocal} from '../store/authSlice/authApiService';
@@ -46,6 +46,9 @@ const HomeStackScreens = (): JSX.Element => {
    */
   const userData = useAppStore(state => state.userData);
   const setSocket = useAppStore(state => state.setSocket);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
   useEffect(() => {
     /*
      ** initializing socket instance
@@ -83,6 +86,25 @@ const HomeStackScreens = (): JSX.Element => {
       socketInstance.off(ChatEventEnum.SERVER_MESSAGE);
     };
   }, [userData, setSocket]);
+  // for handling bausines logic when app is going on foreground/background/killed state
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      // console.log('🚀 ~ subscription ~ AppState.currentState):', AppState.currentState);
+      // console.log('🚀 ~ subscription ~ nextAppState:', nextAppState);
+
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   return (
     <HomeStack.Navigator>

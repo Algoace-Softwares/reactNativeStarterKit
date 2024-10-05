@@ -30,3 +30,8 @@ export interface TypingEventType {
   userId: string;
   userName?: string;
 }
+export interface onlineEventType {
+  chatId: string;
+  userId: string;
+  onlineStatus?: boolean;
+}
