@@ -56,6 +56,7 @@ const HomeStackScreens = (): JSX.Element => {
     const socketInstance = socketio('ws://localhost:8000', {
       transports: ['websocket'],
     });
+
     console.log('socketInstance:', socketInstance);
 
     // setting up on state variable
@@ -69,6 +70,7 @@ const HomeStackScreens = (): JSX.Element => {
       name: userData?.name,
       nickName: userData?.nickName,
     });
+
     socketInstance.on(ChatEventEnum.DISCONNECT_EVENT, (reason, details) => {
       console.log('diconnect:', reason, details);
     });
