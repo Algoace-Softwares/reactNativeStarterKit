@@ -54,7 +54,11 @@ const HomeStackScreens = (): JSX.Element => {
      ** initializing socket instance
      */
     const socketInstance = socketio('ws://localhost:8000', {
-      transports: ['websocket'],
+      withCredentials: true,
+    // auth: { token },
+    // extraHeaders: {
+    //   authorization: token
+    // }
     });
 
     console.log('socketInstance:', socketInstance);
@@ -63,13 +67,6 @@ const HomeStackScreens = (): JSX.Element => {
     setSocket(socketInstance);
 
     console.log('emitting socket');
-
-    // emitting event to know the server this user is connected and ready for emitting or listeining events
-    socketInstance?.emit(ChatEventEnum.CONNECTED_EVENT, {
-      userId: userData?._id,
-      name: userData?.name,
-      nickName: userData?.nickName,
-    });
 
     socketInstance.on(ChatEventEnum.DISCONNECT_EVENT, (reason, details) => {
       console.log('diconnect:', reason, details);
