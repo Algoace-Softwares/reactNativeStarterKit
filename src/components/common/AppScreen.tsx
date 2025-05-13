@@ -164,6 +164,7 @@ const $containerStyle = (colors: Colors): ViewStyle => {
 
 const styles = StyleSheet.create({
   innerStyle: {
+    flex:1,
     alignItems: 'stretch',
     justifyContent: 'flex-start',
   },
